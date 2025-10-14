@@ -6,6 +6,9 @@ from typing import Dict, List, Any, Set, Optional
 from pathlib import Path
 import json
 
+# Singleton instance
+_traverser_instance: Optional["GraphTraverser"] = None
+
 
 class GraphTraverser:
     """Traverse graph relationships to find connected nodes.
@@ -41,7 +44,7 @@ class GraphTraverser:
         # Build edge index for fast lookups
         self._build_edge_index()
 
-    def _build_edge_index(self):
+    def _build_edge_index(self) -> None:
         """Build indexes for efficient edge traversal.
 
         COMPLEXITY REDUCTION (Task 006): Refactored from CCN=15 to CCN≤10 using Extract Method pattern.
@@ -50,13 +53,13 @@ class GraphTraverser:
         self._index_outgoing_and_incoming_edges()
         self._build_well_curve_indices()
 
-    def _index_outgoing_and_incoming_edges(self):
+    def _index_outgoing_and_incoming_edges(self) -> None:
         """Build bidirectional edge indexes for fast traversal."""
         # Outgoing edges: source_id -> [(target_id, edge_type)]
-        self.outgoing_edges: Dict[str, List[tuple]] = {}
+        self.outgoing_edges: Dict[str, List[tuple[str, str]]] = {}
 
         # Incoming edges: target_id -> [(source_id, edge_type)]
-        self.incoming_edges: Dict[str, List[tuple]] = {}
+        self.incoming_edges: Dict[str, List[tuple[str, str]]] = {}
 
         for edge in self.edges:
             source_id = edge.get("source")
@@ -74,7 +77,7 @@ class GraphTraverser:
                     self.incoming_edges[target_id] = []
                 self.incoming_edges[target_id].append((source_id, edge_type))
 
-    def _build_well_curve_indices(self):
+    def _build_well_curve_indices(self) -> None:
         """Build convenience indices for well-curve relationships and mnemonics."""
         # Maps: well -> list of curves; curve -> well; well -> set of mnemonics
         self.well_to_curves: Dict[str, List[Dict[str, Any]]] = {}
@@ -234,8 +237,14 @@ class GraphTraverser:
             List of all nodes (seed + expanded)
         """
         expanded_nodes = list(seed_nodes)
-        visited_ids: Set[str] = {node.get("id") for node in seed_nodes}
-        current_layer = [node.get("id") for node in seed_nodes]
+        visited_ids: Set[str] = {
+            node_id for node in seed_nodes
+            if (node_id := node.get("id")) is not None
+        }
+        current_layer: List[str] = [
+            node_id for node in seed_nodes
+            if (node_id := node.get("id")) is not None
+        ]
 
         for hop in range(max_hops):
             next_layer = self._expand_layer(
@@ -272,19 +281,21 @@ class GraphTraverser:
             if expand_direction in [None, "outgoing"]:
                 outgoing = self.get_connected_nodes(node_id, direction="outgoing")
                 for node in outgoing:
-                    if node.get("id") not in visited_ids:
+                    nid = node.get("id")
+                    if nid is not None and nid not in visited_ids:
                         expanded_nodes.append(node)
-                        visited_ids.add(node.get("id"))
-                        next_layer.append(node.get("id"))
+                        visited_ids.add(nid)
+                        next_layer.append(nid)
 
             # Expand incoming connections
             if expand_direction in [None, "incoming"]:
                 incoming = self.get_connected_nodes(node_id, direction="incoming")
                 for node in incoming:
-                    if node.get("id") not in visited_ids:
+                    nid = node.get("id")
+                    if nid is not None and nid not in visited_ids:
                         expanded_nodes.append(node)
-                        visited_ids.add(node.get("id"))
-                        next_layer.append(node.get("id"))
+                        visited_ids.add(nid)
+                        next_layer.append(nid)
 
         return next_layer
 
@@ -304,30 +315,33 @@ class GraphTraverser:
         outgoing = self.outgoing_edges.get(node_id, [])
         incoming = self.incoming_edges.get(node_id, [])
 
-        summary = {
+        outgoing_by_type: Dict[str, int] = {}
+        incoming_by_type: Dict[str, int] = {}
+
+        # Count outgoing edges by type
+        for target_id, edge_type in outgoing:
+            if edge_type not in outgoing_by_type:
+                outgoing_by_type[edge_type] = 0
+            outgoing_by_type[edge_type] += 1
+
+        # Count incoming edges by type
+        for source_id, edge_type in incoming:
+            if edge_type not in incoming_by_type:
+                incoming_by_type[edge_type] = 0
+            incoming_by_type[edge_type] += 1
+
+        summary: Dict[str, Any] = {
             "node_id": node_id,
             "node_type": node.get("type"),
             "outgoing_edges": {
                 "count": len(outgoing),
-                "by_type": {}
+                "by_type": outgoing_by_type
             },
             "incoming_edges": {
                 "count": len(incoming),
-                "by_type": {}
+                "by_type": incoming_by_type
             }
         }
-
-        # Count outgoing edges by type
-        for target_id, edge_type in outgoing:
-            if edge_type not in summary["outgoing_edges"]["by_type"]:
-                summary["outgoing_edges"]["by_type"][edge_type] = 0
-            summary["outgoing_edges"]["by_type"][edge_type] += 1
-
-        # Count incoming edges by type
-        for source_id, edge_type in incoming:
-            if edge_type not in summary["incoming_edges"]["by_type"]:
-                summary["incoming_edges"]["by_type"][edge_type] = 0
-            summary["incoming_edges"]["by_type"][edge_type] += 1
 
         return summary
 
@@ -340,7 +354,7 @@ def get_traverser() -> GraphTraverser:
     """
     global _traverser_instance
 
-    if '_traverser_instance' not in globals():
+    if _traverser_instance is None:
         _traverser_instance = GraphTraverser()
 
     return _traverser_instance

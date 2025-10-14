@@ -35,7 +35,7 @@ from services.graph_index.relationship_detector import detect_relationship_query
 from services.graph_index.graph_traverser import get_traverser
 
 try:
-    from langgraph.graph import END, START, StateGraph
+    from langgraph.graph import END, START, StateGraph  # type: ignore[import-not-found]
 except ImportError:  # pragma: no cover - langgraph optional
     StateGraph = None
     START = "start"
@@ -135,7 +135,7 @@ def retrieval_step(state: WorkflowState) -> WorkflowState:
     if not embedding:
         raise RuntimeError("No query embedding available for retrieval")
 
-    client = AstraApiClient()
+    client = AstraApiClient()  # type: ignore[no-untyped-call]
     collection_name = settings.astra_db_collection or "graph_nodes"
 
     # Detect query type and relationship patterns
@@ -295,7 +295,7 @@ def _normalize_well_node_id(raw_id: str) -> Optional[str]:
     return normalized
 
 
-def _find_curve_node_id_by_mnemonic(trav, mnemonic: str) -> Optional[str]:
+def _find_curve_node_id_by_mnemonic(trav: Any, mnemonic: str) -> Optional[str]:
     target = (mnemonic or '').strip().upper()
     if not target:
         return None
@@ -303,11 +303,12 @@ def _find_curve_node_id_by_mnemonic(trav, mnemonic: str) -> Optional[str]:
         for node in curves:
             attrs = (node or {}).get('attributes', {})
             if isinstance(attrs, dict) and str(attrs.get('mnemonic', '')).upper() == target:
-                return node.get('id')
+                nid = node.get('id')
+                return str(nid) if nid is not None else None
     return None
 
 
-def _handle_well_relationship_queries(state: WorkflowState, trav, well_id: str, query_lower: str) -> bool:
+def _handle_well_relationship_queries(state: WorkflowState, trav: Any, well_id: str, query_lower: str) -> bool:
     """Handle all well-specific relationship queries using handler registry.
 
     COMPLEXITY REDUCTION: Refactored from F(119) to D(~15) using registry pattern.
@@ -372,7 +373,7 @@ def _handle_well_relationship_queries(state: WorkflowState, trav, well_id: str, 
 
 
 
-def _handle_curve_lookup(state: WorkflowState, trav, query_lower: str) -> bool:
+def _handle_curve_lookup(state: WorkflowState, trav: Any, query_lower: str) -> bool:
     tokens = [tok.upper() for tok in re.findall(r"[A-Z0-9_]{2,}", state.query)]
     for token in tokens:
         wells = trav.get_wells_with_mnemonic(token)
@@ -424,7 +425,7 @@ def _try_orchestrator_glossary(state: WorkflowState) -> bool:
     try:
         from services.orchestration.local_orchestrator import LocalOrchestrator
 
-        orchestrator = LocalOrchestrator()
+        orchestrator = LocalOrchestrator()  # type: ignore[no-untyped-call]
         orch_result = orchestrator.invoke(state.query, context="")
 
         # Update metadata with orchestrator results
@@ -505,7 +506,7 @@ def _handle_well_count(state: WorkflowState, query_lower: str) -> bool:
         return False
 
     try:
-        client = AstraApiClient()
+        client = AstraApiClient()  # type: ignore[no-untyped-call]
         settings = get_settings()
         collection_name = settings.astra_db_collection or 'graph_nodes'
         count = client.count_documents(collection_name, {'entity_type': 'las_document'})
@@ -706,7 +707,7 @@ def embedding_step(state: WorkflowState) -> WorkflowState:
     return state
 
 
-def build_workflow() -> Callable[[str, dict | None], WorkflowState]:
+def build_workflow() -> Callable[[str, Dict[str, Any] | None], WorkflowState]:
     """Build the main GraphRAG workflow.
 
     Returns a callable that accepts (query, metadata) and returns WorkflowState.
@@ -715,7 +716,7 @@ def build_workflow() -> Callable[[str, dict | None], WorkflowState]:
     MAX_QUERY_LENGTH = 500
 
     if StateGraph is None:
-        def _runner(query: str, metadata: dict | None = None) -> WorkflowState:
+        def _runner(query: str, metadata: Dict[str, Any] | None = None) -> WorkflowState:
             # Validate query length (Task 005 Priority 1 fix)
             if len(query) > MAX_QUERY_LENGTH:
                 raise ValueError(
@@ -740,7 +741,7 @@ def build_workflow() -> Callable[[str, dict | None], WorkflowState]:
 
     app = graph.compile()
 
-    def _runner(query: str, metadata: dict | None = None) -> WorkflowState:
+    def _runner_langgraph(query: str, metadata: Dict[str, Any] | None = None) -> WorkflowState:
         # Validate query length (Task 005 Priority 1 fix)
         if len(query) > MAX_QUERY_LENGTH:
             raise ValueError(
@@ -748,10 +749,10 @@ def build_workflow() -> Callable[[str, dict | None], WorkflowState]:
                 f"Maximum allowed: {MAX_QUERY_LENGTH} chars"
             )
         state = WorkflowState(query=query, metadata=metadata or {})
-        result = app.invoke(state)
+        result: WorkflowState = app.invoke(state)
         return result
 
-    return _runner
+    return _runner_langgraph
 
 
 # Backwards compatibility alias
