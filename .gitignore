@@ -1,0 +1,165 @@
+# Environment and credentials
+.env
+*.env
+.env.*
+configs/env/
+
+# Data files - exclude all raw and processed data
+data/
+*.csv
+*.las
+*.json
+*.parquet
+*.pkl
+*.pickle
+*.xlsx
+*.xls
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.manifest
+*.spec
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# Testing and coverage
+.coverage
+.coverage.*
+.pytest_cache/
+.tox/
+htmlcov/
+.hypothesis/
+nosetests.xml
+coverage.xml
+*.cover
+.cache
+
+# IDE and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+.claude/
+*.sublime-project
+*.sublime-workspace
+
+# Logs and temporary files
+logs/
+*.log
+*.tmp
+temp/
+tmp/
+__chunk_*.txt
+__segment*.txt
+__reasoning*.txt
+__*.txt
+
+# Documentation artifacts (keeping only essential docs)
+AUTHENTIC_*.md
+CLEANUP_*.md
+CODE_ANALYSIS_*.md
+CODE_ANALYSIS_*.txt
+CODE_CLEANUP_*.md
+COMPREHENSIVE_*.md
+CONTEXTUAL_*.md
+EVALUATION_*.md
+EXPANDED_*.md
+FINAL_*.md
+FIXES_*.md
+GRAPHRAG_*.md
+PHASED_*.md
+README_*.md
+REFACTORING_*.md
+REMEDIATION_*.md
+TEST_*.md
+VALIDATION_*.md
+WEAKEST_*.md
+checkpoint*.md
+compass_artifact_*.md
+CONFIGURATION_EXTRACTION.md
+
+# Reports and analysis outputs
+*.csv
+bandit_report.*
+*_report.*
+*_results.*
+
+# Models and large files
+models/
+embeddings/
+*.bin
+*.h5
+*.keras
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.ckpt
+
+# Artifacts and cache
+artifacts/
+.ruff_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+nul
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Documentation build artifacts
+docs/_build/
+docs/_static/
+docs/_templates/
+
+# Package manager files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Local configuration
+local_settings.py
+instance/
+.webassets-cache
+
+# Secrets and keys
+*.key
+*.pem
+*.crt
+*.p12
+secrets.yaml
+secrets.yml
