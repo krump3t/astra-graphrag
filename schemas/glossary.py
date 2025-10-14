@@ -6,6 +6,7 @@ This module defines data models for:
 - Cache configuration (TTL, Redis connection)
 """
 
+import os
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, HttpUrl, field_validator
@@ -77,17 +78,17 @@ class CacheConfig(BaseModel):
     """Configuration for glossary cache (Redis + in-memory fallback).
 
     Attributes:
-        redis_host: Redis server hostname
-        redis_port: Redis server port
-        redis_db: Redis database number
-        ttl: Time-to-live for cached entries (seconds)
-        max_memory_cache_size: Max entries in fallback in-memory cache
-        connection_timeout: Redis connection timeout (seconds)
+        redis_host: Redis server hostname (env: REDIS_HOST)
+        redis_port: Redis server port (env: REDIS_PORT)
+        redis_db: Redis database number (env: REDIS_DB)
+        ttl: Time-to-live for cached entries (env: REDIS_TTL, seconds, default 24h)
+        max_memory_cache_size: Max entries in fallback in-memory cache (env: MAX_MEMORY_CACHE_SIZE)
+        connection_timeout: Redis connection timeout (env: REDIS_TIMEOUT, seconds)
     """
 
-    redis_host: str = Field(default="localhost", description="Redis hostname")
-    redis_port: int = Field(default=6379, ge=1, le=65535, description="Redis port")
-    redis_db: int = Field(default=0, ge=0, le=15, description="Redis database number")
-    ttl: int = Field(default=900, ge=0, le=86400, description="Cache TTL (seconds, default 15 min, 0 = no caching)")
-    max_memory_cache_size: int = Field(default=1000, ge=100, le=10000, description="Max in-memory cache entries")
-    connection_timeout: int = Field(default=1, ge=1, le=10, description="Redis connection timeout (seconds)")
+    redis_host: str = Field(default_factory=lambda: os.getenv("REDIS_HOST", "localhost"), description="Redis hostname")
+    redis_port: int = Field(default_factory=lambda: int(os.getenv("REDIS_PORT", "6379")), ge=1, le=65535, description="Redis port")
+    redis_db: int = Field(default_factory=lambda: int(os.getenv("REDIS_DB", "0")), ge=0, le=15, description="Redis database number")
+    ttl: int = Field(default_factory=lambda: int(os.getenv("REDIS_TTL", "86400")), ge=0, description="Cache TTL (seconds, default 24h, 0 = no caching)")
+    max_memory_cache_size: int = Field(default_factory=lambda: int(os.getenv("MAX_MEMORY_CACHE_SIZE", "1000")), ge=100, le=10000, description="Max in-memory cache entries")
+    connection_timeout: int = Field(default_factory=lambda: int(os.getenv("REDIS_TIMEOUT", "2")), ge=1, le=10, description="Redis connection timeout (seconds)")
