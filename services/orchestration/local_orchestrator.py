@@ -22,6 +22,8 @@ import logging
 from typing import Dict, Any, Optional
 from ibm_watsonx_ai.foundation_models import ModelInference
 
+from services.monitoring import get_metrics_collector, LatencyTracker, CostTracker
+
 logger = logging.getLogger(__name__)
 
 

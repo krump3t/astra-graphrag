@@ -6,6 +6,7 @@ from urllib import error, parse, request
 
 from services.config import get_settings
 from services.graph_index.retry_utils import retry_with_backoff
+from services.monitoring import get_metrics_collector, CostTracker
 
 IAM_TOKEN_URL = "https://iam.cloud.ibm.com/identity/token"
 
@@ -85,9 +86,29 @@ class WatsonxGenerationClient:
             }
         ).encode("utf-8")
         payload = self._post(endpoint, data=body, headers=headers)
+
+        # Track cost (Task 007 Phase 1)
+        collector = get_metrics_collector()
+        cost_tracker = CostTracker(collector)
+
+        # Extract token usage from watsonx.ai response
         results = payload.get("results") or []
         if results and isinstance(results, list):
-            text = results[0].get("generated_text") or results[0].get("output_text")
+            result = results[0]
+            # Watsonx.ai API returns token counts in results
+            input_tokens = result.get("input_token_count", 0)
+            output_tokens = result.get("generated_token_count", 0)
+
+            # If token counts are available, log cost
+            if input_tokens > 0 or output_tokens > 0:
+                cost_tracker.log_llm_call(
+                    model_id=self.model_id,
+                    input_tokens=input_tokens,
+                    output_tokens=output_tokens,
+                    metadata={"prompt_length": len(prompt)}
+                )
+
+            text = result.get("generated_text") or result.get("output_text")
             if isinstance(text, str):
                 return text
         return json.dumps(payload)

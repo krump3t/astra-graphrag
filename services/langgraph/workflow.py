@@ -14,6 +14,8 @@ from services.graph_index.astra_api import AstraApiClient
 from services.config import get_settings
 from services.config.retrieval_config import RetrievalConfig
 from services.langgraph.reranker import rerank_results
+from services.monitoring import get_metrics_collector, LatencyTracker
+
 logger = logging.getLogger(__name__)
 TRAVERSAL_ERRORS = (RuntimeError, FileNotFoundError, ValueError)
 
@@ -118,76 +120,80 @@ def retrieval_step(state: WorkflowState) -> WorkflowState:
     Raises:
         RuntimeError: If no query embedding is available
     """
-    from services.langgraph.retrieval_helpers import (
-        determine_retrieval_parameters,
-        determine_reranking_weights,
-        detect_and_apply_filters,
-        apply_filters_and_truncate,
-        update_state_with_retrieved_documents,
-        execute_vector_search,
-        handle_empty_docs_fallback,
-        execute_graph_traversal,
-    )
+    collector = get_metrics_collector()
 
-    # Initialize clients and settings
-    settings = get_settings()
-    embedding = state.metadata.get("query_embedding", [])
-    if not embedding:
-        raise RuntimeError("No query embedding available for retrieval")
+    with LatencyTracker(collector, "retrieval_step", {"query": state.query}):
+        from services.langgraph.retrieval_helpers import (
+            determine_retrieval_parameters,
+            determine_reranking_weights,
+            detect_and_apply_filters,
+            apply_filters_and_truncate,
+            update_state_with_retrieved_documents,
+            execute_vector_search,
+            handle_empty_docs_fallback,
+            execute_graph_traversal,
+        )
 
-    client = AstraApiClient()  # type: ignore[no-untyped-call]
-    collection_name = settings.astra_db_collection or "graph_nodes"
+        # Initialize clients and settings
+        settings = get_settings()
+        embedding = state.metadata.get("query_embedding", [])
+        if not embedding:
+            raise RuntimeError("No query embedding available for retrieval")
 
-    # Detect query type and relationship patterns
-    agg_type = detect_aggregation_type(state.query)
-    is_aggregation = agg_type is not None
-    state.metadata["detected_aggregation_type"] = agg_type
+        client = AstraApiClient()  # type: ignore[no-untyped-call]
+        collection_name = settings.astra_db_collection or "graph_nodes"
 
-    relationship_detection = detect_relationship_query(state.query)
-    state.metadata["relationship_detection"] = relationship_detection
-    rel_conf = relationship_detection.get("confidence", 0.0)
-    state.metadata["relationship_confidence"] = rel_conf
-    state.metadata["relationship_confidence_evidence"] = relationship_detection.get("confidence_evidence", [])
+        # Detect query type and relationship patterns
+        agg_type = detect_aggregation_type(state.query)
+        is_aggregation = agg_type is not None
+        state.metadata["detected_aggregation_type"] = agg_type
 
-    # Determine retrieval parameters and filters
-    initial_limit, max_documents, top_k = determine_retrieval_parameters(
-        is_aggregation, rel_conf, state.metadata
-    )
-    filter_dict, _ = detect_and_apply_filters(state.metadata, state.query)
+        relationship_detection = detect_relationship_query(state.query)
+        state.metadata["relationship_detection"] = relationship_detection
+        rel_conf = relationship_detection.get("confidence", 0.0)
+        state.metadata["relationship_confidence"] = rel_conf
+        state.metadata["relationship_confidence_evidence"] = relationship_detection.get("confidence_evidence", [])
 
-    # Execute vector search and rerank
-    documents = execute_vector_search(
-        client, collection_name, embedding, agg_type, state.query.lower(),
-        state.metadata, initial_limit, max_documents, filter_dict
-    )
-    vector_weight, keyword_weight = determine_reranking_weights(rel_conf)
-    reranked_docs = rerank_results(
-        query=state.query, documents=documents,
-        vector_weight=vector_weight, keyword_weight=keyword_weight, top_k=top_k
-    )
+        # Determine retrieval parameters and filters
+        initial_limit, max_documents, top_k = determine_retrieval_parameters(
+            is_aggregation, rel_conf, state.metadata
+        )
+        filter_dict, _ = detect_and_apply_filters(state.metadata, state.query)
 
-    # Apply filtering and truncation
-    critical_keywords = _extract_critical_keywords(state.query)
-    well_id_filter = state.metadata.get("well_id_filter")
-    reranked_docs, decision_log = apply_filters_and_truncate(
-        reranked_docs, critical_keywords, well_id_filter, rel_conf, state.metadata
-    )
+        # Execute vector search and rerank
+        documents = execute_vector_search(
+            client, collection_name, embedding, agg_type, state.query.lower(),
+            state.metadata, initial_limit, max_documents, filter_dict
+        )
+        vector_weight, keyword_weight = determine_reranking_weights(rel_conf)
+        reranked_docs = rerank_results(
+            query=state.query, documents=documents,
+            vector_weight=vector_weight, keyword_weight=keyword_weight, top_k=top_k
+        )
 
-    # Convert to document list and handle empty results
-    docs_list = [d for d in reranked_docs if isinstance(d, dict)]
-    docs_list = handle_empty_docs_fallback(
-        docs_list, documents, critical_keywords, well_id_filter,
-        state.query, rel_conf, state.metadata
-    )
+        # Apply filtering and truncation
+        critical_keywords = _extract_critical_keywords(state.query)
+        well_id_filter = state.metadata.get("well_id_filter")
+        reranked_docs, decision_log = apply_filters_and_truncate(
+            reranked_docs, critical_keywords, well_id_filter, rel_conf, state.metadata
+        )
 
-    # Update state and execute graph traversal
-    update_state_with_retrieved_documents(state, docs_list, len(documents))
-    execute_graph_traversal(state, docs_list, relationship_detection, rel_conf, embedding)
+        # Convert to document list and handle empty results
+        docs_list = [d for d in reranked_docs if isinstance(d, dict)]
+        docs_list = handle_empty_docs_fallback(
+            docs_list, documents, critical_keywords, well_id_filter,
+            state.query, rel_conf, state.metadata
+        )
 
-    if decision_log:
-        state.metadata["decision_log"] = decision_log
+        # Update state and execute graph traversal
+        update_state_with_retrieved_documents(state, docs_list, len(documents))
+        execute_graph_traversal(state, docs_list, relationship_detection, rel_conf, embedding)
 
-    return state
+        if decision_log:
+            state.metadata["decision_log"] = decision_log
+
+        return state
+
 
 
 def _format_prompt(question: str, context: str) -> str:
@@ -647,63 +653,71 @@ def reasoning_step(state: WorkflowState) -> WorkflowState:
     COMPLEXITY REDUCTION (Task 006): Refactored from CCN=42 to CCN≤10 using Extract Method pattern.
     Delegates to specialized helper functions for improved maintainability.
     """
-    # Try MCP glossary orchestrator first
-    if _try_orchestrator_glossary(state):
+    collector = get_metrics_collector()
+
+    with LatencyTracker(collector, "reasoning_step", {"query": state.query}):
+        # Try MCP glossary orchestrator first
+        if _try_orchestrator_glossary(state):
+            return state
+
+        # Check scope and apply defusion if needed
+        if _check_scope_and_defuse(state):
+            return state
+
+        query_lower = state.query.lower()
+
+        # Handle specific query types
+        if _handle_curve_count_for_well(state, query_lower):
+            return state
+
+        if _handle_well_count(state, query_lower):
+            return state
+
+        if _handle_relationship_queries(state):
+            return state
+
+        # Validate retrieved context exists
+        if not state.retrieved:
+            raise RuntimeError('No retrieved context available for reasoning')
+
+        # Try structured extraction
+        if _handle_structured_extraction(state):
+            return state
+
+        # Try aggregation
+        if _handle_aggregation(state):
+            return state
+
+        # Try domain rules
+        if _apply_domain_rules_if_applicable(state):
+            return state
+
+        # Default: generate LLM response
+        _generate_llm_response(state)
         return state
-
-    # Check scope and apply defusion if needed
-    if _check_scope_and_defuse(state):
-        return state
-
-    query_lower = state.query.lower()
-
-    # Handle specific query types
-    if _handle_curve_count_for_well(state, query_lower):
-        return state
-
-    if _handle_well_count(state, query_lower):
-        return state
-
-    if _handle_relationship_queries(state):
-        return state
-
-    # Validate retrieved context exists
-    if not state.retrieved:
-        raise RuntimeError('No retrieved context available for reasoning')
-
-    # Try structured extraction
-    if _handle_structured_extraction(state):
-        return state
-
-    # Try aggregation
-    if _handle_aggregation(state):
-        return state
-
-    # Try domain rules
-    if _apply_domain_rules_if_applicable(state):
-        return state
-
-    # Default: generate LLM response
-    _generate_llm_response(state)
-    return state
 
 
 
 def embedding_step(state: WorkflowState) -> WorkflowState:
-    client = get_embedding_client()
-    original_query = state.query
-    query_to_embed = original_query
-    if should_expand_query(original_query):
-        expanded = expand_query_with_synonyms(original_query)
-        query_to_embed = expanded
-        state.metadata["query_expanded"] = True
-        state.metadata["expanded_query"] = expanded
-    else:
-        state.metadata["query_expanded"] = False
-    embeddings = client.embed_texts([query_to_embed])
-    if not embeddings:
-        raise RuntimeError("Failed to generate query embedding")
-    state.metadata["query_embedding"] = embeddings[0]
+    """Generate query embedding with latency tracking (Task 007 Phase 1)."""
+    collector = get_metrics_collector()
+
+    with LatencyTracker(collector, "embedding_step", {"query": state.query}):
+        client = get_embedding_client()
+        original_query = state.query
+        query_to_embed = original_query
+        if should_expand_query(original_query):
+            expanded = expand_query_with_synonyms(original_query)
+            query_to_embed = expanded
+            state.metadata["query_expanded"] = True
+            state.metadata["expanded_query"] = expanded
+        else:
+            state.metadata["query_expanded"] = False
+        embeddings = client.embed_texts([query_to_embed])
+        if not embeddings:
+            raise RuntimeError("Failed to generate query embedding")
+        state.metadata["query_embedding"] = embeddings[0]
+
     return state
 
 
