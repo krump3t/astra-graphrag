@@ -31,9 +31,12 @@ IN_SCOPE_TOPICS = {
 
 # Out-of-scope topics that should be detected
 OUT_OF_SCOPE_TOPICS = {
-    'weather': ['weather', 'forecast', 'temperature', 'rain', 'precipitation', 'climate'],
+    'politics': ['election', 'president', 'congress', 'vote', 'campaign', 'senator', 'parliament', 'government policy'],
+    'food': ['recipe', 'cooking', 'ingredient', 'meal', 'restaurant', 'chef', 'cuisine', 'dinner'],
+    'entertainment': ['movie', 'song', 'actor', 'album', 'concert', 'film', 'tv show', 'celebrity'],
+    'weather': ['weather', 'forecast', 'temperature', 'rain', 'precipitation', 'climate', 'snow', 'sunny'],
+    'sports': ['game', 'score', 'team', 'player', 'championship', 'league', 'tournament', 'match'],
     'finance': ['price', 'stock', 'market', 'investment', 'bitcoin', 'cryptocurrency', 'trading'],
-    'general_web': ['news', 'sports', 'entertainment', 'politics', 'current events'],
     'other_domains': ['medical', 'healthcare', 'legal', 'retail', 'agriculture']
 }
 

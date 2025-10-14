@@ -1,0 +1,42 @@
+[
+  {
+    "claim": "MCP glossary integration not consistently invoked; LLM doesn't always call MCP tools.",
+    "source_type": "P1",
+    "url_or_doi": "file://tasks/004-e2e-graphrag-validation/reports/final_validation_report.md#44-integration-point-4-mcp-glossary",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "MCP tool NOT consistently invoked (LLM doesn't always call tools). Validation: PARTIAL (MCP integration exists, but not reliably triggered).",
+    "note_on_relevance": "Primary evidence for Task 005 objective: MCP integration needs verification and potential fixes."
+  },
+  {
+    "claim": "Task 004 achieved 100% test pass rate with 94.7% protocol compliance, production-ready status.",
+    "source_type": "P1",
+    "url_or_doi": "file://tasks/004-e2e-graphrag-validation/reports/final_validation_report.md#8-conclusion",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "100% test pass rate (19/19), P95 <5s, all integrations tested. Production-ready with 94.7% SCA v9-Compact compliance.",
+    "note_on_relevance": "Establishes baseline for Task 005: system works, but pre-deployment QA gates not yet run."
+  },
+  {
+    "claim": "Priority 1 fixes identified: scope detection keywords and query length limit needed before production.",
+    "source_type": "P1",
+    "url_or_doi": "file://tasks/004-e2e-graphrag-validation/reports/final_validation_report.md#71-immediate-fixes-priority-1",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "Add missing out-of-scope keywords. Add query length validation: if len(query) > 500 raise ValueError. Effort: <10 minutes.",
+    "note_on_relevance": "Defines two of Task 005's required fixes before production deployment."
+  },
+  {
+    "claim": "Full QA gates (mypy, ruff, lizard, pip-audit) not yet executed; needed for protocol compliance.",
+    "source_type": "P1",
+    "url_or_doi": "file://tasks/004-e2e-graphrag-validation/reports/final_validation_report.md#83-next-steps",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "Optional: Run full QA gates (ruff, mypy, pip-audit) - 10-15 minutes. Pre-deployment action required.",
+    "note_on_relevance": "Task 005 must execute all QA gates per SCA protocol requirements."
+  },
+  {
+    "claim": "SCA protocol requires mypy --strict on critical path, Lizard CCN≤10, no high/critical vulnerabilities.",
+    "source_type": "P1",
+    "url_or_doi": "file://.claude/full_protocol.md#8-stop-conditions-non-negotiable",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "QA gates (hard): CP coverage ≥95%; mypy --strict on CP; Lizard CCN≤10/Cognitive≤15; no high/critical vulns.",
+    "note_on_relevance": "Defines quality gates that Task 005 must satisfy for protocol compliance."
+  }
+]

@@ -31,13 +31,6 @@ from services.langgraph.attribute_extraction import (
     should_use_structured_extraction,
 )
 from services.langgraph.domain_rules import apply_domain_rules
-from services.langgraph.domain_maps import (
-    RESISTIVITY_SET,
-    POROSITY_SET,
-    DEPTH_SET,
-    LITHO_SET,
-    is_standard_mnemonic,
-)
 from services.graph_index.relationship_detector import detect_relationship_query
 from services.graph_index.graph_traverser import get_traverser
 
@@ -65,7 +58,9 @@ def _extract_critical_keywords(query: str) -> list[str]:
 
 
 def _detect_well_id_filter(query: str) -> Optional[str]:
-    pattern = r'well\s+([\w\-/]*\d+[\w\-/]*)'
+    # Pattern matches well IDs like "15/9-13" or "16_1-2" anywhere in query
+    # Not just after "well " to handle "well name for 15/9-13" queries
+    pattern = r'(\d+/\d+[-_]\d+\w*|\d+_\d+[-_]\d+\w*)'
     match = re.search(pattern, query.lower())
     if match:
         return match.group(1).replace('/', '_')
@@ -240,6 +235,28 @@ def retrieval_step(state: WorkflowState) -> WorkflowState:
 
     # Convert to document list and update state
     docs_list = [d for d in reranked_docs if isinstance(d, dict)]
+
+    # CRITICAL FIX: Handle empty docs_list after filtering
+    # If filtering removed all documents, fall back to original reranked results
+    if not docs_list and documents:
+        logger.warning(
+            "Filtering removed all documents (keywords=%s, well_id=%s). "
+            "Falling back to top reranked results.",
+            critical_keywords, well_id_filter
+        )
+        # Fall back to original reranked docs before filtering
+        vector_weight, keyword_weight = determine_reranking_weights(rel_conf)
+        fallback_reranked = rerank_results(
+            query=state.query,
+            documents=documents,
+            vector_weight=vector_weight,
+            keyword_weight=keyword_weight,
+            top_k=top_k,
+        )
+        docs_list = [d for d in fallback_reranked if isinstance(d, dict)][:5]  # Take top 5
+        state.metadata["filter_fallback_applied"] = True
+        state.metadata["fallback_reason"] = "empty_after_filtering"
+
     update_state_with_retrieved_documents(state, docs_list, len(documents))
 
     # Optional graph traversal expansion
@@ -399,11 +416,11 @@ def _find_curve_node_id_by_mnemonic(trav, mnemonic: str) -> Optional[str]:
 
 
 def _handle_well_relationship_queries(state: WorkflowState, trav, well_id: str, query_lower: str) -> bool:
-    """Handle all well-specific relationship queries using decomposed handlers.
+    """Handle all well-specific relationship queries using handler registry.
 
-    This function coordinates query routing to specialized handlers for different
-    query types. It prepares common data (curves, mnemonics, groups) and delegates
-    to appropriate handlers based on query patterns.
+    COMPLEXITY REDUCTION: Refactored from F(119) to D(~15) using registry pattern.
+    This function prepares common data and delegates to specialized handlers
+    via the handler registry for improved maintainability and testability.
 
     Args:
         state: Current workflow state
@@ -416,20 +433,7 @@ def _handle_well_relationship_queries(state: WorkflowState, trav, well_id: str, 
     """
     from services.langgraph.well_query_handlers import (
         _build_curve_groups,
-        handle_petrophysical_evaluation_query,
-        handle_hydrocarbon_identification_query,
-        handle_unit_filter_query,
-        handle_log_suite_classification_query,
-        handle_capability_matrix_query,
-        handle_geological_setting_query,
-        handle_curve_listing_query,
-        handle_depth_curves_query,
-        handle_gamma_ray_neutron_query,
-        handle_porosity_curves_query,
-        handle_resistivity_curves_query,
-        handle_curve_grouping_query,
-        handle_underscore_count_query,
-        handle_triple_combo_exclusion_query,
+        get_handler_registry,
     )
 
     # Normalize well ID and fetch curve data
@@ -460,29 +464,19 @@ def _handle_well_relationship_queries(state: WorkflowState, trav, well_id: str, 
     state.metadata['graph_traversal_applied'] = True
     state.metadata['num_results_after_traversal'] = len(curves)
 
-    # Try each handler in priority order
-    handlers = [
-        lambda: handle_petrophysical_evaluation_query(state, groups, ordered),
-        lambda: handle_hydrocarbon_identification_query(state, groups, ordered),
-        lambda: handle_unit_filter_query(state, curves, ordered, _normalize_unit2),
-        lambda: handle_capability_matrix_query(state, groups, ordered),
-        lambda: handle_log_suite_classification_query(state, groups, ordered, well_attrs, well_id, basin),
-        lambda: handle_geological_setting_query(state, groups, ordered, well_attrs, basin),
-        lambda: handle_gamma_ray_neutron_query(state, mnemonics, ordered),
-        lambda: handle_resistivity_curves_query(state, groups, mnemonics, ordered),
-        lambda: handle_porosity_curves_query(state, groups, ordered),
-        lambda: handle_depth_curves_query(state, groups, ordered),
-        lambda: handle_curve_grouping_query(state, groups),
-        lambda: handle_underscore_count_query(state, ordered),
-        lambda: handle_triple_combo_exclusion_query(state, ordered),
-        lambda: handle_curve_listing_query(state, ordered),
-    ]
-
-    for handler in handlers:
-        if handler():
-            return True
-
-    return False
+    # Dispatch to handler registry (complexity reduction via delegation)
+    registry = get_handler_registry()
+    return registry.dispatch(
+        state=state,
+        curves=curves,
+        mnemonics=mnemonics,
+        ordered_mnemonics=ordered,
+        groups=groups,
+        well_attrs=well_attrs,
+        well_id=well_id,
+        basin=basin,
+        normalize_unit_fn=_normalize_unit2,
+    )
 
 
 
@@ -531,6 +525,30 @@ def _handle_relationship_queries(state: WorkflowState) -> bool:
 
 
 def reasoning_step(state: WorkflowState) -> WorkflowState:
+    # MCP glossary integration via local orchestrator (Task 005)
+    # Try orchestrator for glossary queries BEFORE scope check
+    try:
+        from services.orchestration.local_orchestrator import LocalOrchestrator
+
+        orchestrator = LocalOrchestrator()
+        orch_result = orchestrator.invoke(state.query, context="")
+
+        # Update metadata with orchestrator results
+        state.metadata.update(orch_result.get("metadata", {}))
+
+        # If orchestrator handled the query (non-empty response), use it
+        if orch_result.get("response"):
+            state.response = orch_result["response"]
+            state.retrieved = [state.response]
+            state.metadata['retrieved_documents'] = [{'text': state.response}]
+            return state
+
+    except Exception as e:
+        # Log orchestrator errors but continue with normal flow
+        logger.warning(f"Orchestrator error (non-fatal): {e}")
+        state.metadata["orchestrator_error"] = str(e)
+
+    # Normal workflow continues below for non-glossary queries
     scope_result = check_query_scope(state.query, use_llm_for_ambiguous=False)
     state.metadata["scope_check"] = scope_result
     scope_threshold = RetrievalConfig.SCOPE_CHECK_CONFIDENCE_THRESHOLD
@@ -685,8 +703,16 @@ def build_workflow() -> Callable[[str, dict | None], WorkflowState]:
     Returns a callable that accepts (query, metadata) and returns WorkflowState.
     Supports both LangGraph-based and sequential execution modes.
     """
+    MAX_QUERY_LENGTH = 500
+
     if StateGraph is None:
         def _runner(query: str, metadata: dict | None = None) -> WorkflowState:
+            # Validate query length (Task 005 Priority 1 fix)
+            if len(query) > MAX_QUERY_LENGTH:
+                raise ValueError(
+                    f"Query too long ({len(query)} chars). "
+                    f"Maximum allowed: {MAX_QUERY_LENGTH} chars"
+                )
             state = WorkflowState(query=query, metadata=metadata or {})
             state = embedding_step(state)
             state = retrieval_step(state)
@@ -706,6 +732,12 @@ def build_workflow() -> Callable[[str, dict | None], WorkflowState]:
     app = graph.compile()
 
     def _runner(query: str, metadata: dict | None = None) -> WorkflowState:
+        # Validate query length (Task 005 Priority 1 fix)
+        if len(query) > MAX_QUERY_LENGTH:
+            raise ValueError(
+                f"Query too long ({len(query)} chars). "
+                f"Maximum allowed: {MAX_QUERY_LENGTH} chars"
+            )
         state = WorkflowState(query=query, metadata=metadata or {})
         result = app.invoke(state)
         return result

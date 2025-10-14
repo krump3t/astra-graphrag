@@ -1,0 +1,90 @@
+{
+  "inputs": [
+    {
+      "name": "E2E Q&A Test Pairs (Task 004)",
+      "path_or_url": "tests/fixtures/e2e_qa_pairs.json",
+      "sha256": "2bff465c49b07ad685e070b1286bd2c283fd82bddd8143cfbe3578b24fb357df",
+      "rows": 55,
+      "cols": 3,
+      "licensing": "internal",
+      "license_url": "",
+      "usage_restrictions": "Internal testing only; manually curated Q&A pairs for GraphRAG validation",
+      "retention_days": 365,
+      "pii": false,
+      "note": "Held-out test set from Task 004; reused for regression testing in Task 005"
+    },
+    {
+      "name": "MCP Test Queries (New for Task 005)",
+      "path_or_url": "tests/fixtures/mcp_test_queries.json",
+      "sha256": "",
+      "sha256_note": "N/A - file to be created during Task 005 Phase 1; hash will be computed post-creation",
+      "rows": 20,
+      "cols": 2,
+      "licensing": "internal",
+      "license_url": "",
+      "usage_restrictions": "Internal testing only; domain term queries for MCP glossary verification",
+      "retention_days": 365,
+      "pii": false,
+      "note": "To be created during Task 005 Phase 1; SHA256 will be computed after file creation"
+    },
+    {
+      "name": "Task 004 Final Validation Report",
+      "path_or_url": "tasks/004-e2e-graphrag-validation/reports/final_validation_report.md",
+      "sha256": "86d7d8285343dca95504a5f903dd11e7e7592ef24e5fa285d240dd298e60555d",
+      "rows": 707,
+      "cols": 1,
+      "licensing": "internal",
+      "license_url": "",
+      "usage_restrictions": "Internal documentation; primary evidence source for Task 005",
+      "retention_days": 730,
+      "pii": false,
+      "note": "Baseline reference for Task 005; documents current system state and outstanding issues"
+    },
+    {
+      "name": "Python Requirements (dependencies)",
+      "path_or_url": "requirements.txt",
+      "sha256": "",
+      "sha256_note": "N/A - dependency file is mutable; pip-audit scans current state during QA execution",
+      "rows": 0,
+      "cols": 0,
+      "licensing": "mixed",
+      "license_url": "https://pypi.org",
+      "usage_restrictions": "Subject to individual package licenses; pip-audit will scan for vulnerabilities",
+      "retention_days": 90,
+      "pii": false,
+      "note": "Input for pip-audit QA gate; SHA256 computed during QA execution"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "MCP Invocation Log",
+      "path": "tasks/005-functionality-verification-qa/artifacts/validation/mcp_invocation_log.jsonl",
+      "description": "JSON Lines log of MCP tool invocation attempts (per query)",
+      "retention_days": 180
+    },
+    {
+      "name": "Routing Verification Log",
+      "path": "tasks/005-functionality-verification-qa/artifacts/validation/routing_verification.jsonl",
+      "description": "JSON Lines log of routing decisions (graph/aggregation/extraction/LLM)",
+      "retention_days": 180
+    },
+    {
+      "name": "QA Gates Consolidated Report",
+      "path": "tasks/005-functionality-verification-qa/artifacts/validation/qa_gates_report.md",
+      "description": "Consolidated report from ruff, mypy, lizard, pip-audit, pytest-cov",
+      "retention_days": 730
+    },
+    {
+      "name": "Coverage XML Report",
+      "path": "tasks/005-functionality-verification-qa/artifacts/validation/coverage.xml",
+      "description": "pytest-cov output (XML format) for CP coverage metrics",
+      "retention_days": 180
+    },
+    {
+      "name": "Final Verification Report",
+      "path": "tasks/005-functionality-verification-qa/reports/final_verification_report.md",
+      "description": "Task 005 deliverable: MCP fix status, routing verification, QA gate results",
+      "retention_days": 730
+    }
+  ]
+}
