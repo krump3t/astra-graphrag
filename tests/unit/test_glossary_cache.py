@@ -27,7 +27,7 @@ class TestCacheInitialization:
         cache = GlossaryCache()
         assert cache.config.redis_host == "localhost"
         assert cache.config.redis_port == 6379
-        assert cache.config.ttl == 900  # 15 minutes
+        assert cache.config.ttl == 86400  # 24 hours (updated in Task 007 Phase 4A)
 
     def test_cache_accepts_custom_config(self):
         """Cache should accept custom configuration."""
