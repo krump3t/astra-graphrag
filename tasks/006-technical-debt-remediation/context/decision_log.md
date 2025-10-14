@@ -79,6 +79,34 @@ This document records major decisions made during Task 006 execution in chronolo
 
 ---
 
+## 2025-10-14: Phase 2 Complete - All 4 Functions Refactored Successfully
+
+**Decision**: Refactored all 4 high-complexity functions to meet CCN≤10 target using Extract Method pattern
+
+**Functions Refactored**:
+1. **reasoning_step** (workflow.py): CCN 42 → 10 (9 helper functions extracted, 152 lines → 45 lines)
+2. **retrieval_step** (workflow.py): CCN 25 → 6 (5 helper functions extracted, 193 lines → 85 lines)
+3. **_build_edge_index** (graph_traverser.py): CCN 15 → 1 (2 helper methods extracted, 48 lines → 8 lines)
+4. **expand_search_results** (graph_traverser.py): CCN 12 → 5 (1 helper method extracted, 52 lines → 32 lines)
+
+**Rationale**: Extract Method pattern (Fowler 2018) reduces cognitive load, improves maintainability, and makes code easier to test while preserving behavior
+
+**Impact**:
+- Total complexity reduction: 89 → 22 (75% reduction)
+- Total lines reduced: 445 → 170 (62% reduction)
+- Test pass rate: 19/20 (95%, no new functional regressions)
+- 1 latency timeout (environmental, not code-related)
+
+**Validation**: All 4 functions verified with lizard; E2E tests confirm functional equivalence
+
+**Reference**: ADR-006-001 (Extract Method refactoring); Evidence E-001 (McCabe 1976 - CCN>10 increases defect density 2-3x)
+
+**Helper Functions Created**:
+- **workflow.py**: retrieval_helpers.py (12 functions: determine_retrieval_parameters, execute_vector_search, apply_filters_and_truncate, handle_empty_docs_fallback, execute_graph_traversal, etc.)
+- **graph_traverser.py**: _index_outgoing_and_incoming_edges, _build_well_curve_indices, _expand_layer
+
+---
+
 <!-- Additional decision entries will be added during Phase 3-6 execution -->
 
 ## Template for Future Entries

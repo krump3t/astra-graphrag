@@ -42,7 +42,16 @@ class GraphTraverser:
         self._build_edge_index()
 
     def _build_edge_index(self):
-        """Build indexes for efficient edge traversal."""
+        """Build indexes for efficient edge traversal.
+
+        COMPLEXITY REDUCTION (Task 006): Refactored from CCN=15 to CCN≤10 using Extract Method pattern.
+        Delegates to specialized helper methods for improved maintainability.
+        """
+        self._index_outgoing_and_incoming_edges()
+        self._build_well_curve_indices()
+
+    def _index_outgoing_and_incoming_edges(self):
+        """Build bidirectional edge indexes for fast traversal."""
         # Outgoing edges: source_id -> [(target_id, edge_type)]
         self.outgoing_edges: Dict[str, List[tuple]] = {}
 
@@ -65,7 +74,8 @@ class GraphTraverser:
                     self.incoming_edges[target_id] = []
                 self.incoming_edges[target_id].append((source_id, edge_type))
 
-        # Precompute convenience indices for fast Level 2-4 answers
+    def _build_well_curve_indices(self):
+        """Build convenience indices for well-curve relationships and mnemonics."""
         # Maps: well -> list of curves; curve -> well; well -> set of mnemonics
         self.well_to_curves: Dict[str, List[Dict[str, Any]]] = {}
         self.curve_to_well: Dict[str, str] = {}
@@ -82,7 +92,8 @@ class GraphTraverser:
                             curves.append(curve)
                             self.curve_to_well[src_id] = node_id
                 self.well_to_curves[node_id] = curves
-                # Build mnemonic set
+
+                # Build mnemonic set from curves
                 mnems: Set[str] = set()
                 for c in curves:
                     m = c.get("attributes", {}).get("mnemonic")
@@ -211,9 +222,8 @@ class GraphTraverser:
     ) -> List[Dict[str, Any]]:
         """Expand vector search results by following graph edges.
 
-        This is the key hybrid retrieval method that combines:
-        1. Vector search (finds semantically similar nodes)
-        2. Graph traversal (expands to connected nodes)
+        COMPLEXITY REDUCTION (Task 006): Refactored from CCN=12 to CCN≤10 using Extract Method pattern.
+        Delegates expansion logic to helper method for improved maintainability.
 
         Args:
             seed_nodes: Initial nodes from vector search
@@ -225,36 +235,58 @@ class GraphTraverser:
         """
         expanded_nodes = list(seed_nodes)
         visited_ids: Set[str] = {node.get("id") for node in seed_nodes}
-
         current_layer = [node.get("id") for node in seed_nodes]
 
         for hop in range(max_hops):
-            next_layer = []
-
-            for node_id in current_layer:
-                # Get connected nodes
-                if expand_direction in [None, "outgoing"]:
-                    outgoing = self.get_connected_nodes(node_id, direction="outgoing")
-                    for node in outgoing:
-                        if node.get("id") not in visited_ids:
-                            expanded_nodes.append(node)
-                            visited_ids.add(node.get("id"))
-                            next_layer.append(node.get("id"))
-
-                if expand_direction in [None, "incoming"]:
-                    incoming = self.get_connected_nodes(node_id, direction="incoming")
-                    for node in incoming:
-                        if node.get("id") not in visited_ids:
-                            expanded_nodes.append(node)
-                            visited_ids.add(node.get("id"))
-                            next_layer.append(node.get("id"))
-
+            next_layer = self._expand_layer(
+                current_layer, expand_direction, visited_ids, expanded_nodes
+            )
             current_layer = next_layer
-
             if not current_layer:
                 break  # No more nodes to expand
 
         return expanded_nodes
+
+    def _expand_layer(
+        self,
+        current_layer: List[str],
+        expand_direction: Optional[str],
+        visited_ids: Set[str],
+        expanded_nodes: List[Dict[str, Any]]
+    ) -> List[str]:
+        """Expand one layer of nodes during graph traversal.
+
+        Args:
+            current_layer: Node IDs to expand from
+            expand_direction: Direction to expand ("outgoing", "incoming", or None)
+            visited_ids: Set of already visited node IDs (updated in-place)
+            expanded_nodes: List of expanded nodes (updated in-place)
+
+        Returns:
+            List of node IDs for the next layer
+        """
+        next_layer = []
+
+        for node_id in current_layer:
+            # Expand outgoing connections
+            if expand_direction in [None, "outgoing"]:
+                outgoing = self.get_connected_nodes(node_id, direction="outgoing")
+                for node in outgoing:
+                    if node.get("id") not in visited_ids:
+                        expanded_nodes.append(node)
+                        visited_ids.add(node.get("id"))
+                        next_layer.append(node.get("id"))
+
+            # Expand incoming connections
+            if expand_direction in [None, "incoming"]:
+                incoming = self.get_connected_nodes(node_id, direction="incoming")
+                for node in incoming:
+                    if node.get("id") not in visited_ids:
+                        expanded_nodes.append(node)
+                        visited_ids.add(node.get("id"))
+                        next_layer.append(node.get("id"))
+
+        return next_layer
 
     def get_relationship_summary(self, node_id: str) -> Dict[str, Any]:
         """Get summary of all relationships for a node.

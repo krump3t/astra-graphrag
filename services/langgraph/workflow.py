@@ -106,11 +106,8 @@ def _detect_entity_filter(query: str) -> Optional[Dict[str, Any]]:
 def retrieval_step(state: WorkflowState) -> WorkflowState:
     """Execute document retrieval with filtering and optional graph expansion.
 
-    This function orchestrates the complete retrieval pipeline:
-    1. Initial vector search
-    2. Reranking
-    3. Keyword and well ID filtering
-    4. Optional graph traversal expansion
+    COMPLEXITY REDUCTION (Task 006): Refactored from CCN=25 to CCN≤10 using Extract Method pattern.
+    Delegates to specialized helper functions for improved maintainability.
 
     Args:
         state: Current workflow state with query embedding
@@ -124,13 +121,12 @@ def retrieval_step(state: WorkflowState) -> WorkflowState:
     from services.langgraph.retrieval_helpers import (
         determine_retrieval_parameters,
         determine_reranking_weights,
-        apply_keyword_filtering,
-        apply_well_id_filtering,
-        prepare_seed_nodes_for_traversal,
-        determine_traversal_hops,
-        fetch_and_enrich_expanded_nodes,
+        detect_and_apply_filters,
+        apply_filters_and_truncate,
         update_state_with_retrieved_documents,
-        update_state_with_expanded_documents,
+        execute_vector_search,
+        handle_empty_docs_fallback,
+        execute_graph_traversal,
     )
 
     # Initialize clients and settings
@@ -150,147 +146,43 @@ def retrieval_step(state: WorkflowState) -> WorkflowState:
     relationship_detection = detect_relationship_query(state.query)
     state.metadata["relationship_detection"] = relationship_detection
     rel_conf = relationship_detection.get("confidence", 0.0)
-    strategy = relationship_detection.get("traversal_strategy", {}) or {}
     state.metadata["relationship_confidence"] = rel_conf
     state.metadata["relationship_confidence_evidence"] = relationship_detection.get("confidence_evidence", [])
 
-    # Determine retrieval parameters based on query type
+    # Determine retrieval parameters and filters
     initial_limit, max_documents, top_k = determine_retrieval_parameters(
         is_aggregation, rel_conf, state.metadata
     )
+    filter_dict, _ = detect_and_apply_filters(state.metadata, state.query)
 
-    # Apply entity and well ID filters
-    filter_dict = state.metadata.get("retrieval_filter")
-    if not filter_dict:
-        filter_dict = _detect_entity_filter(state.query)
-        if filter_dict:
-            state.metadata["auto_filter"] = filter_dict
-
-    well_id = _detect_well_id_filter(state.query)
-    if well_id:
-        state.metadata["well_id_filter"] = well_id
-
-    # Execute vector search (with optional direct count for COUNT queries)
-    if agg_type == 'COUNT' and not ('well' in state.query.lower() or state.metadata.get('well_id_filter')):
-        direct_count = client.count_documents(collection_name, filter_dict)
-        state.metadata["direct_count"] = direct_count
-        count_limit = RetrievalConfig.COUNT_QUERY_RETRIEVAL_LIMIT
-        documents = client.vector_search(
-            collection_name, embedding,
-            limit=min(count_limit, initial_limit),
-            filter_dict=filter_dict
-        )
-    else:
-        documents = client.vector_search(
-            collection_name, embedding,
-            limit=initial_limit,
-            filter_dict=filter_dict,
-            max_documents=max_documents
-        )
-
-    state.metadata["filter_applied"] = filter_dict
-    state.metadata["initial_retrieval_count"] = len(documents)
-
-    # Rerank results using adaptive weights
+    # Execute vector search and rerank
+    documents = execute_vector_search(
+        client, collection_name, embedding, agg_type, state.query.lower(),
+        state.metadata, initial_limit, max_documents, filter_dict
+    )
     vector_weight, keyword_weight = determine_reranking_weights(rel_conf)
     reranked_docs = rerank_results(
-        query=state.query,
-        documents=documents,
-        vector_weight=vector_weight,
-        keyword_weight=keyword_weight,
-        top_k=top_k,
+        query=state.query, documents=documents,
+        vector_weight=vector_weight, keyword_weight=keyword_weight, top_k=top_k
     )
 
-    # Apply keyword filtering
-    decision_log: list[str] = []
+    # Apply filtering and truncation
     critical_keywords = _extract_critical_keywords(state.query)
-    if critical_keywords:
-        original_count = len(reranked_docs)
-        well_id_present = bool(state.metadata.get("well_id_filter"))
-        reranked_docs, log_entry = apply_keyword_filtering(
-            reranked_docs, critical_keywords, rel_conf, well_id_present
-        )
-        decision_log.append(log_entry)
-        state.metadata["keyword_filtered"] = True
-        state.metadata["keyword_filter_terms"] = critical_keywords
-        state.metadata["docs_before_keyword_filter"] = original_count
-        state.metadata["docs_after_keyword_filter"] = len(reranked_docs)
-
-    # Apply well ID filtering
     well_id_filter = state.metadata.get("well_id_filter")
-    if well_id_filter:
-        original_count = len(reranked_docs)
-        reranked_docs = apply_well_id_filtering(reranked_docs, well_id_filter)
-        state.metadata["well_id_filtered"] = True
-        state.metadata["docs_before_well_filter"] = original_count
-        state.metadata["docs_after_well_filter"] = len(reranked_docs)
+    reranked_docs, decision_log = apply_filters_and_truncate(
+        reranked_docs, critical_keywords, well_id_filter, rel_conf, state.metadata
+    )
 
-    # Truncate if needed
-    max_results = RetrievalConfig.MAX_FILTERED_RESULTS
-    if (critical_keywords or well_id_filter) and len(reranked_docs) > max_results:
-        state.metadata["filtered_results_truncated"] = True
-        state.metadata["results_before_truncation"] = len(reranked_docs)
-        reranked_docs = reranked_docs[:max_results]
-        state.metadata["results_after_truncation"] = len(reranked_docs)
-
-    # Convert to document list and update state
+    # Convert to document list and handle empty results
     docs_list = [d for d in reranked_docs if isinstance(d, dict)]
+    docs_list = handle_empty_docs_fallback(
+        docs_list, documents, critical_keywords, well_id_filter,
+        state.query, rel_conf, state.metadata
+    )
 
-    # CRITICAL FIX: Handle empty docs_list after filtering
-    # If filtering removed all documents, fall back to original reranked results
-    if not docs_list and documents:
-        logger.warning(
-            "Filtering removed all documents (keywords=%s, well_id=%s). "
-            "Falling back to top reranked results.",
-            critical_keywords, well_id_filter
-        )
-        # Fall back to original reranked docs before filtering
-        vector_weight, keyword_weight = determine_reranking_weights(rel_conf)
-        fallback_reranked = rerank_results(
-            query=state.query,
-            documents=documents,
-            vector_weight=vector_weight,
-            keyword_weight=keyword_weight,
-            top_k=top_k,
-        )
-        docs_list = [d for d in fallback_reranked if isinstance(d, dict)][:5]  # Take top 5
-        state.metadata["filter_fallback_applied"] = True
-        state.metadata["fallback_reason"] = "empty_after_filtering"
-
+    # Update state and execute graph traversal
     update_state_with_retrieved_documents(state, docs_list, len(documents))
-
-    # Optional graph traversal expansion
-    min_conf = RetrievalConfig.MIN_TRAVERSAL_CONFIDENCE
-    if strategy.get("apply_traversal") and rel_conf >= min_conf:
-        traverser = get_traverser()
-        rel_type = relationship_detection.get("relationship_type")
-        entities = relationship_detection.get("entities", {})
-
-        # Prepare seed nodes
-        seed_nodes = prepare_seed_nodes_for_traversal(
-            docs_list, rel_type, entities, traverser
-        )
-
-        # Determine expansion parameters
-        seed_types = [n.get("type") for n in seed_nodes]
-        expand_direction, max_hops = determine_traversal_hops(
-            rel_type, seed_types, strategy
-        )
-
-        # Execute graph expansion
-        expanded_nodes = get_traverser().expand_search_results(
-            seed_nodes, expand_direction=expand_direction, max_hops=max_hops
-        )
-
-        # Fetch and enrich expanded nodes
-        expanded_docs = fetch_and_enrich_expanded_nodes(
-            expanded_nodes, client, collection_name, embedding
-        )
-
-        # Update state with expanded results
-        update_state_with_expanded_documents(state, expanded_docs, len(docs_list))
-    else:
-        state.metadata["graph_traversal_applied"] = False
+    execute_graph_traversal(state, docs_list, relationship_detection, rel_conf, embedding)
 
     if decision_log:
         state.metadata["decision_log"] = decision_log

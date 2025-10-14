@@ -317,3 +317,261 @@ def update_state_with_expanded_documents(
     state.metadata["expansion_ratio"] = (
         len(expanded_docs) / original_docs_count if original_docs_count else 0
     )
+
+
+def detect_and_apply_filters(
+    state_metadata: Dict[str, Any],
+    query: str,
+) -> tuple[Optional[Dict[str, Any]], Optional[str]]:
+    """Detect and apply entity and well ID filters.
+
+    Args:
+        state_metadata: Workflow state metadata
+        query: Query string
+
+    Returns:
+        Tuple of (filter_dict, well_id)
+    """
+    from services.langgraph.workflow import _detect_entity_filter, _detect_well_id_filter
+
+    # Apply entity filter
+    filter_dict = state_metadata.get("retrieval_filter")
+    if not filter_dict:
+        filter_dict = _detect_entity_filter(query)
+        if filter_dict:
+            state_metadata["auto_filter"] = filter_dict
+
+    # Apply well ID filter
+    well_id = _detect_well_id_filter(query)
+    if well_id:
+        state_metadata["well_id_filter"] = well_id
+
+    return filter_dict, well_id
+
+
+def execute_vector_search(
+    client: AstraApiClient,
+    collection_name: str,
+    embedding: List[float],
+    agg_type: Optional[str],
+    query_lower: str,
+    state_metadata: Dict[str, Any],
+    initial_limit: int,
+    max_documents: Optional[int],
+    filter_dict: Optional[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Execute vector search with special handling for COUNT queries.
+
+    Args:
+        client: Astra API client
+        collection_name: Collection to search
+        embedding: Query embedding vector
+        agg_type: Aggregation type (e.g., 'COUNT', 'MAX')
+        query_lower: Lowercased query string
+        state_metadata: Workflow state metadata
+        initial_limit: Initial retrieval limit
+        max_documents: Max documents to retrieve
+        filter_dict: Optional filter dictionary
+
+    Returns:
+        List of retrieved documents
+    """
+    # Special handling for COUNT queries without well filter
+    if agg_type == 'COUNT' and not ('well' in query_lower or state_metadata.get('well_id_filter')):
+        direct_count = client.count_documents(collection_name, filter_dict)
+        state_metadata["direct_count"] = direct_count
+        count_limit = RetrievalConfig.COUNT_QUERY_RETRIEVAL_LIMIT
+        documents = client.vector_search(
+            collection_name, embedding,
+            limit=min(count_limit, initial_limit),
+            filter_dict=filter_dict
+        )
+    else:
+        documents = client.vector_search(
+            collection_name, embedding,
+            limit=initial_limit,
+            filter_dict=filter_dict,
+            max_documents=max_documents
+        )
+
+    state_metadata["filter_applied"] = filter_dict
+    state_metadata["initial_retrieval_count"] = len(documents)
+    return documents
+
+
+def apply_filters_and_truncate(
+    reranked_docs: List[Dict[str, Any]],
+    critical_keywords: List[str],
+    well_id_filter: Optional[str],
+    rel_conf: float,
+    state_metadata: Dict[str, Any],
+) -> tuple[List[Dict[str, Any]], list[str]]:
+    """Apply keyword and well ID filtering, then truncate if needed.
+
+    Args:
+        reranked_docs: Documents after reranking
+        critical_keywords: Keywords to filter by
+        well_id_filter: Well ID to filter by
+        rel_conf: Relationship confidence score
+        state_metadata: Workflow state metadata
+
+    Returns:
+        Tuple of (filtered_docs, decision_log)
+    """
+    decision_log: list[str] = []
+
+    # Apply keyword filtering
+    if critical_keywords:
+        original_count = len(reranked_docs)
+        well_id_present = bool(well_id_filter)
+        reranked_docs, log_entry = apply_keyword_filtering(
+            reranked_docs, critical_keywords, rel_conf, well_id_present
+        )
+        decision_log.append(log_entry)
+        state_metadata["keyword_filtered"] = True
+        state_metadata["keyword_filter_terms"] = critical_keywords
+        state_metadata["docs_before_keyword_filter"] = original_count
+        state_metadata["docs_after_keyword_filter"] = len(reranked_docs)
+
+    # Apply well ID filtering
+    if well_id_filter:
+        original_count = len(reranked_docs)
+        reranked_docs = apply_well_id_filtering(reranked_docs, well_id_filter)
+        state_metadata["well_id_filtered"] = True
+        state_metadata["docs_before_well_filter"] = original_count
+        state_metadata["docs_after_well_filter"] = len(reranked_docs)
+
+    # Truncate if needed
+    max_results = RetrievalConfig.MAX_FILTERED_RESULTS
+    if (critical_keywords or well_id_filter) and len(reranked_docs) > max_results:
+        state_metadata["filtered_results_truncated"] = True
+        state_metadata["results_before_truncation"] = len(reranked_docs)
+        reranked_docs = reranked_docs[:max_results]
+        state_metadata["results_after_truncation"] = len(reranked_docs)
+
+    return reranked_docs, decision_log
+
+
+def handle_empty_docs_fallback(
+    docs_list: List[Dict[str, Any]],
+    documents: List[Dict[str, Any]],
+    critical_keywords: List[str],
+    well_id_filter: Optional[str],
+    query: str,
+    rel_conf: float,
+    state_metadata: Dict[str, Any],
+) -> List[Dict[str, Any]]:
+    """Handle fallback when filtering removes all documents.
+
+    Args:
+        docs_list: Documents after filtering
+        documents: Original unfiltered documents
+        critical_keywords: Keywords used for filtering
+        well_id_filter: Well ID filter if any
+        query: Original query string
+        rel_conf: Relationship confidence score
+        state_metadata: Workflow state metadata
+
+    Returns:
+        Either original docs_list if non-empty, or fallback top 5 docs
+    """
+    # Imports placed here to avoid circular dependency
+    import logging
+    from services.langgraph.reranker import rerank_results
+
+    logger = logging.getLogger(__name__)
+
+    # If docs_list is non-empty, return as-is
+    if docs_list:
+        return docs_list
+
+    # If original documents exist but filtering removed everything, fall back
+    if documents:
+        logger.warning(
+            "Filtering removed all documents (keywords=%s, well_id=%s). "
+            "Falling back to top reranked results.",
+            critical_keywords, well_id_filter
+        )
+
+        # Re-rank original documents
+        vector_weight, keyword_weight = determine_reranking_weights(rel_conf)
+        fallback_reranked = rerank_results(
+            query=query,
+            documents=documents,
+            vector_weight=vector_weight,
+            keyword_weight=keyword_weight,
+            top_k=RetrievalConfig.get_top_k(rel_conf),
+        )
+
+        # Take top 5 documents
+        docs_list_fallback = [d for d in fallback_reranked if isinstance(d, dict)][:5]
+        state_metadata["filter_fallback_applied"] = True
+        state_metadata["fallback_reason"] = "empty_after_filtering"
+        return docs_list_fallback
+
+    # No documents at all - return empty list
+    return docs_list
+
+
+def execute_graph_traversal(
+    state: WorkflowState,
+    docs_list: List[Dict[str, Any]],
+    relationship_detection: Dict[str, Any],
+    rel_conf: float,
+    embedding: List[float],
+) -> None:
+    """Execute optional graph traversal expansion.
+
+    Updates state in-place if traversal is applied.
+
+    Args:
+        state: Workflow state to update
+        docs_list: Retrieved documents (seed nodes)
+        relationship_detection: Relationship detection results
+        rel_conf: Relationship confidence score
+        embedding: Query embedding vector
+    """
+    from services.graph_index.graph_traverser import get_traverser
+    from services.graph_index.astra_api import AstraApiClient
+    from services.config import get_settings
+
+    strategy = relationship_detection.get("traversal_strategy", {}) or {}
+    min_conf = RetrievalConfig.MIN_TRAVERSAL_CONFIDENCE
+
+    # Check if traversal should be applied
+    if not (strategy.get("apply_traversal") and rel_conf >= min_conf):
+        state.metadata["graph_traversal_applied"] = False
+        return
+
+    # Initialize traverser and extract relationship info
+    traverser = get_traverser()
+    rel_type = relationship_detection.get("relationship_type")
+    entities = relationship_detection.get("entities", {})
+
+    # Prepare seed nodes
+    seed_nodes = prepare_seed_nodes_for_traversal(
+        docs_list, rel_type, entities, traverser
+    )
+
+    # Determine expansion parameters
+    seed_types = [n.get("type") for n in seed_nodes]
+    expand_direction, max_hops = determine_traversal_hops(
+        rel_type, seed_types, strategy
+    )
+
+    # Execute graph expansion
+    expanded_nodes = traverser.expand_search_results(
+        seed_nodes, expand_direction=expand_direction, max_hops=max_hops
+    )
+
+    # Fetch and enrich expanded nodes
+    client = AstraApiClient()
+    settings = get_settings()
+    collection_name = settings.astra_db_collection or "graph_nodes"
+
+    expanded_docs = fetch_and_enrich_expanded_nodes(
+        expanded_nodes, client, collection_name, embedding
+    )
+
+    # Update state with expanded results
+    update_state_with_expanded_documents(state, expanded_docs, len(docs_list))
