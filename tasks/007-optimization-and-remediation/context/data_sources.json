@@ -1,0 +1,318 @@
+{
+  "task_id": "007-optimization-and-remediation",
+  "protocol": "SCA v9-Compact",
+  "date_generated": "2025-10-14",
+  "data_sources": {
+    "inputs": [
+      {
+        "id": "INPUT-007-001",
+        "name": "E2E Test Suite",
+        "path": "tests/critical_path/test_cp_workflow_e2e.py",
+        "type": "code",
+        "format": "Python pytest",
+        "size_info": "20 test queries (5 simple, 5 relationship, 5 aggregation, 5 extraction)",
+        "sha256": "N/A (code, not data)",
+        "licensing": "Project license",
+        "pii": "none",
+        "retention_days": "indefinite",
+        "purpose": "Baseline validation; measures test pass rate (≥95% requirement)",
+        "validation_status": "verified_task_006"
+      },
+      {
+        "id": "INPUT-007-002",
+        "name": "Current Prompts",
+        "path": "services/langgraph/",
+        "type": "code",
+        "format": "Python strings (embedded in workflow.py, query_expansion.py, scope_detection.py)",
+        "size_info": "~5 prompt templates (basic, unoptimized)",
+        "sha256": "N/A (code, not data)",
+        "licensing": "Project license",
+        "pii": "none",
+        "retention_days": "indefinite",
+        "purpose": "Baseline for prompt optimization; semantic similarity comparison",
+        "validation_status": "current_production"
+      },
+      {
+        "id": "INPUT-007-003",
+        "name": "Current LLM Configuration",
+        "path": "services/config/settings.py",
+        "type": "code",
+        "format": "Python dataclass",
+        "size_info": "1 config file (granite-13b-instruct-v2 currently used)",
+        "sha256": "N/A (code, not data)",
+        "licensing": "Project license",
+        "pii": "none",
+        "retention_days": "indefinite",
+        "purpose": "Baseline for model selection; cost/performance benchmark comparison",
+        "validation_status": "current_production"
+      },
+      {
+        "id": "INPUT-007-004",
+        "name": "LocalOrchestrator Implementation",
+        "path": "services/orchestration/local_orchestrator.py",
+        "type": "code",
+        "format": "Python class (121 NLOC, max CCN=5)",
+        "size_info": "1 file, proof-of-concept implementation",
+        "sha256": "N/A (code, not data)",
+        "licensing": "Project license",
+        "pii": "none",
+        "retention_days": "indefinite",
+        "purpose": "Baseline for orchestrator hardening; current 100% tool invocation rate on 5 test cases",
+        "validation_status": "proof_of_concept_task_005"
+      },
+      {
+        "id": "INPUT-007-005",
+        "name": "Task 006 VALIDATION_REPORT.md",
+        "path": "tasks/006-technical-debt-remediation/VALIDATION_REPORT.md",
+        "type": "documentation",
+        "format": "Markdown",
+        "size_info": "17.6 KB (known limitations section)",
+        "sha256": "N/A (documentation)",
+        "licensing": "Project license",
+        "pii": "none",
+        "retention_days": "indefinite",
+        "purpose": "Known limitations list; drives Task 007 scope",
+        "validation_status": "verified_task_006"
+      },
+      {
+        "id": "INPUT-007-006",
+        "name": "Test Data Files",
+        "path": "data/raw/force2020/las_files/",
+        "type": "data",
+        "format": "LAS files + JSON metadata",
+        "size_info": "122 files, ~620 MB total",
+        "sha256": "See data/checksums.json",
+        "licensing": "FORCE 2020 ML Competition (public, non-commercial research)",
+        "url": "https://github.com/bolgebrygg/Force-2020-Machine-Learning-competition",
+        "pii": "none",
+        "retention_days": "indefinite",
+        "purpose": "Test queries retrieve from this data; unchanged from Task 006",
+        "validation_status": "checksummed_task_006"
+      }
+    ],
+    "outputs": [
+      {
+        "id": "OUTPUT-007-001",
+        "name": "Metrics Log (Latency)",
+        "path": "logs/metrics_latency.json",
+        "type": "telemetry",
+        "format": "JSON (newline-delimited)",
+        "size_estimate": "~10-50 KB per test run",
+        "schema": {
+          "timestamp": "ISO 8601 string",
+          "metric_type": "latency",
+          "metric_name": "embedding_step | retrieval_step | reasoning_step | generation_step",
+          "value": "float (seconds)",
+          "metadata": {
+            "query": "string",
+            "query_type": "simple | relationship | aggregation | extraction"
+          }
+        },
+        "retention_days": "90",
+        "purpose": "Measures P50/P95/P99 latency per workflow step; validates Metric 1 (P95<3s target)"
+      },
+      {
+        "id": "OUTPUT-007-002",
+        "name": "Metrics Log (Cost)",
+        "path": "logs/metrics_cost.json",
+        "type": "telemetry",
+        "format": "JSON (newline-delimited)",
+        "size_estimate": "~5-20 KB per test run",
+        "schema": {
+          "timestamp": "ISO 8601 string",
+          "metric_type": "cost",
+          "metric_name": "llm_api_call",
+          "value": "float (USD)",
+          "metadata": {
+            "model_id": "string",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "query_type": "string"
+          }
+        },
+        "retention_days": "90",
+        "purpose": "Tracks LLM API costs per query; validates Metric 2 (20% cost reduction target)"
+      },
+      {
+        "id": "OUTPUT-007-003",
+        "name": "Metrics Log (Cache)",
+        "path": "logs/metrics_cache.json",
+        "type": "telemetry",
+        "format": "JSON (newline-delimited)",
+        "size_estimate": "~2-10 KB per test run",
+        "schema": {
+          "timestamp": "ISO 8601 string",
+          "metric_type": "cache",
+          "metric_name": "redis_hit | redis_miss | glossary_hit | glossary_miss | query_result_hit",
+          "value": "float (1.0 for hit, 0.0 for miss)",
+          "metadata": {
+            "cache_key": "string (hashed)",
+            "cache_type": "string"
+          }
+        },
+        "retention_days": "30",
+        "purpose": "Tracks cache hit rates (target: ≥60%); supports performance analysis"
+      },
+      {
+        "id": "OUTPUT-007-004",
+        "name": "Metrics Log (Orchestrator)",
+        "path": "logs/metrics_orchestrator.json",
+        "type": "telemetry",
+        "format": "JSON (newline-delimited)",
+        "size_estimate": "~5-15 KB per test run",
+        "schema": {
+          "timestamp": "ISO 8601 string",
+          "metric_type": "orchestrator",
+          "metric_name": "term_extraction_success | term_extraction_failure | timeout | fallback",
+          "value": "float (1.0 for success, 0.0 for failure)",
+          "metadata": {
+            "query": "string",
+            "extracted_term": "string | null",
+            "latency": "float (seconds)"
+          }
+        },
+        "retention_days": "90",
+        "purpose": "Tracks LocalOrchestrator telemetry; validates Metric 3 (≥90% accuracy target)"
+      },
+      {
+        "id": "OUTPUT-007-005",
+        "name": "Optimized Prompt Library",
+        "path": "services/prompts/",
+        "type": "code",
+        "format": "Python module (templates.py, reasoning_prompts.py, orchestrator_prompts.py, query_prompts.py, scope_prompts.py)",
+        "size_estimate": "~1000-2000 NLOC",
+        "retention_days": "indefinite",
+        "purpose": "Centralized prompt templates with versioning; validates Metric 4 (15% semantic similarity improvement)"
+      },
+      {
+        "id": "OUTPUT-007-006",
+        "name": "Model Benchmark Report",
+        "path": "tasks/007-optimization-and-remediation/model_benchmark_results.json",
+        "type": "analysis",
+        "format": "JSON",
+        "size_estimate": "~5-10 KB",
+        "schema": {
+          "models_evaluated": ["granite-13b-instruct-v2", "granite-3-3-8b-instruct"],
+          "test_queries": 20,
+          "results": {
+            "model_id": {
+              "avg_latency": "float (seconds)",
+              "p95_latency": "float (seconds)",
+              "avg_cost": "float (USD)",
+              "semantic_similarity": "float (0-1)",
+              "test_pass_rate": "float (0-1)"
+            }
+          }
+        },
+        "retention_days": "indefinite",
+        "purpose": "Documents model selection decision; validates Metric 2 (cost/performance trade-off)"
+      },
+      {
+        "id": "OUTPUT-007-007",
+        "name": "Monitoring Infrastructure",
+        "path": "services/monitoring/",
+        "type": "code",
+        "format": "Python module (metrics_collector.py, latency_tracker.py, cost_tracker.py)",
+        "size_estimate": "~500-800 NLOC",
+        "retention_days": "indefinite",
+        "purpose": "Instrumentation infrastructure; validates Metric 5 (≥95% coverage target)"
+      },
+      {
+        "id": "OUTPUT-007-008",
+        "name": "Hardened LocalOrchestrator",
+        "path": "services/orchestration/local_orchestrator.py",
+        "type": "code",
+        "format": "Python class (production-ready with error handling, retry logic, telemetry)",
+        "size_estimate": "~200-300 NLOC (expanded from 121 NLOC)",
+        "retention_days": "indefinite",
+        "purpose": "Production-grade orchestrator; validates Metric 3 (≥90% accuracy, graceful errors)"
+      },
+      {
+        "id": "OUTPUT-007-009",
+        "name": "VALIDATION_REPORT.md",
+        "path": "tasks/007-optimization-and-remediation/VALIDATION_REPORT.md",
+        "type": "documentation",
+        "format": "Markdown",
+        "size_estimate": "~15-25 KB",
+        "retention_days": "indefinite",
+        "purpose": "Documents all hypothesis metrics validation; statistical test results; before/after comparisons"
+      }
+    ],
+    "transformations": [
+      {
+        "id": "TRANSFORM-007-001",
+        "name": "Instrumentation Integration",
+        "input_ids": ["INPUT-007-001", "INPUT-007-002"],
+        "output_ids": ["OUTPUT-007-001", "OUTPUT-007-002", "OUTPUT-007-003", "OUTPUT-007-004", "OUTPUT-007-007"],
+        "method": "Context manager pattern for latency tracking; decorator pattern for cost tracking; singleton MetricsCollector",
+        "validation": "Verify 100% of test queries have latency/cost metrics logged; no instrumentation overhead >5ms",
+        "reversible": false,
+        "notes": "Phase 1: Adds instrumentation to workflow.py, generation.py, local_orchestrator.py without changing functional behavior"
+      },
+      {
+        "id": "TRANSFORM-007-002",
+        "name": "Model Benchmarking",
+        "input_ids": ["INPUT-007-001", "INPUT-007-003", "OUTPUT-007-001", "OUTPUT-007-002"],
+        "output_ids": ["OUTPUT-007-006"],
+        "method": "Run 20 test queries on granite-13b-instruct-v2 and granite-3-3-8b-instruct; measure latency, cost, semantic similarity",
+        "validation": "Paired t-test (α=0.05) for latency/cost differences; semantic similarity measured via embedding cosine distance",
+        "reversible": false,
+        "notes": "Phase 2: Reads current config (INPUT-007-003), runs benchmark, outputs model_benchmark_results.json (OUTPUT-007-006)"
+      },
+      {
+        "id": "TRANSFORM-007-003",
+        "name": "Prompt Optimization",
+        "input_ids": ["INPUT-007-002"],
+        "output_ids": ["OUTPUT-007-005"],
+        "method": "Extract prompts from workflow.py → create prompt library with ChainOfThoughtPrompt, FewShotPrompt templates; add versioning",
+        "validation": "Semantic similarity improvement ≥15%; E2E test pass rate maintains ≥95%; parsing errors reduced",
+        "reversible": true,
+        "notes": "Phase 3: Refactors embedded prompts into services/prompts/ module; maintains baseline prompts for comparison"
+      },
+      {
+        "id": "TRANSFORM-007-004",
+        "name": "LocalOrchestrator Hardening",
+        "input_ids": ["INPUT-007-004"],
+        "output_ids": ["OUTPUT-007-008"],
+        "method": "Add retry logic (exponential backoff), timeout handling (10s), error handling, validation, telemetry integration",
+        "validation": "Term extraction accuracy ≥90% on 20 test queries; graceful error handling (no crashes); ≥90% branch coverage",
+        "reversible": false,
+        "notes": "Phase 4: Expands local_orchestrator.py from 121 NLOC to ~200-300 NLOC; adds unit tests for error conditions"
+      },
+      {
+        "id": "TRANSFORM-007-005",
+        "name": "Performance Optimization",
+        "input_ids": ["INPUT-007-001", "OUTPUT-007-001"],
+        "output_ids": ["OUTPUT-007-003"],
+        "method": "Implement query result caching (LRU cache, maxsize=100); track cache hit rates",
+        "validation": "Cache hit rate ≥60% for repeated queries; P95 latency improvement validated by paired t-test",
+        "reversible": true,
+        "notes": "Phase 5: Adds @lru_cache to generation calls; optional async glossary fetching (stretch goal)"
+      },
+      {
+        "id": "TRANSFORM-007-006",
+        "name": "Statistical Validation",
+        "input_ids": ["OUTPUT-007-001", "OUTPUT-007-002", "OUTPUT-007-004", "OUTPUT-007-006"],
+        "output_ids": ["OUTPUT-007-009"],
+        "method": "Paired t-tests for latency/cost/semantic similarity (α=0.05, n=20); binomial test for orchestrator accuracy",
+        "validation": "All 5 hypothesis metrics achieved; statistical significance validated; E2E test pass rate ≥95%",
+        "reversible": false,
+        "notes": "Phase 7: Runs statistical tests on collected metrics; generates VALIDATION_REPORT.md"
+      }
+    ]
+  },
+  "data_integrity": {
+    "test_data_verified": true,
+    "checksum_file": "data/checksums.json",
+    "verification_script": "scripts/verify_checksums.py",
+    "verification_date": "2025-10-14",
+    "verification_result": "122/122 files verified successfully (Task 006)"
+  },
+  "notes": [
+    "Task 007 does not modify test data files (INPUT-007-006); data integrity from Task 006 preserved",
+    "All metrics logs (OUTPUT-007-001 through OUTPUT-007-004) are telemetry, not training data",
+    "No PII in any data sources; all inputs are technical/scientific data",
+    "Transformations are incremental and git-tracked for reproducibility",
+    "Statistical validation uses same test queries across before/after measurements (paired design)"
+  ]
+}
