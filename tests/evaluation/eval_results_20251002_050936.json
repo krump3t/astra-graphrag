@@ -1,0 +1,346 @@
+{
+  "timestamp": "2025-10-02T05:09:36.734957",
+  "summary": {
+    "total_tests": 8,
+    "successful": 8,
+    "failed": 0,
+    "success_rate": 1.0,
+    "average_metrics": {
+      "faithfulness": 0.45,
+      "answer_relevance": 0.249,
+      "context_precision": 0.709,
+      "context_recall": 0.059,
+      "ground_truth_overlap": 0.165,
+      "keyword_score": 0.354,
+      "aggregate_score": 0.422
+    },
+    "category_performance": {
+      "factual_retrieval": 0.42,
+      "comparison": 0.206,
+      "technical_explanation": 0.5,
+      "temporal": 0.577,
+      "geographic": 0.3,
+      "technical_detail": 0.537
+    }
+  },
+  "results": [
+    {
+      "test_id": "well_log_basic",
+      "category": "factual_retrieval",
+      "query": "What well log data is available from Kansas?",
+      "answer": "The well log data available from Kansas is as follows:\n- Node ID: las-file-20251002T035016Z_1001178549\n03/04/1999: 21:59Updated by the Kansas Geological Survey\n-kgs#id: 30S39W/1001178549\n-additions: 1001178549.add\n-new: LEAS .               COLLINGWOOD: Lease Name\n-old: WELL .          COLLINGWOOD 1-28: WELL NAME\n02/24/1999: 12:43Updated by the Kansas Geological Survey\n-kgs#input_file: /home/crude2_3/WellLogs/Guy/100-Amoco/disc09/18720743.las.las\nThe well log data available from Kansas is as follows:\n-Node ID: las-file-20251002T035016Z_1001178549\n03/04/1999: 21:59Updated by the Kansas Geological Survey\n-kgs#id: 30S39W/1001178549\n-additions: 100 1178549.add\n-new:LEAS .               COLLINGWOOD: Lease Name\n-old: WELL .          COLLINGWOOD 1-28: WELL NAME\n02/24/1999: 12:43Updated by the Kansas Geological Survey\n-kgs#input_file: /home/crude2_3/WellLogs/Guy/100-Amoco/disc09/18720743.las.las",
+      "retrieved_contexts": [
+        "Node ID: las-file-20251002T035016Z_1001178549\n03/04/1999: 21:59 Updated by the Kansas Geological Survey\nkgs#id: 30S39W/1001178549\nadditions: 1001178549.add\nnew: LEAS .               COLLINGWOOD: Lease Name\nold: WELL .          COLLINGWOOD 1-28: WELL NAME\n02/24/1999: 12:43 Updated by the Kansas Geological Survey\nkgs#input_file: /home/crude2_3/WellLogs/Guy/100-Amoco/disc09/18720743.las.las\n----.----: -----------------------------",
+        "Node ID: usgs-measurement-0\ndatetime: 2025-10-01T20:15:00.000-06:00\nvalue: 42.7\nvariable_code: 00060\nvariable_name: Discharge, cubic feet per second\nqualifiers: P\nmethod_id: 49959",
+        "Node ID: usgs-site-03339000\nsite_code: 03339000\nsite_name: VERMILION RIVER NEAR DANVILLE, IL",
+        "Node ID: las-curve-11\nmnemonic: DLDN\nunit: GM/CC\ndescription: 12 BULK DENSITY",
+        "Node ID: las-curve-18\nmnemonic: ACAPL\nunit: PERCNT\ndescription: 19 POROSITY"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.8,
+          "answer_relevance": 0.14,
+          "context_precision": 0.667,
+          "context_recall": 0.065,
+          "ground_truth_overlap": 0.18,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.615
+        },
+        "diagnostics": {
+          "num_contexts": 5,
+          "answer_length": 93,
+          "missing_keywords": [],
+          "expected_entities_found": "2/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 5,
+          "initial_results": 20,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    },
+    {
+      "test_id": "usgs_site_info",
+      "category": "factual_retrieval",
+      "query": "Tell me about USGS monitoring sites in the dataset",
+      "answer": "The las file contains the following information:\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA\n- Well log data from oil wells in Kansas, USA",
+      "retrieved_contexts": [
+        "Node ID: usgs-site-03339000\nsite_code: 03339000\nsite_name: VERMILION RIVER NEAR DANVILLE, IL",
+        "Node ID: las-file-20251002T035016Z_1001178549\n03/04/1999: 21:59 Updated by the Kansas Geological Survey\nkgs#id: 30S39W/1001178549\nadditions: 1001178549.add\nnew: LEAS .               COLLINGWOOD: Lease Name\nold: WELL .          COLLINGWOOD 1-28: WELL NAME\n02/24/1999: 12:43 Updated by the Kansas Geological Survey\nkgs#input_file: /home/crude2_3/WellLogs/Guy/100-Amoco/disc09/18720743.las.las\n----.----: -----------------------------",
+        "Node ID: usgs-measurement-0\ndatetime: 2025-10-01T20:15:00.000-06:00\nvalue: 42.7\nvariable_code: 00060\nvariable_name: Discharge, cubic feet per second\nqualifiers: P\nmethod_id: 49959",
+        "Node ID: las-curve-3\nmnemonic: GST\nunit: API\ndescription: 4 ????????",
+        "Node ID: las-curve-2\nmnemonic: GSTK\nunit: API\ndescription: 3 ????????"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.333,
+          "answer_relevance": 0.133,
+          "context_precision": 0.667,
+          "context_recall": 0.034,
+          "ground_truth_overlap": 0.111,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.273
+        },
+        "diagnostics": {
+          "num_contexts": 5,
+          "answer_length": 427,
+          "missing_keywords": [
+            "USGS",
+            "site",
+            "water"
+          ],
+          "expected_entities_found": "2/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 5,
+          "initial_results": 20,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    },
+    {
+      "test_id": "curve_mnemonics",
+      "category": "factual_retrieval",
+      "query": "What types of log curves are recorded in the well data?",
+      "answer": "- If the context is sufficient, state that explicitly and suggest running the full GraphRAGWorkflow once Astra DB is connected.The well data contains log curves of porosity, density, and API.",
+      "retrieved_contexts": [
+        "Node ID: las-curve-18\nmnemonic: ACAPL\nunit: PERCNT\ndescription: 19 POROSITY",
+        "Node ID: las-curve-0\nmnemonic: DEPT\nunit: FT\ndescription: 1 DEPTH",
+        "Node ID: las-curve-8\nmnemonic: DLDPL\nunit: PERCNT\ndescription: 9 DENSITY POROSITY (LIMESTONE)",
+        "Node ID: las-curve-11\nmnemonic: DLDN\nunit: GM/CC\ndescription: 12 BULK DENSITY",
+        "Node ID: las-curve-3\nmnemonic: GST\nunit: API\ndescription: 4 ????????"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.115,
+          "answer_relevance": 0.231,
+          "context_precision": 0.667,
+          "context_recall": 0.125,
+          "ground_truth_overlap": 0.192,
+          "keyword_score": 0.667,
+          "aggregate_score": 0.371
+        },
+        "diagnostics": {
+          "num_contexts": 5,
+          "answer_length": 30,
+          "missing_keywords": [
+            "gamma"
+          ],
+          "expected_entities_found": "2/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 5,
+          "initial_results": 20,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    },
+    {
+      "test_id": "data_source_comparison",
+      "category": "comparison",
+      "query": "What is the difference between USGS data and KGS well log data?",
+      "answer": "The las file has the following columns: Well Name, Well ID, Well Depth, Well Start, Well Name, Well Logging Company, Well Operator, Well latitude, Well longitude, Well Timezone, Well Depth_Type, Well Depth_Value, Well Depth_Units, Well Depth_Date, Well Depth_Time, Well Depth_Method, Well Depth_Qualifier, Well Depth_Qualifier_Value, Well Depth_Qualifier_Date, Well Depth_Qualifier_Time, Well Depth_Qualifier_Method, Well Depth_Qualifier_Value_Date, Well Depth_Qualifier_Value_Time, Well Depth_Qualifier_Method_Value_Date, Well Depth_Qualifier_Method_Value_Time, Well Depth_Qualifier_Method_Value_Date, Well Depth_Qualifier_Method_Value_Time, Well Depth_Qualifier_Method_Value_Date, Well Depth_Qualifier_Method_Value_Time, Well Depth_Qualifier_Method_Value_Date, Well Depth_Qualifier_Method_Value_Time, Well Depth_Qualifier_Method_Value_Date, Well Depth_Qualifier_Method_Value_Time, Well Depth_Qualifier_Method_Value_Date, Well Depth_Qualifier_Method_Value_Time, Well Depth_Qualifier_Method_Value_Date, Well Depth_Qualifier_Method_Value_Time, Well Depth_Qualifier_Method_Value_Date, Well Depth_Qualifier_Method_Value_Time, Well Depth_Qualifier_Method_Value_Date, Well Depth_Qualifier_Method_Value_Time, Well Depth_Qualifier_Method_Value_Date, Well Depth_Qualifier_Method_Value_Time, Well Depth_Qualifier_Method_Value_Date, Well Depth_Qualifier_Method_Value_Time, Well Depth_Qualifier_Method_Value_Date, Well Depth_Qualifier_Method_Value_Time, Well Depth_Qualifier_Method_Value_Date, Well Depth_Qualifier_Method_Value_Time, Well Depth_Qualifier_Method_Value_Date, Well Depth_Qualifier_Method_Value_Time, Well Depth_",
+      "retrieved_contexts": [
+        "Node ID: las-file-20251002T035016Z_1001178549\n03/04/1999: 21:59 Updated by the Kansas Geological Survey\nkgs#id: 30S39W/1001178549\nadditions: 1001178549.add\nnew: LEAS .               COLLINGWOOD: Lease Name\nold: WELL .          COLLINGWOOD 1-28: WELL NAME\n02/24/1999: 12:43 Updated by the Kansas Geological Survey\nkgs#input_file: /home/crude2_3/WellLogs/Guy/100-Amoco/disc09/18720743.las.las\n----.----: -----------------------------",
+        "Node ID: usgs-measurement-0\ndatetime: 2025-10-01T20:15:00.000-06:00\nvalue: 42.7\nvariable_code: 00060\nvariable_name: Discharge, cubic feet per second\nqualifiers: P\nmethod_id: 49959",
+        "Node ID: las-curve-18\nmnemonic: ACAPL\nunit: PERCNT\ndescription: 19 POROSITY",
+        "Node ID: las-curve-8\nmnemonic: DLDPL\nunit: PERCNT\ndescription: 9 DENSITY POROSITY (LIMESTONE)",
+        "Node ID: las-curve-11\nmnemonic: DLDN\nunit: GM/CC\ndescription: 12 BULK DENSITY"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.182,
+          "answer_relevance": 0.061,
+          "context_precision": 0.667,
+          "context_recall": 0.045,
+          "ground_truth_overlap": 0.03,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.206
+        },
+        "diagnostics": {
+          "num_contexts": 5,
+          "answer_length": 112,
+          "missing_keywords": [
+            "USGS",
+            "surface water",
+            "KGS",
+            "subsurface"
+          ],
+          "expected_entities_found": "2/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 5,
+          "initial_results": 20,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    },
+    {
+      "test_id": "porosity_measurement",
+      "category": "technical_explanation",
+      "query": "How is porosity measured in the well logs?",
+      "answer": "The porosity of the subsurface is measured using the neutron porosity method.",
+      "retrieved_contexts": [
+        "Node ID: las-curve-8\nmnemonic: DLDPL\nunit: PERCNT\ndescription: 9 DENSITY POROSITY (LIMESTONE)",
+        "Node ID: las-curve-18\nmnemonic: ACAPL\nunit: PERCNT\ndescription: 19 POROSITY",
+        "Node ID: las-curve-7\nmnemonic: NCNPL\nunit: PERCNT\ndescription: 8 NEUTRON POROSITY (LIMESTONE)",
+        "Node ID: las-file-20251002T035016Z_1001178549\n03/04/1999: 21:59 Updated by the Kansas Geological Survey\nkgs#id: 30S39W/1001178549\nadditions: 1001178549.add\nnew: LEAS .               COLLINGWOOD: Lease Name\nold: WELL .          COLLINGWOOD 1-28: WELL NAME\n02/24/1999: 12:43 Updated by the Kansas Geological Survey\nkgs#input_file: /home/crude2_3/WellLogs/Guy/100-Amoco/disc09/18720743.las.las\n----.----: -----------------------------",
+        "Node ID: usgs-measurement-0\ndatetime: 2025-10-01T20:15:00.000-06:00\nvalue: 42.7\nvariable_code: 00060\nvariable_name: Discharge, cubic feet per second\nqualifiers: P\nmethod_id: 49959"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.333,
+          "answer_relevance": 0.444,
+          "context_precision": 1.0,
+          "context_recall": 0.059,
+          "ground_truth_overlap": 0.357,
+          "keyword_score": 0.333,
+          "aggregate_score": 0.5
+        },
+        "diagnostics": {
+          "num_contexts": 5,
+          "answer_length": 12,
+          "missing_keywords": [
+            "density",
+            "measurement"
+          ],
+          "expected_entities_found": "3/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 5,
+          "initial_results": 20,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    },
+    {
+      "test_id": "temporal_data",
+      "category": "temporal",
+      "query": "What time period does the well log data cover?",
+      "answer": "The well log data covers the period from 03/04/1999 to 02/24/1999.",
+      "retrieved_contexts": [
+        "Node ID: las-file-20251002T035016Z_1001178549\n03/04/1999: 21:59 Updated by the Kansas Geological Survey\nkgs#id: 30S39W/1001178549\nadditions: 1001178549.add\nnew: LEAS .               COLLINGWOOD: Lease Name\nold: WELL .          COLLINGWOOD 1-28: WELL NAME\n02/24/1999: 12:43 Updated by the Kansas Geological Survey\nkgs#input_file: /home/crude2_3/WellLogs/Guy/100-Amoco/disc09/18720743.las.las\n----.----: -----------------------------",
+        "Node ID: las-curve-18\nmnemonic: ACAPL\nunit: PERCNT\ndescription: 19 POROSITY",
+        "Node ID: usgs-measurement-0\ndatetime: 2025-10-01T20:15:00.000-06:00\nvalue: 42.7\nvariable_code: 00060\nvariable_name: Discharge, cubic feet per second\nqualifiers: P\nmethod_id: 49959",
+        "Node ID: las-curve-8\nmnemonic: DLDPL\nunit: PERCNT\ndescription: 9 DENSITY POROSITY (LIMESTONE)",
+        "Node ID: las-curve-17\nmnemonic: ACTC\nunit: US/FT\ndescription: 18 SONIC INTERVAL TRANSIT TIME (COMPENSATED)"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.538,
+          "answer_relevance": 0.385,
+          "context_precision": 1.0,
+          "context_recall": 0.033,
+          "ground_truth_overlap": 0.357,
+          "keyword_score": 0.5,
+          "aggregate_score": 0.577
+        },
+        "diagnostics": {
+          "num_contexts": 5,
+          "answer_length": 11,
+          "missing_keywords": [
+            "date"
+          ],
+          "expected_entities_found": "3/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 5,
+          "initial_results": 20,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    },
+    {
+      "test_id": "geographic_scope",
+      "category": "geographic",
+      "query": "What geographic regions are covered in this dataset?",
+      "answer": "- Las Curve 8: Density Porosity (Limestone)",
+      "retrieved_contexts": [
+        "Node ID: las-curve-11\nmnemonic: DLDN\nunit: GM/CC\ndescription: 12 BULK DENSITY",
+        "Node ID: las-curve-18\nmnemonic: ACAPL\nunit: PERCNT\ndescription: 19 POROSITY",
+        "Node ID: las-curve-8\nmnemonic: DLDPL\nunit: PERCNT\ndescription: 9 DENSITY POROSITY (LIMESTONE)",
+        "Node ID: las-curve-23\nmnemonic: IDTN\nunit: LBS\ndescription: 24 ????????",
+        "Node ID: las-curve-0\nmnemonic: DEPT\nunit: FT\ndescription: 1 DEPTH"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 1.0,
+          "answer_relevance": 0.0,
+          "context_precision": 0.0,
+          "context_recall": 0.0,
+          "ground_truth_overlap": 0.0,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.3
+        },
+        "diagnostics": {
+          "num_contexts": 5,
+          "answer_length": 7,
+          "missing_keywords": [
+            "Kansas",
+            "region"
+          ],
+          "expected_entities_found": "0/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 5,
+          "initial_results": 20,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    },
+    {
+      "test_id": "measurement_units",
+      "category": "technical_detail",
+      "query": "What units are used for density measurements?",
+      "answer": "The units used for density measurements are PERCNT and INCHES.",
+      "retrieved_contexts": [
+        "Node ID: las-curve-8\nmnemonic: DLDPL\nunit: PERCNT\ndescription: 9 DENSITY POROSITY (LIMESTONE)",
+        "Node ID: las-curve-15\nmnemonic: ACCL1\nunit: INCHES\ndescription: 16 DENSITY CALIPER",
+        "Node ID: las-curve-11\nmnemonic: DLDN\nunit: GM/CC\ndescription: 12 BULK DENSITY",
+        "Node ID: usgs-measurement-0\ndatetime: 2025-10-01T20:15:00.000-06:00\nvalue: 42.7\nvariable_code: 00060\nvariable_name: Discharge, cubic feet per second\nqualifiers: P\nmethod_id: 49959",
+        "Node ID: las-curve-9\nmnemonic: DLDC\nunit: GM/CC\ndescription: 10 DENSITY CORRECTION"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.3,
+          "answer_relevance": 0.6,
+          "context_precision": 1.0,
+          "context_recall": 0.115,
+          "ground_truth_overlap": 0.091,
+          "keyword_score": 0.333,
+          "aggregate_score": 0.537
+        },
+        "diagnostics": {
+          "num_contexts": 5,
+          "answer_length": 10,
+          "missing_keywords": [
+            "GM/CC",
+            "grams"
+          ],
+          "expected_entities_found": "3/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 5,
+          "initial_results": 20,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    }
+  ]
+}

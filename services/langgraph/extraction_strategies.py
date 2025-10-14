@@ -5,7 +5,7 @@ structured_extraction_answer to improve maintainability and reduce complexity.
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Optional, Dict, Any
+from typing import TYPE_CHECKING, List, Optional
 
 if TYPE_CHECKING:
     pass

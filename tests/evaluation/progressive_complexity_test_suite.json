@@ -1,0 +1,363 @@
+{
+  "test_suite_name": "Progressive Complexity GraphRAG Validation",
+  "description": "Tests structured in progressive complexity levels to validate logic and functional capacity",
+  "version": "1.0",
+  "test_levels": {
+    "level_1": {
+      "name": "Direct Attribute Extraction",
+      "description": "Single-hop queries requiring direct extraction from node attributes",
+      "complexity": "Simple",
+      "queries": [
+        {
+          "id": "l1_01",
+          "level": 1,
+          "query": "What is the well name for well 15_9-13?",
+          "expected_pattern": "direct_attribute_lookup",
+          "graph_traversal_required": false,
+          "validation": {
+            "type": "must_include",
+            "terms": ["Sleipner"]
+          },
+          "ground_truth": "Sleipner East Appr"
+        },
+        {
+          "id": "l1_02",
+          "level": 1,
+          "query": "What is the unit of measurement for the DEPT curve?",
+          "expected_pattern": "direct_attribute_lookup",
+          "graph_traversal_required": false,
+          "validation": {
+            "type": "must_include",
+            "terms": ["m", "meter"]
+          },
+          "ground_truth": "m (meters)"
+        },
+        {
+          "id": "l1_03",
+          "level": 1,
+          "query": "What does the NPHI curve measure?",
+          "expected_pattern": "direct_attribute_lookup",
+          "graph_traversal_required": false,
+          "validation": {
+            "type": "must_include",
+            "terms": ["NPHI"]
+          },
+          "ground_truth": "NPHI measures neutron porosity"
+        },
+        {
+          "id": "l1_04",
+          "level": 1,
+          "query": "List all curve mnemonics that contain the word LITHOFACIES",
+          "expected_pattern": "direct_attribute_extraction",
+          "graph_traversal_required": false,
+          "validation": {
+            "type": "must_include",
+            "terms": ["FORCE_2020_LITHOFACIES_LITHOLOGY", "FORCE_2020_LITHOFACIES_CONFIDENCE"]
+          },
+          "ground_truth": "FORCE_2020_LITHOFACIES_LITHOLOGY, FORCE_2020_LITHOFACIES_CONFIDENCE"
+        },
+        {
+          "id": "l1_05",
+          "level": 1,
+          "query": "What is the domain of the GR curve?",
+          "expected_pattern": "direct_attribute_lookup",
+          "graph_traversal_required": false,
+          "validation": {
+            "type": "must_include",
+            "terms": ["subsurface", "well log"]
+          },
+          "ground_truth": "subsurface well log"
+        }
+      ]
+    },
+    "level_2": {
+      "name": "Single Relationship Traversal",
+      "description": "Queries requiring traversal of one relationship edge",
+      "complexity": "Medium",
+      "queries": [
+        {
+          "id": "l2_01",
+          "level": 2,
+          "query": "What curves belong to well 15_9-13?",
+          "expected_pattern": "well_to_curves_traversal",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include",
+            "terms": ["DEPT", "GR", "NPHI", "RHOB"]
+          },
+          "ground_truth": "21 curves including DEPT, GR, NPHI, RHOB, DTC, etc."
+        },
+        {
+          "id": "l2_02",
+          "level": 2,
+          "query": "Which well does the GR curve belong to?",
+          "expected_pattern": "curve_to_well_traversal",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include",
+            "terms": ["15_9-13", "Sleipner"]
+          },
+          "ground_truth": "Well 15_9-13 (Sleipner East Appr)"
+        },
+        {
+          "id": "l2_03",
+          "level": 2,
+          "query": "What is the document that contains curve NPHI?",
+          "expected_pattern": "curve_to_document_traversal",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include",
+            "terms": ["15_9-13", "LAS"]
+          },
+          "ground_truth": "LAS document for well 15_9-13"
+        },
+        {
+          "id": "l2_04",
+          "level": 2,
+          "query": "How many curves does the document for well 15_9-13 contain?",
+          "expected_pattern": "well_to_document_to_count",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "exact_match",
+            "value": "21"
+          },
+          "ground_truth": "21 curves"
+        },
+        {
+          "id": "l2_05",
+          "level": 2,
+          "query": "List the first 5 curves in well 15_9-13",
+          "expected_pattern": "well_to_curves_limited",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "count_check",
+            "min": 3,
+            "max": 5,
+            "terms": ["DEPT", "FORCE_2020", "CALI", "MUDWEIGHT", "ROP"]
+          },
+          "ground_truth": "DEPT, FORCE_2020_LITHOFACIES_CONFIDENCE, FORCE_2020_LITHOFACIES_LITHOLOGY, CALI, MUDWEIGHT"
+        }
+      ]
+    },
+    "level_3": {
+      "name": "Multi-Hop Reasoning",
+      "description": "Queries requiring multiple relationship traversals or conditional logic",
+      "complexity": "Complex",
+      "queries": [
+        {
+          "id": "l3_01",
+          "level": 3,
+          "query": "Does well 15_9-13 have both gamma ray and neutron porosity curves?",
+          "expected_pattern": "boolean_multi_curve_check",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "boolean_with_evidence",
+            "expected_answer": "yes",
+            "evidence_terms": ["GR", "NPHI"]
+          },
+          "ground_truth": "Yes, it has GR (gamma ray) and NPHI (neutron porosity)"
+        },
+        {
+          "id": "l3_02",
+          "level": 3,
+          "query": "Find curves in well 15_9-13 that measure resistivity",
+          "expected_pattern": "semantic_filtering",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include_any",
+            "terms": ["RDEP", "RSHA", "RMED", "RXO", "resistivity"]
+          },
+          "ground_truth": "RDEP, RSHA, RMED, RXO (resistivity curves)"
+        },
+        {
+          "id": "l3_03",
+          "level": 3,
+          "query": "What curves in well 15_9-13 have units in ohm.m?",
+          "expected_pattern": "attribute_filtering",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include",
+            "terms": ["RDEP", "RSHA", "RMED", "RXO"]
+          },
+          "ground_truth": "RDEP, RSHA, RMED, RXO all have units of ohm.m"
+        },
+        {
+          "id": "l3_04",
+          "level": 3,
+          "query": "Which curves in well 15_9-13 are used for porosity calculation?",
+          "expected_pattern": "domain_knowledge_filtering",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include_any",
+            "terms": ["NPHI", "RHOB", "DTC", "porosity"]
+          },
+          "ground_truth": "NPHI (neutron porosity), RHOB (density), DTC (sonic) are used for porosity calculation"
+        },
+        {
+          "id": "l3_05",
+          "level": 3,
+          "query": "Among the curves in well 15_9-13, which ones measure depth?",
+          "expected_pattern": "semantic_attribute_match",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include",
+            "terms": ["DEPT", "DEPTH"]
+          },
+          "ground_truth": "DEPT measures depth, DEPTH_MD is measured depth"
+        }
+      ]
+    },
+    "level_4": {
+      "name": "Aggregation and Cross-Entity Analysis",
+      "description": "Queries requiring aggregation, counting, or comparison across multiple entities",
+      "complexity": "Very Complex",
+      "queries": [
+        {
+          "id": "l4_01",
+          "level": 4,
+          "query": "Count how many curves in well 15_9-13 have underscore in their mnemonic",
+          "expected_pattern": "pattern_counting",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "numeric_range",
+            "min": 2,
+            "max": 10
+          },
+          "ground_truth": "At least FORCE_2020_LITHOFACIES_CONFIDENCE, FORCE_2020_LITHOFACIES_LITHOLOGY, DEPTH_MD (3+)"
+        },
+        {
+          "id": "l4_02",
+          "level": 4,
+          "query": "What percentage of curves in well 15_9-13 are resistivity logs?",
+          "expected_pattern": "ratio_calculation",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include",
+            "terms": ["4", "21", "19%", "20%"]
+          },
+          "ground_truth": "4 out of 21 curves (approximately 19%)"
+        },
+        {
+          "id": "l4_03",
+          "level": 4,
+          "query": "Group the curves in well 15_9-13 by their measurement type",
+          "expected_pattern": "categorization",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include",
+            "terms": ["resistivity", "porosity", "depth", "lithology"]
+          },
+          "ground_truth": "Groups: depth (DEPT, DEPTH_MD), resistivity (RDEP, RSHA, RMED, RXO), porosity (NPHI, RHOB), lithology (FORCE_2020_LITHOFACIES), etc."
+        },
+        {
+          "id": "l4_04",
+          "level": 4,
+          "query": "Which curve types appear in well 15_9-13 but are not standard triple combo logs?",
+          "expected_pattern": "set_difference",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include_any",
+            "terms": ["FORCE_2020", "MUDWEIGHT", "ROP", "CALI"]
+          },
+          "ground_truth": "Non-triple-combo curves: FORCE_2020_LITHOFACIES (2), MUDWEIGHT, ROP, CALI, resistivity logs, SP"
+        },
+        {
+          "id": "l4_05",
+          "level": 4,
+          "query": "Compare the number of lithology curves vs porosity curves in well 15_9-13",
+          "expected_pattern": "comparative_counting",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include",
+            "terms": ["2", "lithology", "porosity", "FORCE_2020"]
+          },
+          "ground_truth": "2 lithology curves (FORCE_2020_LITHOFACIES_*) vs 2-3 porosity curves (NPHI, RHOB, possibly DTC)"
+        }
+      ]
+    },
+    "level_5": {
+      "name": "Synthesis and Inference",
+      "description": "Queries requiring inference, domain knowledge application, and synthesis",
+      "complexity": "Expert",
+      "queries": [
+        {
+          "id": "l5_01",
+          "level": 5,
+          "query": "Based on the available curves in well 15_9-13, can you perform a complete petrophysical evaluation?",
+          "expected_pattern": "capability_assessment",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include",
+            "terms": ["yes", "GR", "NPHI", "RHOB", "resistivity"]
+          },
+          "ground_truth": "Yes, the well has GR, NPHI, RHOB, DTC, and resistivity logs needed for petrophysical evaluation"
+        },
+        {
+          "id": "l5_02",
+          "level": 5,
+          "query": "What log suite classification does well 15_9-13 belong to?",
+          "expected_pattern": "classification_inference",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include_any",
+            "terms": ["triple combo", "quad combo", "extended", "resistivity"]
+          },
+          "ground_truth": "Extended triple combo (has GR, NPHI, RHOB, DTC) plus additional resistivity and lithology logs"
+        },
+        {
+          "id": "l5_03",
+          "level": 5,
+          "query": "If you needed to identify hydrocarbon-bearing zones in well 15_9-13, what curves would you use and why?",
+          "expected_pattern": "workflow_recommendation",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include",
+            "terms": ["resistivity", "porosity", "NPHI", "RHOB"]
+          },
+          "ground_truth": "Use resistivity logs (RDEP, RSHA, RMED, RXO) for hydrocarbon detection, NPHI-RHOB crossover for gas zones"
+        },
+        {
+          "id": "l5_04",
+          "level": 5,
+          "query": "What is the most likely geological setting for well 15_9-13 based on available curve types?",
+          "expected_pattern": "geological_inference",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include_any",
+            "terms": ["Norwegian Sea", "North Sea", "marine", "offshore", "Sleipner"]
+          },
+          "ground_truth": "Norwegian Sea offshore setting (Sleipner field) with clastic reservoir rocks"
+        },
+        {
+          "id": "l5_05",
+          "level": 5,
+          "query": "Given the curve suite in well 15_9-13, what advanced interpretations are possible vs impossible?",
+          "expected_pattern": "capability_matrix",
+          "graph_traversal_required": true,
+          "validation": {
+            "type": "must_include",
+            "terms": ["possible", "impossible", "lithology", "saturation"]
+          },
+          "ground_truth": "Possible: lithology ID, porosity calc, saturation analysis. Impossible: NMR analysis (no NMR logs), dipmeter analysis (no dipmeter)"
+        }
+      ]
+    }
+  },
+  "validation_framework": {
+    "progressive_requirements": {
+      "level_1_threshold": 0.80,
+      "level_2_threshold": 0.70,
+      "level_3_threshold": 0.60,
+      "level_4_threshold": 0.50,
+      "level_5_threshold": 0.40
+    },
+    "pass_criteria": "Must pass level N before attempting level N+1",
+    "scoring": {
+      "level_1_weight": 1.0,
+      "level_2_weight": 1.5,
+      "level_3_weight": 2.0,
+      "level_4_weight": 2.5,
+      "level_5_weight": 3.0
+    }
+  }
+}

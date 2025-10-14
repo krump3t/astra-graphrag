@@ -43,38 +43,7 @@ def generate_node_embeddings() -> Path:
     edges = graph.get("edges", [])
 
     print(f"Loaded {len(nodes)} nodes and {len(edges)} edges")
-    print("Enriching nodes with relationship metadata before embedding...")
-
-    # Enrich nodes with relationship metadata (same as load_graph_to_astra.py)
-    nodes_by_id = {n.get("id"): n for n in nodes}
-    for node in nodes:
-        node_id = node.get("id")
-        node_type = node.get("type")
-        attrs = node.get("attributes", {})
-
-        # For curves: Add parent well name
-        if node_type == 'las_curve':
-            well_edges = [e for e in edges if e.get('source') == node_id and e.get('type') == 'describes']
-            if well_edges:
-                well_id = well_edges[0].get('target')
-                well_node = nodes_by_id.get(well_id)
-                if well_node:
-                    well_name = well_node.get('attributes', {}).get('WELL', well_id)
-                    attrs['_well_name'] = well_name
-
-        # For wells: Add curve mnemonics list
-        elif node_type == 'las_document':
-            curve_edges = [e for e in edges if e.get('target') == node_id and e.get('type') == 'describes']
-            curve_mnemonics = []
-            for edge in curve_edges[:10]:
-                curve_id = edge.get('source')
-                curve_node = nodes_by_id.get(curve_id)
-                if curve_node:
-                    mnemonic = curve_node.get('attributes', {}).get('mnemonic')
-                    if mnemonic:
-                        curve_mnemonics.append(mnemonic)
-            if curve_mnemonics:
-                attrs['_curve_mnemonics'] = curve_mnemonics
+    print("Note: Nodes are pre-enriched with relationship metadata from graph_from_processed.py")
 
     texts = [_node_text(node, edges) for node in nodes]
     ids = [node.get("id") for node in nodes]

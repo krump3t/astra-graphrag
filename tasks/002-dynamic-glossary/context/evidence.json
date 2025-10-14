@@ -1,0 +1,50 @@
+[
+  {
+    "claim": "BeautifulSoup4 is industry standard for HTML parsing in Python with robust error handling",
+    "source_type": "P1",
+    "url_or_doi": "https://www.crummy.com/software/BeautifulSoup/bs4/doc/",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "Beautiful Soup parses anything you give it, and does the tree traversal stuff for you.",
+    "note_on_relevance": "Primary library for HTML parsing in scraper; official documentation confirms robust parsing for malformed HTML"
+  },
+  {
+    "claim": "Web scraping should respect robots.txt and implement rate limiting to avoid blocking",
+    "source_type": "P1",
+    "url_or_doi": "https://developers.google.com/search/docs/crawling-indexing/robots/intro",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "A robots.txt file tells search engine crawlers which URLs the crawler can access on your site.",
+    "note_on_relevance": "Google's robots.txt specification informs compliance strategy; rate limiting mitigates source blocking"
+  },
+  {
+    "claim": "Redis is production-ready in-memory cache with sub-millisecond latency and persistence options",
+    "source_type": "P1",
+    "url_or_doi": "https://redis.io/docs/about/",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "Redis is an open source in-memory data structure store used as a database, cache, and message broker.",
+    "note_on_relevance": "Official Redis documentation confirms sub-millisecond performance for caching layer; supports TTL expiration"
+  },
+  {
+    "claim": "HTTP request retry with exponential backoff improves reliability in distributed systems",
+    "source_type": "P1",
+    "url_or_doi": "https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "Exponential backoff is a standard error-handling strategy for network applications where the client periodically retries a failed request with increasing delays between requests.",
+    "note_on_relevance": "AWS architecture best practices inform retry strategy for scraper; reduces thundering herd problem"
+  },
+  {
+    "claim": "SLB Oilfield Glossary is authoritative petroleum engineering terminology source with 4,000+ terms",
+    "source_type": "P1",
+    "url_or_doi": "https://glossary.slb.com/",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "The Oilfield Glossary is a reference containing definitions of technical terms, acronyms, and phrases used in the oil and gas industry.",
+    "note_on_relevance": "Primary authoritative source for petroleum engineering definitions; validates scraping target relevance"
+  },
+  {
+    "claim": "LRU cache with bounded size prevents memory exhaustion in fallback scenarios",
+    "source_type": "P2",
+    "url_or_doi": "https://docs.python.org/3/library/functools.html#functools.lru_cache",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "Decorator to wrap a function with a memoizing callable that saves up to maxsize most recent calls.",
+    "note_on_relevance": "Python standard library LRU cache informs in-memory fallback implementation; prevents unbounded growth"
+  }
+]

@@ -524,9 +524,11 @@ def _handle_relationship_queries(state: WorkflowState) -> bool:
     return False
 
 
-def reasoning_step(state: WorkflowState) -> WorkflowState:
-    # MCP glossary integration via local orchestrator (Task 005)
-    # Try orchestrator for glossary queries BEFORE scope check
+def _try_orchestrator_glossary(state: WorkflowState) -> bool:
+    """Try MCP glossary orchestrator for term definitions.
+
+    Returns True if orchestrator handled the query, False otherwise.
+    """
     try:
         from services.orchestration.local_orchestrator import LocalOrchestrator
 
@@ -541,140 +543,255 @@ def reasoning_step(state: WorkflowState) -> WorkflowState:
             state.response = orch_result["response"]
             state.retrieved = [state.response]
             state.metadata['retrieved_documents'] = [{'text': state.response}]
-            return state
+            return True
+
+        return False
 
     except Exception as e:
         # Log orchestrator errors but continue with normal flow
         logger.warning(f"Orchestrator error (non-fatal): {e}")
         state.metadata["orchestrator_error"] = str(e)
+        return False
 
-    # Normal workflow continues below for non-glossary queries
+
+def _check_scope_and_defuse(state: WorkflowState) -> bool:
+    """Check query scope and generate defusion response if out of scope.
+
+    Returns True if query is out of scope (defusion applied), False otherwise.
+    """
     scope_result = check_query_scope(state.query, use_llm_for_ambiguous=False)
     state.metadata["scope_check"] = scope_result
     scope_threshold = RetrievalConfig.SCOPE_CHECK_CONFIDENCE_THRESHOLD
+
     if scope_result['in_scope'] is False and scope_result['confidence'] > scope_threshold:
         state.response = generate_defusion_response(scope_result, state.query)
         state.metadata["defusion_applied"] = True
         summary_line = state.response
         state.retrieved = [summary_line]
         state.metadata['retrieved_documents'] = [{'text': summary_line}]
-        return state
+        return True
 
-    query_lower = state.query.lower()
+    return False
 
-    if ('how many' in query_lower and 'curve' in query_lower and 'underscore' not in query_lower) and ('well' in query_lower or state.metadata.get('well_id_filter')):
+
+def _handle_curve_count_for_well(state: WorkflowState, query_lower: str) -> bool:
+    """Handle 'how many curves' queries for a specific well.
+
+    Returns True if query was handled, False otherwise.
+    """
+    if not (('how many' in query_lower and 'curve' in query_lower and 'underscore' not in query_lower) and
+            ('well' in query_lower or state.metadata.get('well_id_filter'))):
+        return False
+
+    well_id = state.metadata.get('well_id_filter')
+    if not well_id:
+        return False
+
+    try:
+        trav = get_traverser()
+        normalized = _normalize_well_node_id(well_id)
+        if normalized:
+            count = len(trav.get_curves_for_well(normalized))
+            state.response = str(count)
+            state.metadata['relationship_structured_answer'] = True
+            state.metadata['curve_count'] = count
+            return True
+    except TRAVERSAL_ERRORS as exc:
+        logger.exception('Failed curve count traversal for well_id=%s', well_id)
+        _record_workflow_error(state, 'curve_count_traversal', str(exc))
+
+    return False
+
+
+def _handle_well_count(state: WorkflowState, query_lower: str) -> bool:
+    """Handle 'how many wells' aggregation queries.
+
+    Returns True if query was handled, False otherwise.
+    """
+    if not (('how many' in query_lower and 'well' in query_lower) and
+            not state.metadata.get('well_id_filter')):
+        return False
+
+    try:
+        client = AstraApiClient()
+        settings = get_settings()
+        collection_name = settings.astra_db_collection or 'graph_nodes'
+        count = client.count_documents(collection_name, {'entity_type': 'las_document'})
+        state.response = f'There are {count} wells.'
+        state.metadata['aggregation_result'] = {'aggregation_type': 'COUNT', 'count': count}
+        state.metadata['is_aggregation'] = True
+        state.metadata['direct_count'] = count
+        return True
+    except RuntimeError as exc:
+        logger.exception('Failed direct well count via Astra (collection=%s)', collection_name)
+        _record_workflow_error(state, 'well_count', str(exc))
+
+    return False
+
+
+def _handle_structured_extraction(state: WorkflowState) -> bool:
+    """Handle structured attribute extraction queries.
+
+    Returns True if extraction was performed, False otherwise.
+    """
+    if not should_use_structured_extraction(state.query, state.metadata):
+        return False
+
+    attr = detect_attribute_query(state.query)
+    if not attr:
+        return False
+
+    # Try well name extraction via traverser
+    if attr.get('attribute_name') == 'well':
         well_id = state.metadata.get('well_id_filter')
         if well_id:
             try:
                 trav = get_traverser()
                 normalized = _normalize_well_node_id(well_id)
                 if normalized:
-                    count = len(trav.get_curves_for_well(normalized))
-                    state.response = str(count)
-                    state.metadata['relationship_structured_answer'] = True
-                    state.metadata['curve_count'] = count
-                    return state
+                    node = trav.get_node(normalized)
+                    well_name = (node or {}).get('attributes', {}).get('WELL') if node else None
+                    if well_name:
+                        state.response = well_name
+                        state.metadata['structured_extraction'] = True
+                        state.metadata['attribute_detected'] = attr
+                        state.metadata['well_name_from_traverser'] = True
+                        return True
             except TRAVERSAL_ERRORS as exc:
-                logger.exception('Failed curve count traversal for well_id=%s', well_id)
-                _record_workflow_error(state, 'curve_count_traversal', str(exc))
+                logger.exception('Failed to resolve well name via traverser for well_id=%s', well_id)
+                _record_workflow_error(state, 'well_name_lookup', str(exc))
 
-    if ('how many' in query_lower and 'well' in query_lower) and not state.metadata.get('well_id_filter'):
-        try:
-            client = AstraApiClient()
-            settings = get_settings()
-            collection_name = settings.astra_db_collection or 'graph_nodes'
-            count = client.count_documents(collection_name, {'entity_type': 'las_document'})
-            state.response = f'There are {count} wells.'
-            state.metadata['aggregation_result'] = {'aggregation_type': 'COUNT', 'count': count}
-            state.metadata['is_aggregation'] = True
-            state.metadata['direct_count'] = count
-            return state
-        except RuntimeError as exc:
-            logger.exception('Failed direct well count via Astra (collection=%s)', collection_name)
-            _record_workflow_error(state, 'well_count', str(exc))
+    # Fallback to general extraction
+    extraction_texts = [
+        doc.get('text') or doc.get('semantic_text', '')
+        for doc in state.metadata.get('retrieved_documents', [])
+        if isinstance(doc, dict)
+    ]
+    if not extraction_texts:
+        extraction_texts = state.retrieved
 
-    if _handle_relationship_queries(state):
-        return state
+    answer = structured_extraction_answer(state.query, extraction_texts, attr)
+    if answer:
+        state.response = answer
+        state.metadata['structured_extraction'] = True
+        state.metadata['attribute_detected'] = attr
+        return True
 
-    if not state.retrieved:
-        raise RuntimeError('No retrieved context available for reasoning')
+    return False
 
-    if should_use_structured_extraction(state.query, state.metadata):
-        attr = detect_attribute_query(state.query)
-        if attr:
-            if attr.get('attribute_name') == 'well':
-                well_id = state.metadata.get('well_id_filter')
-                if well_id:
-                    try:
-                        trav = get_traverser()
-                        normalized = _normalize_well_node_id(well_id)
-                        if normalized:
-                            node = trav.get_node(normalized)
-                            well_name = (node or {}).get('attributes', {}).get('WELL') if node else None
-                            if well_name:
-                                state.response = well_name
-                                state.metadata['structured_extraction'] = True
-                                state.metadata['attribute_detected'] = attr
-                                state.metadata['well_name_from_traverser'] = True
-                                return state
-                    except TRAVERSAL_ERRORS as exc:
-                        logger.exception('Failed to resolve well name via traverser for well_id=%s', well_id)
-                        _record_workflow_error(state, 'well_name_lookup', str(exc))
-            extraction_texts = [
-                doc.get('text') or doc.get('semantic_text', '')
-                for doc in state.metadata.get('retrieved_documents', [])
-                if isinstance(doc, dict)
-            ]
-            if not extraction_texts:
-                extraction_texts = state.retrieved
-            answer = structured_extraction_answer(state.query, extraction_texts, attr)
-            if answer:
-                state.response = answer
-                state.metadata['structured_extraction'] = True
-                state.metadata['attribute_detected'] = attr
-                return state
 
+def _handle_aggregation(state: WorkflowState) -> bool:
+    """Handle aggregation queries (COUNT, MAX, MIN, etc.).
+
+    Returns True if aggregation was performed, False otherwise.
+    """
     retrieved_docs = state.metadata.get('retrieved_documents', [])
     direct_count = state.metadata.get('direct_count')
     rel_agg = handle_relationship_aware_aggregation(state.query, retrieved_docs)
     aggregation_result = rel_agg or handle_aggregation_query(state.query, retrieved_docs, direct_count=direct_count)
-    if aggregation_result:
-        state.metadata['aggregation_result'] = aggregation_result
-        state.metadata['is_aggregation'] = True
-        agg_type = aggregation_result.get('aggregation_type')
-        if agg_type in {'COUNT', 'COMPARISON', 'MAX', 'MIN'}:
-            state.response = aggregation_result.get('answer', 'No result found')
-        else:
-            agg_context = format_aggregation_for_llm(aggregation_result)
-            prompt = _format_prompt(state.query, agg_context)
-            gen_client = get_generation_client()
-            max_tokens = RetrievalConfig.AGGREGATION_MAX_TOKENS
-            state.response = gen_client.generate(prompt, max_new_tokens=max_tokens, decoding_method='greedy')
 
-        summary_line = f"Aggregation result: {state.response}"
-        retrieved_docs = state.metadata.get('retrieved_documents')
-        if isinstance(retrieved_docs, list):
-            retrieved_docs.insert(0, {'text': summary_line})
-        else:
-            state.metadata['retrieved_documents'] = [{'text': summary_line}]
+    if not aggregation_result:
+        return False
 
-        existing_contexts = state.retrieved or []
-        state.retrieved = [summary_line] + existing_contexts
-        return state
+    state.metadata['aggregation_result'] = aggregation_result
+    state.metadata['is_aggregation'] = True
+    agg_type = aggregation_result.get('aggregation_type')
 
+    # Direct answer for simple aggregations
+    if agg_type in {'COUNT', 'COMPARISON', 'MAX', 'MIN'}:
+        state.response = aggregation_result.get('answer', 'No result found')
+    else:
+        # LLM synthesis for complex aggregations
+        agg_context = format_aggregation_for_llm(aggregation_result)
+        prompt = _format_prompt(state.query, agg_context)
+        gen_client = get_generation_client()
+        max_tokens = RetrievalConfig.AGGREGATION_MAX_TOKENS
+        state.response = gen_client.generate(prompt, max_new_tokens=max_tokens, decoding_method='greedy')
+
+    # Update retrieved documents with aggregation result
+    summary_line = f"Aggregation result: {state.response}"
+    retrieved_docs = state.metadata.get('retrieved_documents')
+    if isinstance(retrieved_docs, list):
+        retrieved_docs.insert(0, {'text': summary_line})
+    else:
+        state.metadata['retrieved_documents'] = [{'text': summary_line}]
+
+    existing_contexts = state.retrieved or []
+    state.retrieved = [summary_line] + existing_contexts
+    return True
+
+
+def _apply_domain_rules_if_applicable(state: WorkflowState) -> bool:
+    """Apply domain-specific rules if query is not a relationship query.
+
+    Returns True if domain rule was applied, False otherwise.
+    """
     relationship_info = state.metadata.get('relationship_detection') or {}
-    if not relationship_info.get('is_relationship_query'):
-        rule_answer = apply_domain_rules(state.query, state.retrieved)
-        if rule_answer:
-            state.response = rule_answer
-            state.metadata['domain_rule_applied'] = True
-            return state
+    if relationship_info.get('is_relationship_query'):
+        return False
 
+    rule_answer = apply_domain_rules(state.query, state.retrieved)
+    if rule_answer:
+        state.response = rule_answer
+        state.metadata['domain_rule_applied'] = True
+        return True
+
+    return False
+
+
+def _generate_llm_response(state: WorkflowState) -> None:
+    """Generate final LLM response from retrieved context."""
     context = '\n'.join(state.retrieved)
     prompt = _format_prompt(state.query, context)
     gen_client = get_generation_client()
     max_tokens = RetrievalConfig.DEFAULT_MAX_TOKENS
     state.response = gen_client.generate(prompt, max_new_tokens=max_tokens, decoding_method='greedy')
+
+
+def reasoning_step(state: WorkflowState) -> WorkflowState:
+    """Execute reasoning step with multiple specialized handlers.
+
+    COMPLEXITY REDUCTION (Task 006): Refactored from CCN=42 to CCN≤10 using Extract Method pattern.
+    Delegates to specialized helper functions for improved maintainability.
+    """
+    # Try MCP glossary orchestrator first
+    if _try_orchestrator_glossary(state):
+        return state
+
+    # Check scope and apply defusion if needed
+    if _check_scope_and_defuse(state):
+        return state
+
+    query_lower = state.query.lower()
+
+    # Handle specific query types
+    if _handle_curve_count_for_well(state, query_lower):
+        return state
+
+    if _handle_well_count(state, query_lower):
+        return state
+
+    if _handle_relationship_queries(state):
+        return state
+
+    # Validate retrieved context exists
+    if not state.retrieved:
+        raise RuntimeError('No retrieved context available for reasoning')
+
+    # Try structured extraction
+    if _handle_structured_extraction(state):
+        return state
+
+    # Try aggregation
+    if _handle_aggregation(state):
+        return state
+
+    # Try domain rules
+    if _apply_domain_rules_if_applicable(state):
+        return state
+
+    # Default: generate LLM response
+    _generate_llm_response(state)
     return state
 
 

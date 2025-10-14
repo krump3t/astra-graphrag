@@ -1,0 +1,54 @@
+{
+  "inputs": [
+    {
+      "name": "SLB Oilfield Glossary - Porosity Page",
+      "path_or_url": "https://glossary.slb.com/en/terms/p/porosity",
+      "sha256": "91f0efdd7588d75d1f4181e62ab3bbc6e93a8d2682359a6311d4e150d60b5245",
+      "rows": 1,
+      "cols": 3,
+      "licensing": "public",
+      "pii": false,
+      "description": "Sample HTML page for testing SLB scraper (term: porosity)"
+    },
+    {
+      "name": "SPE PetroWiki - Main Page",
+      "path_or_url": "https://petrowiki.spe.org/",
+      "sha256": "pending_live_scrape",
+      "rows": 1,
+      "cols": 3,
+      "licensing": "public",
+      "pii": false,
+      "description": "Creative Commons BY-SA 4.0 licensed petroleum engineering wiki"
+    },
+    {
+      "name": "AAPG Wiki - Main Page",
+      "path_or_url": "https://wiki.aapg.org/",
+      "sha256": "pending_live_scrape",
+      "rows": 1,
+      "cols": 3,
+      "licensing": "public",
+      "pii": false,
+      "description": "American Association of Petroleum Geologists educational wiki"
+    },
+    {
+      "name": "Static Glossary Fallback",
+      "path_or_url": "mcp_server.py:GLOSSARY",
+      "sha256": "in_memory_dict",
+      "rows": 15,
+      "cols": 2,
+      "licensing": "internal",
+      "pii": false,
+      "description": "Existing static glossary in mcp_server.py (15 terms)"
+    },
+    {
+      "name": "Redis Cache",
+      "path_or_url": "localhost:6379",
+      "sha256": "runtime_cache",
+      "rows": 0,
+      "cols": 5,
+      "licensing": "internal",
+      "pii": false,
+      "description": "In-memory cache with 15-minute TTL (key format: glossary:{source}:{term})"
+    }
+  ]
+}

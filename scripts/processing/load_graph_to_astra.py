@@ -373,39 +373,9 @@ def main() -> int:
     edges = graph.get("edges", [])
     print(f"Loaded {len(edges)} graph edges for relationship context")
 
-    # NEW: Build node lookup for enriching relationship data
-    nodes_by_id = {n.get("id"): n for n in graph.get("nodes", [])}
-
-    # NEW: Enrich nodes with relationship metadata for embedding
-    print("\nEnriching nodes with relationship metadata...")
-    for node in graph.get("nodes", []):
-        node_id = node.get("id")
-        node_type = node.get("type")
-        attrs = node.get("attributes", {})
-
-        # For curves: Add parent well name
-        if node_type == 'las_curve':
-            well_edges = [e for e in edges if e.get('source') == node_id and e.get('type') == 'describes']
-            if well_edges:
-                well_id = well_edges[0].get('target')
-                well_node = nodes_by_id.get(well_id)
-                if well_node:
-                    well_name = well_node.get('attributes', {}).get('WELL', well_id)
-                    attrs['_well_name'] = well_name
-
-        # For wells: Add curve mnemonics list
-        elif node_type == 'las_document':
-            curve_edges = [e for e in edges if e.get('target') == node_id and e.get('type') == 'describes']
-            curve_mnemonics = []
-            for edge in curve_edges[:10]:  # Limit to 10 curves for embedding
-                curve_id = edge.get('source')
-                curve_node = nodes_by_id.get(curve_id)
-                if curve_node:
-                    mnemonic = curve_node.get('attributes', {}).get('mnemonic')
-                    if mnemonic:
-                        curve_mnemonics.append(mnemonic)
-            if curve_mnemonics:
-                attrs['_curve_mnemonics'] = curve_mnemonics
+    # Note: Nodes are pre-enriched with relationship metadata from graph_from_processed.py
+    # (enrichment.py module provides the single source of truth)
+    print("Note: Nodes loaded with pre-existing relationship metadata (_well_name, _curve_mnemonics)")
 
     # Prepare documents with enhanced representation and metadata
     documents = []

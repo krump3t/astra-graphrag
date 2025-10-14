@@ -1,0 +1,421 @@
+{
+  "timestamp": "2025-10-13T16:07:13.820708",
+  "summary": {
+    "total_tests": 8,
+    "successful": 8,
+    "failed": 0,
+    "success_rate": 1.0,
+    "average_metrics": {
+      "faithfulness": 0.111,
+      "answer_relevance": 0.081,
+      "context_precision": 0.333,
+      "context_recall": 0.037,
+      "ground_truth_overlap": 0.037,
+      "keyword_score": 0.0,
+      "aggregate_score": 0.124
+    },
+    "category_performance": {
+      "factual_retrieval": 0.234,
+      "comparison": 0.092,
+      "technical_explanation": 0.025,
+      "temporal": 0.05,
+      "geographic": 0.06,
+      "technical_detail": 0.067
+    }
+  },
+  "results": [
+    {
+      "test_id": "well_log_basic",
+      "category": "factual_retrieval",
+      "query": "What well log data is available from Kansas?",
+      "answer": "The provided context does not contain sufficient information to answer this question.",
+      "retrieved_contexts": [
+        "LAS_CURVE [MNEMONIC] GST [MEASURES] 4 ???????? [UNIT] API [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] las-file-20251002T035016Z_1001178549 [WELL_NAME] las-file-20251002T035016Z_1001178549",
+        "LAS_CURVE [MNEMONIC] GSGR [MEASURES] 2 GAMMA RAY [UNIT] API [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] las-file-20251002T035016Z_1001178549 [WELL_NAME] las-file-20251002T035016Z_1001178549",
+        "LAS_CURVE [MNEMONIC] DTS [MEASURES] DTS [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-6 [WELL_NAME] 16/7-6",
+        "LAS_CURVE [MNEMONIC] DTS [MEASURES] DTS [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-25_10-9 [WELL_NAME] Aegis",
+        "LAS_CURVE [MNEMONIC] DTS [MEASURES] DTS [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-35_9-7 [WELL_NAME] 35/9-7",
+        "LAS_CURVE [MNEMONIC] DTS [MEASURES] DTS [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-34_10-35 [WELL_NAME] 34/10-35",
+        "LAS_CURVE [MNEMONIC] DTS [MEASURES] DTS [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-35_11-10 [WELL_NAME] 35/11-10",
+        "LAS_CURVE [MNEMONIC] GSK [MEASURES] 5 ???????? [UNIT] PERCNT [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] las-file-20251002T035016Z_1001178549 [WELL_NAME] las-file-20251002T035016Z_1001178549",
+        "LAS_CURVE [MNEMONIC] DTS [MEASURES] DTS [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-35_9-8 [WELL_NAME] 35/9-8",
+        "LAS_CURVE [MNEMONIC] DTS [MEASURES] DTS [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-35_11-12 [WELL_NAME] 35/11-12",
+        "LAS_CURVE [MNEMONIC] DTC [MEASURES] DTC [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-30_6-5 [WELL_NAME] 30/6-5",
+        "LAS_CURVE [MNEMONIC] DTC [MEASURES] DTC [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-6 [WELL_NAME] 16/7-6",
+        "LAS_CURVE [MNEMONIC] DTC [MEASURES] DTC [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-34_10-21 [WELL_NAME] 34/10-21",
+        "LAS_CURVE [MNEMONIC] DTC [MEASURES] DTC [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-5 [WELL_NAME] 16/7-5",
+        "LAS_CURVE [MNEMONIC] DTS [MEASURES] DTS [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-34_6-1 S [WELL_NAME] 34/6-1"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_precision": 0.333,
+          "context_recall": 0.077,
+          "ground_truth_overlap": 0.053,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.067
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 12,
+          "missing_keywords": [
+            "Kansas",
+            "well",
+            "log"
+          ],
+          "expected_entities_found": "1/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    },
+    {
+      "test_id": "usgs_site_info",
+      "category": "factual_retrieval",
+      "query": "Tell me about USGS monitoring sites in the dataset",
+      "answer": "The provided context does not contain sufficient information to answer this question.",
+      "retrieved_contexts": [
+        "USGS_SITE [SITE_CODE] 03339000 [SITE_NAME] VERMILION RIVER NEAR DANVILLE, IL [DOMAIN] surface water hydrology streamflow"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.083,
+          "context_precision": 0.667,
+          "context_recall": 0.056,
+          "ground_truth_overlap": 0.111,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.158
+        },
+        "diagnostics": {
+          "num_contexts": 1,
+          "answer_length": 12,
+          "missing_keywords": [
+            "USGS",
+            "site",
+            "water"
+          ],
+          "expected_entities_found": "2/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 1,
+          "initial_results": 1,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    },
+    {
+      "test_id": "curve_mnemonics",
+      "category": "factual_retrieval",
+      "query": "What types of log curves are recorded in the well data?",
+      "answer": "The well has the following curves: GST, GSK, MEL1, DEPT, y_loc, IDID, x_loc, z_loc.",
+      "retrieved_contexts": [
+        "LAS_CURVE [MNEMONIC] GST [MEASURES] 4 ???????? [UNIT] API [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] las-file-20251002T035016Z_1001178549 [WELL_NAME] las-file-20251002T035016Z_1001178549",
+        "LAS_CURVE [MNEMONIC] GSK [MEASURES] 5 ???????? [UNIT] PERCNT [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] las-file-20251002T035016Z_1001178549 [WELL_NAME] las-file-20251002T035016Z_1001178549",
+        "LAS_CURVE [MNEMONIC] MEL1 [MEASURES] 26 MICRO INVERSE 1\" [UNIT] OHMM [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] las-file-20251002T035016Z_1001178549 [WELL_NAME] las-file-20251002T035016Z_1001178549",
+        "LAS_CURVE [MNEMONIC] DEPT [MEASURES] DEPTH [UNIT] m [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-31_6-8 [WELL_NAME] 31/6-8",
+        "LAS_CURVE [MNEMONIC] y_loc [MEASURES] y_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-31_6-8 [WELL_NAME] 31/6-8",
+        "LAS_CURVE [MNEMONIC] IDID [MEASURES] 21 DEEP INDUCTION [UNIT] OHMM [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] las-file-20251002T035016Z_1001178549 [WELL_NAME] las-file-20251002T035016Z_1001178549",
+        "LAS_CURVE [MNEMONIC] y_loc [MEASURES] y_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-31_4-10 [WELL_NAME] 31/4-10",
+        "LAS_CURVE [MNEMONIC] x_loc [MEASURES] x_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-31_6-8 [WELL_NAME] 31/6-8",
+        "LAS_CURVE [MNEMONIC] DEPT [MEASURES] DEPTH [UNIT] m [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-31_4-10 [WELL_NAME] 31/4-10",
+        "LAS_CURVE [MNEMONIC] y_loc [MEASURES] y_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-33_9-1 [WELL_NAME] 33/9-1",
+        "LAS_CURVE [MNEMONIC] y_loc [MEASURES] y_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-29_6-1 [WELL_NAME] 29/6-1",
+        "LAS_CURVE [MNEMONIC] z_loc [MEASURES] z_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-31_6-8 [WELL_NAME] 31/6-8",
+        "LAS_CURVE [MNEMONIC] y_loc [MEASURES] y_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-30_6-5 [WELL_NAME] 30/6-5",
+        "LAS_CURVE [MNEMONIC] y_loc [MEASURES] y_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-31_6-5 [WELL_NAME] 31/6-5",
+        "LAS_CURVE [MNEMONIC] y_loc [MEASURES] y_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_10-1 [WELL_NAME] Alpha"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.692,
+          "answer_relevance": 0.231,
+          "context_precision": 1.0,
+          "context_recall": 0.019,
+          "ground_truth_overlap": 0.059,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.477
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 14,
+          "missing_keywords": [
+            "density",
+            "porosity",
+            "gamma"
+          ],
+          "expected_entities_found": "3/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    },
+    {
+      "test_id": "data_source_comparison",
+      "category": "comparison",
+      "query": "What is the difference between USGS data and KGS well log data?",
+      "answer": "The provided context does not contain sufficient information to answer this question.",
+      "retrieved_contexts": [
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-25_10-9 [WELL_NAME] Aegis",
+        "LAS_CURVE [MNEMONIC] SGR [MEASURES] SGR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-6 [WELL_NAME] 16/7-6",
+        "LAS_CURVE [MNEMONIC] SGR [MEASURES] SGR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-15_9-17 [WELL_NAME] 15/9-17",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-15_9-15 [WELL_NAME] Gungne",
+        "LAS_CURVE [MNEMONIC] DTS [MEASURES] DTS [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-25_10-9 [WELL_NAME] Aegis",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-4 [WELL_NAME] Sigyn",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-5 [WELL_NAME] 16/7-5",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-6 [WELL_NAME] 16/7-6",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-30_6-5 [WELL_NAME] 30/6-5",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-35_9-8 [WELL_NAME] 35/9-8",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-31_4-10 [WELL_NAME] 31/4-10",
+        "LAS_CURVE [MNEMONIC] SGR [MEASURES] SGR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-31_2-9 [WELL_NAME] 31/2-9",
+        "LAS_CURVE [MNEMONIC] SGR [MEASURES] SGR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-29_6-1 [WELL_NAME] 29/6-1",
+        "LAS_CURVE [MNEMONIC] SGR [MEASURES] SGR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-31_2-8 [WELL_NAME] 31/2-8",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-15_9-17 [WELL_NAME] 15/9-17"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.083,
+          "context_precision": 0.333,
+          "context_recall": 0.065,
+          "ground_truth_overlap": 0.0,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.092
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 12,
+          "missing_keywords": [
+            "USGS",
+            "surface water",
+            "KGS",
+            "subsurface"
+          ],
+          "expected_entities_found": "1/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    },
+    {
+      "test_id": "porosity_measurement",
+      "category": "technical_explanation",
+      "query": "How is porosity measured in the well logs?",
+      "answer": "The provided context does not contain sufficient information to answer this question.",
+      "retrieved_contexts": [
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-29_6-1 [WELL_NAME] 29/6-1",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-29_3-1 [WELL_NAME] 29/3-1",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-15_9-17 [WELL_NAME] 15/9-17",
+        "LAS_CURVE [MNEMONIC] DEPTH_MD [MEASURES] DEPTH_MD [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-29_6-1 [WELL_NAME] 29/6-1",
+        "LAS_CURVE [MNEMONIC] NPHI [MEASURES] NPHI [UNIT] m3/m3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-29_6-1 [WELL_NAME] 29/6-1",
+        "LAS_CURVE [MNEMONIC] RHOB [MEASURES] RHOB [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-29_6-1 [WELL_NAME] 29/6-1",
+        "LAS_CURVE [MNEMONIC] ROP [MEASURES] ROP [UNIT] m/h [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-15_9-17 [WELL_NAME] 15/9-17",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-15_9-14 [WELL_NAME] 15/9-14",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-5 [WELL_NAME] 16/7-5",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-6 [WELL_NAME] 16/7-6",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-7_1-1 [WELL_NAME] 7/1-1",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_4-1 [WELL_NAME] 16/4-1",
+        "LAS_CURVE [MNEMONIC] MUDWEIGHT [MEASURES] MUDWEIGHT [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-15_9-17 [WELL_NAME] 15/9-17",
+        "LAS_CURVE [MNEMONIC] ROP [MEASURES] ROP [UNIT] m/h [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-15_9-14 [WELL_NAME] 15/9-14",
+        "LAS_CURVE [MNEMONIC] DEPT [MEASURES] DEPTH [UNIT] m [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-29_6-1 [WELL_NAME] 29/6-1"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.083,
+          "context_precision": 0.0,
+          "context_recall": 0.0,
+          "ground_truth_overlap": 0.0,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.025
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 12,
+          "missing_keywords": [
+            "porosity",
+            "density",
+            "measurement"
+          ],
+          "expected_entities_found": "0/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    },
+    {
+      "test_id": "temporal_data",
+      "category": "temporal",
+      "query": "What time period does the well log data cover?",
+      "answer": "The provided context does not contain sufficient information to answer this question.",
+      "retrieved_contexts": [
+        "LAS_CURVE [MNEMONIC] DTS [MEASURES] DTS [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-6 [WELL_NAME] 16/7-6",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-15_9-17 [WELL_NAME] 15/9-17",
+        "LAS_CURVE [MNEMONIC] DTC [MEASURES] DTC [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-6 [WELL_NAME] 16/7-6",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-5 [WELL_NAME] 16/7-5",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-31_6-8 [WELL_NAME] 31/6-8",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-6 [WELL_NAME] 16/7-6",
+        "LAS_CURVE [MNEMONIC] DTC [MEASURES] DTC [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-31_6-8 [WELL_NAME] 31/6-8",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-30_6-5 [WELL_NAME] 30/6-5",
+        "LAS_CURVE [MNEMONIC] SP [MEASURES] SP [UNIT] mV [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-15_9-17 [WELL_NAME] 15/9-17",
+        "LAS_CURVE [MNEMONIC] DTC [MEASURES] DTC [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-15_9-17 [WELL_NAME] 15/9-17",
+        "LAS_CURVE [MNEMONIC] DTC [MEASURES] DTC [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-5 [WELL_NAME] 16/7-5",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-15_9-14 [WELL_NAME] 15/9-14",
+        "LAS_CURVE [MNEMONIC] DTC [MEASURES] DTC [UNIT] us/ft [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-30_6-5 [WELL_NAME] 30/6-5",
+        "LAS_CURVE [MNEMONIC] SP [MEASURES] SP [UNIT] mV [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_7-5 [WELL_NAME] 16/7-5",
+        "LAS_CURVE [MNEMONIC] SGR [MEASURES] SGR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-15_9-17 [WELL_NAME] 15/9-17"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.167,
+          "context_precision": 0.0,
+          "context_recall": 0.054,
+          "ground_truth_overlap": 0.071,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.05
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 12,
+          "missing_keywords": [
+            "1999",
+            "date"
+          ],
+          "expected_entities_found": "0/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    },
+    {
+      "test_id": "geographic_scope",
+      "category": "geographic",
+      "query": "What geographic regions are covered in this dataset?",
+      "answer": "Gamma ray (GR) measures natural radioactivity; high GR typically indicates shale.",
+      "retrieved_contexts": [
+        "LAS_CURVE [MNEMONIC] x_loc [MEASURES] x_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_10-3 [WELL_NAME] Tyr Central",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-34_10-16 R [WELL_NAME] 34/10-16R",
+        "LAS_CURVE [MNEMONIC] z_loc [MEASURES] z_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_10-3 [WELL_NAME] Tyr Central",
+        "LAS_CURVE [MNEMONIC] GR [MEASURES] GR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-36_7-3 [WELL_NAME] 36/7-3",
+        "LAS_CURVE [MNEMONIC] y_loc [MEASURES] y_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_10-3 [WELL_NAME] Tyr Central",
+        "LAS_CURVE [MNEMONIC] x_loc [MEASURES] x_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-36_7-3 [WELL_NAME] 36/7-3",
+        "LAS_CURVE [MNEMONIC] z_loc [MEASURES] z_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-36_7-3 [WELL_NAME] 36/7-3",
+        "LAS_CURVE [MNEMONIC] z_loc [MEASURES] z_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-25_6-2 [WELL_NAME] Delta-Beta",
+        "LAS_CURVE [MNEMONIC] y_loc [MEASURES] y_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-36_7-3 [WELL_NAME] 36/7-3",
+        "LAS_CURVE [MNEMONIC] x_loc [MEASURES] x_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-25_6-2 [WELL_NAME] Delta-Beta",
+        "LAS_CURVE [MNEMONIC] SGR [MEASURES] SGR [UNIT] gAPI [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-34_8-3 [WELL_NAME] 34/8-3",
+        "LAS_CURVE [MNEMONIC] x_loc [MEASURES] x_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-34_10-16 R [WELL_NAME] 34/10-16R",
+        "LAS_CURVE [MNEMONIC] x_loc [MEASURES] x_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-26_4-1 [WELL_NAME] 26/4-1",
+        "LAS_CURVE [MNEMONIC] z_loc [MEASURES] z_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-26_4-1 [WELL_NAME] 26/4-1",
+        "LAS_CURVE [MNEMONIC] z_loc [MEASURES] z_loc [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-34_10-16 R [WELL_NAME] 34/10-16R"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.2,
+          "answer_relevance": 0.0,
+          "context_precision": 0.0,
+          "context_recall": 0.023,
+          "ground_truth_overlap": 0.0,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.06
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 11,
+          "missing_keywords": [
+            "Kansas",
+            "region"
+          ],
+          "expected_entities_found": "0/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    },
+    {
+      "test_id": "measurement_units",
+      "category": "technical_detail",
+      "query": "What units are used for density measurements?",
+      "answer": "The provided context does not contain sufficient information to answer this question.",
+      "retrieved_contexts": [
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_10-2 [WELL_NAME] Delta",
+        "LAS_CURVE [MNEMONIC] MUDWEIGHT [MEASURES] MUDWEIGHT [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_10-2 [WELL_NAME] Delta",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-29_6-1 [WELL_NAME] 29/6-1",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-25_6-2 [WELL_NAME] Delta-Beta",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-29_3-1 [WELL_NAME] 29/3-1",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-25_5-1 [WELL_NAME] Froey",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-25_10-9 [WELL_NAME] Aegis",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_10-3 [WELL_NAME] Tyr Central",
+        "LAS_CURVE [MNEMONIC] RHOB [MEASURES] RHOB [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_10-2 [WELL_NAME] Delta",
+        "LAS_CURVE [MNEMONIC] MUDWEIGHT [MEASURES] MUDWEIGHT [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-25_6-2 [WELL_NAME] Delta-Beta",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-30_6-5 [WELL_NAME] 30/6-5",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-31_2-10 [WELL_NAME] 31/2-10",
+        "LAS_CURVE [MNEMONIC] ROP [MEASURES] ROP [UNIT] m/h [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-25_6-2 [WELL_NAME] Delta-Beta",
+        "LAS_CURVE [MNEMONIC] DEPTH_MD [MEASURES] DEPTH_MD [UNIT] _ [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-16_10-2 [WELL_NAME] Delta",
+        "LAS_CURVE [MNEMONIC] DRHO [MEASURES] DRHO [UNIT] g/cm3 [DOMAIN] subsurface well log formation lithology [BELONGS_TO_WELL] force2020-well-25_2-14 [WELL_NAME] Froey Appr"
+      ],
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_precision": 0.333,
+          "context_recall": 0.0,
+          "ground_truth_overlap": 0.0,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.067
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 12,
+          "missing_keywords": [
+            "density",
+            "GM/CC",
+            "grams"
+          ],
+          "expected_entities_found": "1/3"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      },
+      "status": "success"
+    }
+  ]
+}

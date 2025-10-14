@@ -1,11 +1,9 @@
 """Unit tests for data validation functions."""
 from __future__ import annotations
 
-import csv
 import json
 import pytest
-from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from services.graph_index import validators
 

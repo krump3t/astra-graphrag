@@ -3,7 +3,7 @@ from services.langgraph.workflow import (
     _order_mnemonics,
     _handle_well_relationship_queries,
 )
-from services.langgraph.aggregation import extract_field_from_query
+from services.langgraph.field_extraction import extract_field_from_query
 
 
 class _StubTraverser:

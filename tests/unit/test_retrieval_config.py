@@ -1,7 +1,6 @@
 """Unit tests for retrieval configuration module."""
 from __future__ import annotations
 
-import pytest
 
 from services.config.retrieval_config import RetrievalConfig
 

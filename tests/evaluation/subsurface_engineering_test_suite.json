@@ -1,0 +1,509 @@
+{
+  "test_suite": "Subsurface Engineering - GraphRAG Validation",
+  "description": "Real subsurface engineering questions with verifiable ground truth answers",
+  "created": "2025-10-09",
+  "total_queries": 25,
+  "categories": [
+    "petrophysical_interpretation",
+    "well_log_analysis",
+    "lithofacies_classification",
+    "reservoir_characterization",
+    "graph_relationship_queries",
+    "cross_well_analysis"
+  ],
+  "queries": [
+    {
+      "id": "petro_01",
+      "category": "petrophysical_interpretation",
+      "query": "What petrophysical curves are available for well 15_9-13?",
+      "complexity": "medium",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "FORCE 2020 dataset - well 15_9-13 metadata",
+        "answer_type": "list",
+        "expected_curves": ["DEPT", "GR", "NPHI", "RHOB", "DTC", "RDEP", "RMED", "RSHA", "PEF", "DRHO", "CALI", "SP", "RXO", "ROP", "MUDWEIGHT"],
+        "curve_count": 21,
+        "verification": "Must include at least: DEPT (depth), GR (gamma ray), NPHI (neutron porosity), RHOB (density)",
+        "well_id": "force2020-well-15_9-13",
+        "well_name": "Sleipner East Appr"
+      },
+      "validation_criteria": {
+        "must_include": ["DEPT", "GR", "NPHI", "RHOB"],
+        "min_curve_count": 15,
+        "max_curve_count": 25,
+        "must_mention_well": "15_9-13"
+      }
+    },
+    {
+      "id": "petro_02",
+      "category": "petrophysical_interpretation",
+      "query": "Does well 15_9-13 have gamma ray and neutron porosity logs?",
+      "complexity": "easy",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "FORCE 2020 dataset - standard petrophysical suite",
+        "answer": "Yes, well 15_9-13 (Sleipner East Appr) has both GR (gamma ray) and NPHI (neutron porosity) curves",
+        "verification": "GR and NPHI are part of the standard petrophysical log suite in FORCE 2020",
+        "scientific_basis": "Gamma ray and neutron porosity are fundamental logs for lithology identification and porosity estimation (Source: AAPG Wiki - Well Log Analysis)"
+      },
+      "validation_criteria": {
+        "must_answer": "yes",
+        "must_mention": ["gamma ray", "GR", "neutron", "NPHI"],
+        "confidence_threshold": 0.9
+      }
+    },
+    {
+      "id": "petro_03",
+      "category": "petrophysical_interpretation",
+      "query": "What is the purpose of the NPHI curve in petrophysical analysis?",
+      "complexity": "medium",
+      "expected_graph_traversal": false,
+      "ground_truth": {
+        "source": "Petrophysical literature - EPA, AAPG Wiki",
+        "answer": "NPHI (neutron porosity) measures hydrogen content in the formation, primarily to estimate porosity. It's used for lithology identification when combined with density logs.",
+        "key_concepts": [
+          "Measures hydrogen content",
+          "Porosity estimation",
+          "Lithology identification (with density crossover)",
+          "Gas detection (neutron-density separation)"
+        ],
+        "scientific_basis": "At the most fundamental level, a neutron log records the amount of hydrogen in the formation. The commercial application is to assess porosity in reservoir zones. (Source: EPA - Neutron Borehole Logging)"
+      },
+      "validation_criteria": {
+        "must_mention": ["porosity", "hydrogen"],
+        "bonus_points": ["lithology", "density", "crossover"],
+        "factual_accuracy": true
+      }
+    },
+    {
+      "id": "litho_01",
+      "category": "lithofacies_classification",
+      "query": "What lithofacies curves are available in the FORCE 2020 dataset?",
+      "complexity": "easy",
+      "expected_graph_traversal": false,
+      "ground_truth": {
+        "source": "FORCE 2020 dataset documentation",
+        "answer": "FORCE_2020_LITHOFACIES_LITHOLOGY and FORCE_2020_LITHOFACIES_CONFIDENCE",
+        "description": "Hand-crafted lithofacies interpretations by skilled geoscientists",
+        "verification": "These are machine learning labels provided for the FORCE 2020 competition",
+        "scientific_basis": "The lithofacies interpretation has been hand crafted using skilled geoscientists (Source: Zenodo - FORCE 2020 Dataset)"
+      },
+      "validation_criteria": {
+        "must_include": ["FORCE_2020_LITHOFACIES"],
+        "should_mention": ["LITHOLOGY", "CONFIDENCE"],
+        "correct_count": 2
+      }
+    },
+    {
+      "id": "litho_02",
+      "category": "lithofacies_classification",
+      "query": "How are lithofacies typically interpreted from well logs?",
+      "complexity": "high",
+      "expected_graph_traversal": false,
+      "ground_truth": {
+        "source": "Petrophysical literature - AAPG Wiki, Kansas Geological Survey",
+        "answer": "Lithofacies are interpreted using multiple logs: gamma ray for clay content, neutron-density crossover for lithology type, resistivity for fluid content. Patterns: Low GR + coincident density-neutron = limestone; Low GR + density left of neutron = sandstone; High GR + high neutron = shale.",
+        "key_patterns": {
+          "limestone": "Low gamma-ray, coincident density and neutron response",
+          "sandstone": "Low gamma-ray, high density porosity, low neutron, crossover pattern",
+          "shale": "High gamma-ray, high neutron, moderate density"
+        },
+        "scientific_basis": "The neutron-density porosity overlay in conjunction with the gamma-ray log gives an excellent first look at lithologies (Source: Kansas Geological Survey - Log Overlay Lithology)"
+      },
+      "validation_criteria": {
+        "must_mention": ["gamma ray", "neutron", "density"],
+        "should_mention": ["lithology", "crossover"],
+        "factual_patterns": true
+      }
+    },
+    {
+      "id": "reservoir_01",
+      "category": "reservoir_characterization",
+      "query": "Which wells in the Norwegian Sea have both density and sonic logs?",
+      "complexity": "very_high",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "FORCE 2020 dataset - standard log suite",
+        "answer": "All 118 FORCE 2020 wells have both RHOB (density) and DTC (sonic) logs",
+        "verification": "RHOB and DTC are part of the standard petrophysical suite",
+        "well_count": 118,
+        "region": "Norwegian Sea"
+      },
+      "validation_criteria": {
+        "must_mention": ["Norwegian", "wells"],
+        "should_mention_count": "118",
+        "must_include_logs": ["RHOB", "DTC", "density", "sonic"]
+      }
+    },
+    {
+      "id": "reservoir_02",
+      "category": "reservoir_characterization",
+      "query": "What is the well name for well 15_9-13?",
+      "complexity": "easy",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "FORCE 2020 dataset - well metadata",
+        "exact_answer": "Sleipner East Appr",
+        "well_id": "15/9-13",
+        "verification": "Direct attribute lookup from well metadata",
+        "location": "Norwegian Sea"
+      },
+      "validation_criteria": {
+        "exact_match_required": true,
+        "answer": "Sleipner East Appr",
+        "case_insensitive": false
+      }
+    },
+    {
+      "id": "graph_01",
+      "category": "graph_relationship_queries",
+      "query": "What curves are available for well 15_9-13?",
+      "complexity": "medium",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "Graph structure - edge traversal from force2020-well-15_9-13",
+        "curve_count": 21,
+        "curves": ["DEPT", "FORCE_2020_LITHOFACIES_CONFIDENCE", "FORCE_2020_LITHOFACIES_LITHOLOGY", "CALI", "MUDWEIGHT", "ROP", "RHOB", "GR", "NPHI", "DTC", "BS", "RDEP", "RMED", "RSHA", "SGR", "DCAL", "DRHO", "PEF", "DTS", "SP", "RXO"],
+        "verification": "Count 'describes' edges with target = force2020-well-15_9-13",
+        "graph_traversal_required": true
+      },
+      "validation_criteria": {
+        "exact_count": 21,
+        "must_include_curves": ["DEPT", "GR", "NPHI", "RHOB", "DTC"],
+        "graph_traversal_applied": true,
+        "expansion_ratio_min": 20
+      }
+    },
+    {
+      "id": "graph_02",
+      "category": "graph_relationship_queries",
+      "query": "Which well does the FORCE_2020_LITHOFACIES_LITHOLOGY curve belong to for curve ID force2020-curve-2?",
+      "complexity": "medium",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "Graph structure - edge traversal from force2020-curve-2",
+        "well_id": "force2020-well-15_9-13",
+        "well_name": "Sleipner East Appr",
+        "well_uwi": "15/9-13",
+        "verification": "Follow 'describes' edge from force2020-curve-2 to target well",
+        "graph_traversal_required": true
+      },
+      "validation_criteria": {
+        "must_mention": ["15_9-13", "Sleipner"],
+        "graph_traversal_applied": true,
+        "correct_well_id": true
+      }
+    },
+    {
+      "id": "graph_03",
+      "category": "graph_relationship_queries",
+      "query": "How many wells are in the FORCE 2020 dataset?",
+      "complexity": "easy",
+      "expected_graph_traversal": false,
+      "ground_truth": {
+        "source": "FORCE 2020 dataset metadata",
+        "exact_count": 118,
+        "verification": "Count nodes of type 'las_document' with source='force2020'",
+        "aggregation_type": "COUNT"
+      },
+      "validation_criteria": {
+        "exact_answer": 118,
+        "tolerance": 0,
+        "must_be_numeric": true
+      }
+    },
+    {
+      "id": "cross_well_01",
+      "category": "cross_well_analysis",
+      "query": "What standard petrophysical logs are common across all FORCE 2020 wells?",
+      "complexity": "high",
+      "expected_graph_traversal": false,
+      "ground_truth": {
+        "source": "FORCE 2020 dataset - standard log suite",
+        "common_curves": ["DEPT", "GR", "NPHI", "RHOB", "DTC", "FORCE_2020_LITHOFACIES_LITHOLOGY", "FORCE_2020_LITHOFACIES_CONFIDENCE"],
+        "description": "All FORCE 2020 wells have the same 21-curve standard suite",
+        "verification": "Every well has exactly 21 curves with the same mnemonics"
+      },
+      "validation_criteria": {
+        "must_mention_curves": ["DEPT", "GR", "NPHI", "RHOB"],
+        "should_mention": "standard suite",
+        "min_curves_listed": 5
+      }
+    },
+    {
+      "id": "technical_01",
+      "category": "petrophysical_interpretation",
+      "query": "What is the neutron-density crossover pattern for clean sandstone?",
+      "complexity": "high",
+      "expected_graph_traversal": false,
+      "ground_truth": {
+        "source": "Petrophysical literature - Kansas Geological Survey",
+        "answer": "Clean quartz sandstones show density porosity to the left of neutron porosity (density reads higher porosity than neutron), creating a 2-division crossover. This is due to quartz grain density (2.65 g/cm3) being less than calcite (2.71 g/cm3).",
+        "pattern": "Density left of neutron (2 scale divisions)",
+        "scientific_basis": "Clean quartz sandstones give the typical two-division neutron-density cross-over with density to the left of neutron (Source: Kansas Geological Survey)",
+        "gas_effect": "Gas increases crossover to ~5 divisions"
+      },
+      "validation_criteria": {
+        "must_mention": ["density", "neutron", "crossover"],
+        "should_mention": ["left", "sandstone"],
+        "factual_accuracy": true
+      }
+    },
+    {
+      "id": "technical_02",
+      "category": "petrophysical_interpretation",
+      "query": "How can you identify gas-bearing zones from neutron-density logs?",
+      "complexity": "high",
+      "expected_graph_traversal": false,
+      "ground_truth": {
+        "source": "Petrophysical literature - Kansas Geological Survey",
+        "answer": "Gas-bearing zones show increased neutron-density separation (crossover) compared to oil or water zones. Gas causes neutron log to read 10-15 porosity units too low and density to read ~0.05 g/cm3 too low, increasing crossover from 2 to about 5 scale divisions.",
+        "indicators": [
+          "Increased neutron-density separation",
+          "Neutron reads 10-15 porosity units low",
+          "Density reads 0.05 g/cm3 low",
+          "Crossover increases to ~5 divisions"
+        ],
+        "scientific_basis": "Compared to oil- or water-filled sandstone, the neutron log for a gas-filled sandstone reads as much as 10-15 porosity units too low (Source: Kansas Geological Survey)"
+      },
+      "validation_criteria": {
+        "must_mention": ["neutron", "density", "separation", "crossover"],
+        "should_mention": ["gas"],
+        "factual_accuracy": true
+      }
+    },
+    {
+      "id": "technical_03",
+      "category": "lithofacies_classification",
+      "query": "What gamma ray response characterizes shale formations?",
+      "complexity": "medium",
+      "expected_graph_traversal": false,
+      "ground_truth": {
+        "source": "Petrophysical literature - AAPG Wiki",
+        "answer": "Shales show high gamma-ray readings due to clay mineral content (potassium, thorium, uranium). Additionally, shales show high neutron readings and moderate density readings.",
+        "pattern": "High GR + high neutron + moderate density",
+        "scientific_basis": "Shales show a high gamma-ray reading, a high neutron reading, and a moderate density reading (Source: Kansas Geological Survey)",
+        "reason": "Clay minerals contain radioactive elements"
+      },
+      "validation_criteria": {
+        "must_mention": ["high", "gamma ray"],
+        "should_mention": ["shale", "clay"],
+        "factual_accuracy": true
+      }
+    },
+    {
+      "id": "integration_01",
+      "category": "reservoir_characterization",
+      "query": "For well 15_9-13, which curves would you use to calculate porosity?",
+      "complexity": "high",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "Combined: FORCE 2020 data + petrophysical methods",
+        "available_porosity_curves": ["NPHI", "RHOB", "DTC"],
+        "answer": "Well 15_9-13 has NPHI (neutron porosity), RHOB (density), and DTC (sonic) curves, all of which can be used for porosity calculation. Density-neutron combination is most common.",
+        "methods": {
+          "neutron": "Direct hydrogen content measurement",
+          "density": "Calculated from bulk density and matrix/fluid density",
+          "sonic": "Calculated from travel time using Wyllie equation"
+        },
+        "verification": "Must identify that well has these curves AND explain porosity usage"
+      },
+      "validation_criteria": {
+        "must_mention_curves": ["NPHI", "RHOB"],
+        "should_mention": "porosity",
+        "graph_traversal_should_apply": true,
+        "must_verify_curves_exist": true
+      }
+    },
+    {
+      "id": "integration_02",
+      "category": "reservoir_characterization",
+      "query": "What curves in well 15_9-13 are used for lithology identification?",
+      "complexity": "high",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "Combined: FORCE 2020 data + petrophysical methods",
+        "available_lithology_curves": ["GR", "NPHI", "RHOB", "FORCE_2020_LITHOFACIES_LITHOLOGY"],
+        "answer": "Well 15_9-13 has GR (gamma ray) for clay content, NPHI and RHOB for lithology identification via crossover patterns, and FORCE_2020_LITHOFACIES_LITHOLOGY as interpreted lithology.",
+        "interpretation_method": "GR + neutron-density crossover",
+        "verification": "Must identify curves AND explain lithology identification usage"
+      },
+      "validation_criteria": {
+        "must_mention_curves": ["GR", "NPHI", "RHOB"],
+        "bonus_mention": "LITHOFACIES",
+        "should_explain": "lithology",
+        "graph_traversal_should_apply": true
+      }
+    },
+    {
+      "id": "aggregation_01",
+      "category": "cross_well_analysis",
+      "query": "How many curves does each FORCE 2020 well typically have?",
+      "complexity": "medium",
+      "expected_graph_traversal": false,
+      "ground_truth": {
+        "source": "FORCE 2020 dataset structure",
+        "exact_count": 21,
+        "consistency": "All wells have exactly 21 curves",
+        "verification": "Count edges per well, should be consistent at 21",
+        "aggregation_type": "COUNT"
+      },
+      "validation_criteria": {
+        "exact_answer": 21,
+        "tolerance": 0,
+        "must_mention": "21",
+        "should_mention": "each well"
+      }
+    },
+    {
+      "id": "depth_01",
+      "category": "well_log_analysis",
+      "query": "What depth range does well 15_9-13 cover?",
+      "complexity": "easy",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "FORCE 2020 well metadata - well 15_9-13 attributes",
+        "start_depth": 25.0,
+        "stop_depth": 3283.96,
+        "unit": "meters",
+        "depth_range": "~3259 meters",
+        "verification": "Extract STRT and STOP attributes from well metadata"
+      },
+      "validation_criteria": {
+        "must_mention_numbers": true,
+        "should_mention": ["25", "3283", "3284", "meters"],
+        "range_approximately": "3200-3300m"
+      }
+    },
+    {
+      "id": "curve_detail_01",
+      "category": "well_log_analysis",
+      "query": "What is the unit of measurement for the CALI curve in well 15_9-13?",
+      "complexity": "medium",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "FORCE 2020 curve metadata - CALI attributes",
+        "unit": "inches (in)",
+        "curve_description": "CALI - Caliper log measures borehole diameter",
+        "verification": "Extract unit attribute from CALI curve node",
+        "standard_unit": "inches"
+      },
+      "validation_criteria": {
+        "must_mention": ["inch", "in"],
+        "curve_name": "CALI",
+        "graph_traversal_should_apply": true
+      }
+    },
+    {
+      "id": "multi_hop_01",
+      "category": "cross_well_analysis",
+      "query": "Find all wells in the Norwegian Sea with resistivity logs and list their names",
+      "complexity": "very_high",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "FORCE 2020 dataset - multi-hop graph traversal",
+        "resistivity_curves": ["RDEP", "RMED", "RSHA", "RXO"],
+        "well_count": 118,
+        "verification": "Find curves with resistivity mnemonics, traverse to wells, count unique wells",
+        "note": "All FORCE 2020 wells have resistivity suite (RDEP, RMED, RSHA, RXO)",
+        "region": "Norwegian Sea"
+      },
+      "validation_criteria": {
+        "must_mention": ["Norwegian", "resistivity"],
+        "should_mention_count": "118",
+        "multi_hop_required": true,
+        "well_names_bonus": true
+      }
+    },
+    {
+      "id": "comparison_01",
+      "category": "reservoir_characterization",
+      "query": "Compare the logging suite available in well 15_9-13 versus typical modern wells",
+      "complexity": "very_high",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "Combined: FORCE 2020 data + industry standards",
+        "well_15_9_13_suite": ["GR", "NPHI", "RHOB", "DTC", "Resistivity suite", "Caliper", "Lithofacies"],
+        "modern_standard": ["Triple combo (GR, NPHI, RHOB, Resistivity)", "Sonic", "Imaging logs", "NMR", "Geochemical"],
+        "comparison": "Well 15_9-13 has comprehensive triple combo + sonic + resistivity suite + interpreted lithofacies. Missing advanced logs like NMR or imaging.",
+        "verification": "Must retrieve curves from well 15_9-13 AND compare to industry standards"
+      },
+      "validation_criteria": {
+        "must_retrieve_curves": true,
+        "must_compare": true,
+        "graph_traversal_should_apply": true,
+        "technical_accuracy": true
+      }
+    },
+    {
+      "id": "expert_01",
+      "category": "petrophysical_interpretation",
+      "query": "If well 15_9-13 shows a 5-division neutron-density crossover in a sandstone interval, what does this likely indicate?",
+      "complexity": "very_high",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "Combined: Verify well has NPHI/RHOB + petrophysical interpretation",
+        "step_1": "Verify well 15_9-13 has NPHI and RHOB curves (graph query)",
+        "step_2": "Apply petrophysical interpretation",
+        "interpretation": "5-division crossover in sandstone indicates gas-bearing zone. Normal sandstone shows 2-division crossover; gas increases separation to ~5 divisions due to low hydrogen content affecting neutron reading.",
+        "curves_required": ["NPHI", "RHOB"],
+        "verification": "Must confirm curves exist AND provide correct interpretation",
+        "scientific_basis": "Gas increases crossover from 2 to about 5 scale divisions (Kansas Geological Survey)"
+      },
+      "validation_criteria": {
+        "must_verify_curves": true,
+        "must_mention": "gas",
+        "graph_traversal_should_apply": true,
+        "interpretation_accurate": true
+      }
+    },
+    {
+      "id": "expert_02",
+      "category": "lithofacies_classification",
+      "query": "Using the curves available in well 15_9-13, describe how to distinguish between sandstone and shale intervals",
+      "complexity": "very_high",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "Combined: FORCE 2020 data + petrophysical methods",
+        "available_curves": ["GR", "NPHI", "RHOB", "FORCE_2020_LITHOFACIES_LITHOLOGY"],
+        "method": "Sandstone: Low GR (<50 API), density left of neutron (2-division crossover). Shale: High GR (>100 API), high neutron, moderate density, minimal crossover.",
+        "verification_approach": "1) Confirm well has GR, NPHI, RHOB via graph query. 2) Explain petrophysical method. 3) Optionally mention LITHOFACIES as validation.",
+        "scientific_basis": "Standard neutron-density-gamma ray interpretation (AAPG Wiki, Kansas Geological Survey)"
+      },
+      "validation_criteria": {
+        "must_retrieve_curves": ["GR", "NPHI", "RHOB"],
+        "must_explain_method": true,
+        "graph_traversal_should_apply": true,
+        "must_mention": ["sandstone", "shale", "gamma ray"],
+        "interpretation_accurate": true
+      }
+    },
+    {
+      "id": "workflow_01",
+      "category": "reservoir_characterization",
+      "query": "Outline a complete petrophysical workflow for well 15_9-13 using available log data",
+      "complexity": "very_high",
+      "expected_graph_traversal": true,
+      "ground_truth": {
+        "source": "Combined: FORCE 2020 data + industry workflow",
+        "step_1": "Retrieve curves: GR, NPHI, RHOB, DTC, Resistivity, CALI",
+        "workflow": [
+          "1. Quality control: CALI for borehole condition",
+          "2. Lithology: GR + NPHI-RHOB crossover",
+          "3. Porosity: NPHI, RHOB, DTC (cross-validate)",
+          "4. Fluid saturation: Resistivity logs (RDEP, RMED, RSHA)",
+          "5. Validate with FORCE_2020_LITHOFACIES_LITHOLOGY"
+        ],
+        "verification": "Must query graph for curves AND describe realistic workflow",
+        "curves_needed": ["GR", "NPHI", "RHOB", "DTC", "RDEP", "RMED", "RSHA", "CALI"]
+      },
+      "validation_criteria": {
+        "must_retrieve_curves": true,
+        "must_outline_workflow": true,
+        "min_workflow_steps": 3,
+        "graph_traversal_should_apply": true,
+        "technical_accuracy": true
+      }
+    }
+  ]
+}

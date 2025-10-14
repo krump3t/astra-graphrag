@@ -1,0 +1,804 @@
+{
+  "timestamp": "2025-10-13T17:17:10.845395",
+  "summary": {
+    "total_tests": 25,
+    "successful": 25,
+    "failed": 0,
+    "success_rate": 1.0,
+    "average_metrics": {
+      "faithfulness": 0.359,
+      "answer_relevance": 0.179,
+      "context_precision": 1.0,
+      "context_recall": 0.05,
+      "ground_truth_overlap": 0.258,
+      "keyword_score": 0.76,
+      "aggregate_score": 0.513
+    },
+    "category_performance": {
+      "simple_factual": 0.6,
+      "aggregation_count": 0.507,
+      "aggregation_list": 0.612,
+      "entity_specific": 0.447,
+      "semantic_domain": 0.534,
+      "temporal": 0.5,
+      "spatial": 0.601,
+      "multi_constraint": 0.424,
+      "comparison": 0.343,
+      "complex_analytical": 0.55,
+      "edge_cases": 0.433
+    }
+  },
+  "gating": {
+    "passed": false,
+    "failures": [
+      "aggregate_score 0.513 < required 0.6",
+      "faithfulness 0.359 < required 0.7"
+    ]
+  },
+  "results": [
+    {
+      "test_id": "simple_01",
+      "category": "simple_factual",
+      "query": "What is the USGS site code?",
+      "status": "success",
+      "answer": "03339000",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 1.0,
+          "answer_relevance": 0.0,
+          "context_precision": 1.0,
+          "context_recall": 0.071,
+          "ground_truth_overlap": 0.167,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.7
+        },
+        "diagnostics": {
+          "num_contexts": 1,
+          "answer_length": 1,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 1,
+          "initial_results": 1,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "simple_02",
+      "category": "simple_factual",
+      "query": "What is the name of the USGS monitoring site?",
+      "status": "success",
+      "answer": "VERMILION RIVER NEAR DANVILLE, IL",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 1.0,
+          "answer_relevance": 0.0,
+          "context_precision": 1.0,
+          "context_recall": 0.357,
+          "ground_truth_overlap": 1.0,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.7
+        },
+        "diagnostics": {
+          "num_contexts": 1,
+          "answer_length": 5,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 1,
+          "initial_results": 1,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "simple_03",
+      "category": "simple_factual",
+      "query": "What state is the USGS site located in?",
+      "status": "success",
+      "answer": "Illinois",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.0,
+          "context_precision": 1.0,
+          "context_recall": 0.0,
+          "ground_truth_overlap": 1.0,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.4
+        },
+        "diagnostics": {
+          "num_contexts": 1,
+          "answer_length": 1,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 1,
+          "initial_results": 1,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "agg_count_01",
+      "category": "aggregation_count",
+      "query": "How many EIA energy records are in the dataset?",
+      "status": "success",
+      "answer": "There are 210 EIA production records.",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.167,
+          "answer_relevance": 0.333,
+          "context_precision": 1.0,
+          "context_recall": 0.003,
+          "ground_truth_overlap": 0.5,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.55
+        },
+        "diagnostics": {
+          "num_contexts": 100,
+          "answer_length": 6,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 100,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "agg_count_02",
+      "category": "aggregation_count",
+      "query": "How many LAS curves are available?",
+      "status": "success",
+      "answer": "There are 53 LAS curves.",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.5,
+          "context_precision": 1.0,
+          "context_recall": 0.02,
+          "ground_truth_overlap": 0.4,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.55
+        },
+        "diagnostics": {
+          "num_contexts": 100,
+          "answer_length": 5,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 100,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "agg_count_03",
+      "category": "aggregation_count",
+      "query": "What is the total number of data records across all sources?",
+      "status": "success",
+      "answer": "There are 1000 records.",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.091,
+          "context_precision": 1.0,
+          "context_recall": 0.01,
+          "ground_truth_overlap": 0.077,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.427
+        },
+        "diagnostics": {
+          "num_contexts": 100,
+          "answer_length": 4,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 100,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "agg_count_04",
+      "category": "aggregation_count",
+      "query": "How many USGS monitoring sites are in the database?",
+      "status": "success",
+      "answer": "There are 1 USGS monitoring site.",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.333,
+          "context_precision": 1.0,
+          "context_recall": 0.0,
+          "ground_truth_overlap": 0.667,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.5
+        },
+        "diagnostics": {
+          "num_contexts": 1,
+          "answer_length": 6,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 1,
+          "initial_results": 1,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "agg_list_01",
+      "category": "aggregation_list",
+      "query": "What are all the different data sources in the system?",
+      "status": "success",
+      "answer": "There is only 1 unique entity_type value: las_curve. \n\nAnswer: The data source in the system is las_curve.",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.214,
+          "answer_relevance": 0.286,
+          "context_precision": 1.0,
+          "context_recall": 0.0,
+          "ground_truth_overlap": 0.143,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.55
+        },
+        "diagnostics": {
+          "num_contexts": 1000,
+          "answer_length": 17,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 1000,
+          "initial_results": 1000,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "agg_list_02",
+      "category": "aggregation_list",
+      "query": "What different domains are represented in the data?",
+      "status": "success",
+      "answer": "The Question: What different domains are represented in the data?\n\nAnswer: las_curve.",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.182,
+          "answer_relevance": 0.727,
+          "context_precision": 1.0,
+          "context_recall": 0.006,
+          "ground_truth_overlap": 0.091,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.673
+        },
+        "diagnostics": {
+          "num_contexts": 1000,
+          "answer_length": 12,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 1000,
+          "initial_results": 1000,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "entity_01",
+      "category": "entity_specific",
+      "query": "What LAS curves measure gamma ray radiation?",
+      "status": "success",
+      "answer": "15 curves found: ROP (ROP), RSHA (RSHA), BS (BS), ROP (ROP), ROP (ROP)...",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.5,
+          "answer_relevance": 0.143,
+          "context_precision": 1.0,
+          "context_recall": 0.02,
+          "ground_truth_overlap": 0.0,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.393
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 13,
+          "missing_keywords": [
+            "GSGR"
+          ],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "entity_02",
+      "category": "entity_specific",
+      "query": "Which curve represents bulk density?",
+      "status": "success",
+      "answer": "15 curves found: MUDWEIGHT (MUDWEIGHT), MUDWEIGHT (MUDWEIGHT), MUDWEIGHT (MUDWEIGHT), BS (BS), MUDWEIGHT (MUDWEIGHT)...",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.6,
+          "answer_relevance": 0.0,
+          "context_precision": 1.0,
+          "context_recall": 0.022,
+          "ground_truth_overlap": 0.0,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.38
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 13,
+          "missing_keywords": [
+            "RHOB"
+          ],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "entity_03",
+      "category": "entity_specific",
+      "query": "What does the DEPT curve measure?",
+      "status": "success",
+      "answer": "9 different values found: DEPTH, RDEP, DEPTH_MD, ROP, DRHO...",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.556,
+          "answer_relevance": 0.0,
+          "context_precision": 1.0,
+          "context_recall": 0.128,
+          "ground_truth_overlap": 0.111,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.567
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 9,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "semantic_01",
+      "category": "semantic_domain",
+      "query": "What subsurface formation data is available?",
+      "status": "success",
+      "answer": "The subsurface formation data available includes the following curves: DEPTH_MD, z_loc, y_loc, FORCE_2020_LITHOFACIES_LITHOLOGY, and NPHI. These curves belong to wells 26/4-1, 15/9-17, 35/11-13, 33/9-17, and T4. The NPHI curve measures neutron porosity in units of m3/m3. The FORCE_2020_LITHOFACIES_LITHOLOGY curve measures lithofacies lithology. The DEPTH_MD and z_loc curves measure depth. The y_loc curve measures y location. The wells have the following IDs: force2020-well-26_4-1, force2020-well-15_9-17, force2020-well-35_11-13, force2020-well-33_9-17, and force2020-well-25_2-13 T4.",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.538,
+          "answer_relevance": 0.077,
+          "context_precision": 1.0,
+          "context_recall": 0.083,
+          "ground_truth_overlap": 0.096,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.585
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 68,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "semantic_02",
+      "category": "semantic_domain",
+      "query": "What energy production information is in the database?",
+      "status": "success",
+      "answer": "The database contains information on the following energy production metrics: \nOIL_PRODUCTION_PER_RIG, \nOIL_LEGACY_PRODUCTION_CHANGE, \nOIL_TOTAL_PRODUCTION, \nGAS_PRODUCTION_PER_RIG, \nGAS_LEGACY_PRODUCTION_CHANGE, \nGAS_TOTAL_PRODUCTION. \n\nThese metrics are related to the [DOMAIN] energy production petroleum oil gas drilling productivity. \n\nAdditionally, the database includes information on the number of rigs (RIG_COUNT) in the Anadarko Region for different months. \n\nThe database also contains information on the [REGION] Anadarko Region and the [MONTH] of the data. \n\nTherefore, the energy production information in the database includes oil and gas production per rig, total production, legacy production changes, and rig counts for the Anadarko Region. \n\nThe database has 13 entries for different months. \n\nThe energy production metrics are: \n1. OIL_PRODUCTION_PER_RIG \n2. OIL_LEGACY_PRODUCTION_CHANGE \n3. OIL_TOTAL_PRODUCTION \n4. GAS_PRODUCTION_PER_RIG \n5. GAS_LEGACY_PRODUCTION_CHANGE \n6. GAS_TOTAL_PRODUCTION \n\nThese metrics are related to the [DOMAIN] energy production petroleum oil gas drilling productivity. \n\nThe database contains information on the number of rigs (RIG_COUNT) in the Anadarko Region for different months. \n\nThe database also contains information on the [REGION] Anadarko Region and the [MONTH] of the data. \n\nTherefore, the energy production information in the database includes oil and gas production per rig, total production, legacy production changes, and rig counts for the Anadarko Region. \n\nThe database has 13 entries for different months. \n\nThe energy production metrics are: \n1. OIL_PRODUCTION_PER_RIG \n2. OIL_LEGACY_PRODUCTION_CHANGE \n3. OIL_TOTAL_PRODUCTION \n4. GAS_PRODUCTION_PER_RIG \n5. GAS_LEGACY_PRODUCTION_CHANGE \n6. GAS_TOTAL_PRODUCTION \n\nThese metrics are related to the [DOMAIN] energy production petroleum oil gas drilling productivity. \n\nThe database contains information on the number of rigs (RIG_COUNT) in the Anadarko Region for different months. \n\nThe database also contains information on the [REGION] Anadarko Region and the [MONTH] of the data. \n\nTherefore, the energy production information in the database includes oil and gas production per rig, total production, legacy production changes, and rig counts",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.421,
+          "answer_relevance": 0.105,
+          "context_precision": 1.0,
+          "context_recall": 0.027,
+          "ground_truth_overlap": 0.105,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.558
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 285,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "semantic_03",
+      "category": "semantic_domain",
+      "query": "What surface water monitoring data exists?",
+      "status": "success",
+      "answer": "The final answer is: \nSurface water measurement exists for the USGS site \"VERMILION RIVER NEAR DANVILLE, IL\" with site code \"03339000\" in the domain of surface water hydrology streamflow.",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.583,
+          "answer_relevance": 0.125,
+          "context_precision": 1.0,
+          "context_recall": 0.263,
+          "ground_truth_overlap": 0.25,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.613
+        },
+        "diagnostics": {
+          "num_contexts": 2,
+          "answer_length": 29,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 2,
+          "initial_results": 2,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "semantic_04",
+      "category": "semantic_domain",
+      "query": "What lithology identification tools are available in the well logs?",
+      "status": "success",
+      "answer": "15 curves found: FORCE_2020_LITHOFACIES_LITHOLOGY (FORCE_2020_LITHOFACIES_LITHOLOGY), NPHI (NPHI), NPHI (NPHI), NPHI (NPHI), NPHI (NPHI)...",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.6,
+          "answer_relevance": 0.0,
+          "context_precision": 1.0,
+          "context_recall": 0.026,
+          "ground_truth_overlap": 0.0,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.38
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 13,
+          "missing_keywords": [
+            "PEF"
+          ],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "temporal_01",
+      "category": "temporal",
+      "query": "What is the most recent year represented in the EIA data?",
+      "status": "success",
+      "answer": "2016",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 1.0,
+          "answer_relevance": 0.0,
+          "context_precision": 1.0,
+          "context_recall": 0.001,
+          "ground_truth_overlap": 0.0,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.5
+        },
+        "diagnostics": {
+          "num_contexts": 210,
+          "answer_length": 1,
+          "missing_keywords": [
+            "2023"
+          ],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 210,
+          "initial_results": 210,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "spatial_01",
+      "category": "spatial",
+      "query": "What data is available from Indiana?",
+      "status": "success",
+      "answer": "There are 89 EIA production records in Indiana.",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.125,
+          "answer_relevance": 0.125,
+          "context_precision": 1.0,
+          "context_recall": 0.001,
+          "ground_truth_overlap": 0.5,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.475
+        },
+        "diagnostics": {
+          "num_contexts": 100,
+          "answer_length": 8,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 100,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "spatial_02",
+      "category": "spatial",
+      "query": "Where is the Vermilion River monitoring site located?",
+      "status": "success",
+      "answer": "Answer: The Vermilion River monitoring site is located near Danville, IL.",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.455,
+          "answer_relevance": 0.636,
+          "context_precision": 1.0,
+          "context_recall": 0.143,
+          "ground_truth_overlap": 0.182,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.727
+        },
+        "diagnostics": {
+          "num_contexts": 1,
+          "answer_length": 11,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 1,
+          "initial_results": 1,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "multi_01",
+      "category": "multi_constraint",
+      "query": "How many subsurface data records are there?",
+      "status": "success",
+      "answer": "There are 1000 records.",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.429,
+          "context_precision": 1.0,
+          "context_recall": 0.024,
+          "ground_truth_overlap": 0.125,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.529
+        },
+        "diagnostics": {
+          "num_contexts": 100,
+          "answer_length": 4,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 100,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "multi_02",
+      "category": "multi_constraint",
+      "query": "What spectral gamma ray curves are available?",
+      "status": "success",
+      "answer": "Gamma ray (GR) measures natural radioactivity; high GR typically indicates shale.",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.2,
+          "answer_relevance": 0.2,
+          "context_precision": 1.0,
+          "context_recall": 0.0,
+          "ground_truth_overlap": 0.2,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.32
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 11,
+          "missing_keywords": [
+            "GSTK",
+            "GST",
+            "GSK"
+          ],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "comparison_01",
+      "category": "comparison",
+      "query": "Which domain has the most data records?",
+      "status": "success",
+      "answer": "subsurface (996 records).",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.333,
+          "answer_relevance": 0.143,
+          "context_precision": 1.0,
+          "context_recall": 0.009,
+          "ground_truth_overlap": 0.125,
+          "keyword_score": 0.0,
+          "aggregate_score": 0.343
+        },
+        "diagnostics": {
+          "num_contexts": 1000,
+          "answer_length": 3,
+          "missing_keywords": [
+            "energy"
+          ],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 1000,
+          "initial_results": 1000,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "complex_01",
+      "category": "complex_analytical",
+      "query": "What types of porosity measurements are available in the well logs?",
+      "status": "success",
+      "answer": "15 curves found: NPHI (NPHI), NPHI (NPHI), NPHI (NPHI), NPHI (NPHI), NPHI (NPHI)...",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.5,
+          "answer_relevance": 0.0,
+          "context_precision": 1.0,
+          "context_recall": 0.023,
+          "ground_truth_overlap": 0.167,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.55
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 13,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "edge_01",
+      "category": "edge_cases",
+      "query": "What is the weather forecast for tomorrow?",
+      "status": "success",
+      "answer": "This question appears to be about weather, which is outside the scope of this geological and energy data system.",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.167,
+          "context_precision": 1.0,
+          "context_recall": 0.0,
+          "ground_truth_overlap": 0.444,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.45
+        },
+        "diagnostics": {
+          "num_contexts": 15,
+          "answer_length": 19,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 15,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    },
+    {
+      "test_id": "edge_02",
+      "category": "edge_cases",
+      "query": "How many Bitcoin records are in the database?",
+      "status": "success",
+      "answer": "This question appears to be about finance, which is outside the scope of this geological and energy data system.",
+      "evaluation": {
+        "metrics": {
+          "faithfulness": 0.0,
+          "answer_relevance": 0.056,
+          "context_precision": 1.0,
+          "context_recall": 0.01,
+          "ground_truth_overlap": 0.111,
+          "keyword_score": 1.0,
+          "aggregate_score": 0.417
+        },
+        "diagnostics": {
+          "num_contexts": 100,
+          "answer_length": 19,
+          "missing_keywords": [],
+          "expected_entities_found": "N/A"
+        },
+        "workflow_metadata": {
+          "retrieval_source": "astra",
+          "num_results": 100,
+          "initial_results": 100,
+          "reranked": true
+        }
+      }
+    }
+  ]
+}

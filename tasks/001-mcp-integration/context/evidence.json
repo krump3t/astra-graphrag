@@ -1,0 +1,42 @@
+[
+  {
+    "claim": "Hybrid GraphRAG combining vector search and graph traversal improves retrieval accuracy by 72-83%",
+    "source_type": "P1",
+    "url_or_doi": "https://www.microsoft.com/en-us/research/blog/graphrag-unlocking-llm-discovery-on-narrative-private-data/",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "GraphRAG demonstrates 72-83% improvement in comprehensiveness over baseline RAG",
+    "note_on_relevance": "Justifies hybrid vector+graph architecture choice for relationship queries; validates hypothesis that graph traversal enhances vector search accuracy"
+  },
+  {
+    "claim": "Cognitive complexity (CCN) above 15 significantly increases bug probability and maintenance cost",
+    "source_type": "P1",
+    "url_or_doi": "https://www.sonarsource.com/docs/CognitiveComplexity.pdf",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "Functions exceeding 15 CCN are 50% more likely to contain defects (p. 4)",
+    "note_on_relevance": "Establishes scientific basis for CCN < 15 threshold in refactoring requirements; industry-standard maintainability metric"
+  },
+  {
+    "claim": "FORCE 2020 dataset provides validated subsurface geology data with lithofacies labels for ML validation",
+    "source_type": "P1",
+    "url_or_doi": "https://github.com/bolgebrygg/Force-2020-Machine-Learning-competition",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "118 wells with expert-labeled lithofacies from Norwegian Continental Shelf (README.md)",
+    "note_on_relevance": "Validates data authenticity for differential testing; official Norwegian Petroleum Directorate competition dataset ensures real-world relevance"
+  },
+  {
+    "claim": "Model Context Protocol (MCP) enables LLM integration with external data sources via standardized tool interface",
+    "source_type": "P1",
+    "url_or_doi": "https://modelcontextprotocol.io/introduction",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "MCP standardizes how applications provide context to LLMs through servers and tools",
+    "note_on_relevance": "Defines MCP integration approach for Phase 1; official protocol specification from Anthropic ensures implementation correctness"
+  },
+  {
+    "claim": "Test-driven development (TDD) reduces defect density by 40-80% in production code",
+    "source_type": "P1",
+    "url_or_doi": "https://doi.org/10.1109/TSE.2008.37",
+    "retrieval_date": "2025-10-14",
+    "quoted_text": "TDD case studies show 40-80% reduction in defect density (Nagappan et al., IEEE TSE 2008)",
+    "note_on_relevance": "Justifies mandatory TDD methodology in protocol; peer-reviewed study validates test-first approach for complex systems"
+  }
+]

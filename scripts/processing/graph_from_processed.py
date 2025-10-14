@@ -9,6 +9,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from services.graph_index import paths
+from services.graph_index.enrichment import enrich_nodes_with_relationships
 
 
 def _load_eia_nodes() -> list[dict]:
@@ -255,6 +256,11 @@ def build_combined_graph() -> Path:
     nodes.extend(force2020_nodes)
     edges.extend(force2020_edges)
     print(f"  Added {len(force2020_nodes)} FORCE 2020 nodes, {len(force2020_edges)} edges")
+
+    # Enrich nodes with relationship metadata (SINGLE SOURCE OF TRUTH)
+    print("\nEnriching nodes with relationship metadata...")
+    nodes = enrich_nodes_with_relationships(nodes, edges)
+    print("  Enrichment complete: added _well_name to curves, _curve_mnemonics to wells")
 
     graph = {
         "nodes": nodes,

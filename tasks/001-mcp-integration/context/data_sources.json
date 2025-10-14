@@ -1,0 +1,69 @@
+{
+  "inputs": [
+    {
+      "name": "FORCE 2020 Well Logs",
+      "path_or_url": "data/raw/force2020/las_files/",
+      "sha256": "933752fd96b8c286b17d125b28d8a53dcd1d4c69e179a482cfaedfc2ace5fb00",
+      "sha256_note": "Sample hash for 15_9-13.las; 118 total files with unique hashes",
+      "rows": 118,
+      "cols": 2393,
+      "description": "LAS format well log files from Norwegian Continental Shelf with lithofacies labels",
+      "licensing": "public",
+      "license_url": "https://github.com/bolgebrygg/Force-2020-Machine-Learning-competition/blob/master/LICENSE",
+      "pii": false,
+      "source": "Norwegian Petroleum Directorate / Equinor"
+    },
+    {
+      "name": "AstraDB Vector Store",
+      "path_or_url": "astra.datastax.com (via API)",
+      "sha256": "N/A",
+      "sha256_note": "Cloud-hosted database; content hash varies by ingestion",
+      "rows": 1000,
+      "cols": 768,
+      "description": "Vector embeddings (768-dim) of graph nodes with metadata",
+      "licensing": "internal",
+      "license_url": "N/A",
+      "pii": false,
+      "source": "Generated from FORCE 2020 data via WatsonX Granite embedding model"
+    },
+    {
+      "name": "NetworkX Graph Index",
+      "path_or_url": "In-memory graph structure (services/graph_index/)",
+      "sha256": "N/A",
+      "sha256_note": "Runtime-constructed from LAS files",
+      "rows": 2751,
+      "cols": 2421,
+      "description": "Graph with 2,751 nodes (wells, curves) and 2,421 edges (well-to-curve relationships)",
+      "licensing": "internal",
+      "license_url": "N/A",
+      "pii": false,
+      "source": "Derived from FORCE 2020 LAS file headers"
+    },
+    {
+      "name": "EIA Drilling Productivity",
+      "path_or_url": "data/raw/eia_drilling_productivity.csv",
+      "sha256": "N/A",
+      "sha256_note": "Not used in Phase 1 MCP integration",
+      "rows": 211,
+      "cols": 8,
+      "description": "US regional oil/gas production and rig count statistics",
+      "licensing": "public",
+      "license_url": "https://www.eia.gov/opendata/",
+      "pii": false,
+      "source": "U.S. Energy Information Administration"
+    },
+    {
+      "name": "USGS Water Data",
+      "path_or_url": "data/raw/usgs_water_data.csv",
+      "sha256": "N/A",
+      "sha256_note": "Not used in Phase 1 MCP integration",
+      "rows": 28,
+      "cols": 5,
+      "description": "Streamflow measurements from USGS monitoring sites",
+      "licensing": "public",
+      "license_url": "https://waterdata.usgs.gov/nwis",
+      "pii": false,
+      "source": "U.S. Geological Survey National Water Information System"
+    }
+  ]
+}

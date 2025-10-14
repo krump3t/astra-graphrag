@@ -1,0 +1,290 @@
+{
+  "description": "V3 Expanded - Stress tests for weak areas, complexity for strong areas",
+  "version": "3.0",
+  "total_queries": 40,
+  "expansion_notes": {
+    "weak_areas": "temporal(+3), spatial(+1), comparison(+2), complex_analytical(+2)",
+    "strong_areas": "simple_factual(+1), aggregation_list(+1), edge_cases(+1)",
+    "stress_tests": "Additional 4 queries testing edge cases and multi-constraints"
+  },
+  "queries": [
+    {
+      "id": "simple_01",
+      "category": "simple_factual",
+      "query": "What is the USGS site code?",
+      "expected_answer_contains": "03339000",
+      "expected_entity_type": "usgs_site"
+    },
+    {
+      "id": "simple_02",
+      "category": "simple_factual",
+      "query": "What is the name of the USGS monitoring site?",
+      "expected_answer_contains": "VERMILION RIVER",
+      "expected_entity_type": "usgs_site"
+    },
+    {
+      "id": "simple_03",
+      "category": "simple_factual",
+      "query": "What state is the USGS site located in?",
+      "expected_answer_contains": "Illinois",
+      "expected_entity_type": "usgs_site"
+    },
+    {
+      "id": "simple_04_complex",
+      "category": "simple_factual",
+      "query": "What city is the Vermilion River monitoring site near?",
+      "expected_answer_contains": "Danville",
+      "expected_entity_type": "usgs_site",
+      "notes": "Complexity increase - tests city extraction"
+    },
+    {
+      "id": "agg_count_01",
+      "category": "aggregation_count",
+      "query": "How many EIA energy records are in the dataset?",
+      "expected_count": 210,
+      "expected_entity_type": "eia_record"
+    },
+    {
+      "id": "agg_count_02",
+      "category": "aggregation_count",
+      "query": "How many LAS curves are available?",
+      "expected_count": 27,
+      "expected_entity_type": "las_curve"
+    },
+    {
+      "id": "agg_count_03",
+      "category": "aggregation_count",
+      "query": "What is the total number of data records across all sources?",
+      "expected_count": 240
+    },
+    {
+      "id": "agg_count_04",
+      "category": "aggregation_count",
+      "query": "How many USGS monitoring sites are in the database?",
+      "expected_count": 1,
+      "expected_entity_type": "usgs_site"
+    },
+    {
+      "id": "agg_count_05_stress",
+      "category": "aggregation_count",
+      "query": "How many curves have API as their unit of measurement?",
+      "expected_entity_type": "las_curve",
+      "notes": "Stress test - attribute filtering"
+    },
+    {
+      "id": "agg_list_01",
+      "category": "aggregation_list",
+      "query": "What are all the different data sources in the system?",
+      "expected_values": ["eia_record", "usgs_site", "usgs_measurement", "las_curve", "las_document"]
+    },
+    {
+      "id": "agg_list_02",
+      "category": "aggregation_list",
+      "query": "What different domains are represented in the data?",
+      "expected_values": ["energy", "surface_water", "subsurface"]
+    },
+    {
+      "id": "agg_list_03_complex",
+      "category": "aggregation_list",
+      "query": "List all curve mnemonics that relate to porosity measurements",
+      "expected_answer_contains": "porosity",
+      "expected_entity_type": "las_curve",
+      "notes": "Complexity increase - semantic filtering + listing"
+    },
+    {
+      "id": "entity_01",
+      "category": "entity_specific",
+      "query": "What LAS curves measure gamma ray radiation?",
+      "expected_answer_contains": "GSGR",
+      "expected_entity_type": "las_curve"
+    },
+    {
+      "id": "entity_02",
+      "category": "entity_specific",
+      "query": "Which curves measure density porosity?",
+      "expected_answer_contains": "DLDPL",
+      "expected_entity_type": "las_curve",
+      "notes": "Changed from RHOB (not in data) to DLDPL (density porosity limestone)"
+    },
+    {
+      "id": "entity_03",
+      "category": "entity_specific",
+      "query": "What does the DEPT curve measure?",
+      "expected_answer_contains": "depth",
+      "expected_entity_type": "las_curve"
+    },
+    {
+      "id": "entity_04_stress",
+      "category": "entity_specific",
+      "query": "Is there a SONIC curve in the well logs?",
+      "expected_answer_contains": "no",
+      "expected_entity_type": "las_curve",
+      "notes": "Stress test - negative/absence detection"
+    },
+    {
+      "id": "semantic_01",
+      "category": "semantic_domain",
+      "query": "What subsurface formation data is available?",
+      "domain_filter": "subsurface"
+    },
+    {
+      "id": "semantic_02",
+      "category": "semantic_domain",
+      "query": "What energy production information is in the database?",
+      "expected_entity_type": "eia_record"
+    },
+    {
+      "id": "semantic_03",
+      "category": "semantic_domain",
+      "query": "What surface water monitoring data exists?",
+      "domain_filter": "surface_water"
+    },
+    {
+      "id": "semantic_04",
+      "category": "semantic_domain",
+      "query": "What lithology identification tools are available in the well logs?",
+      "expected_answer_contains": "PEF",
+      "domain_filter": "subsurface"
+    },
+    {
+      "id": "temporal_01",
+      "category": "temporal",
+      "query": "What is the most recent year represented in the EIA data?",
+      "expected_answer_contains": "2024",
+      "expected_entity_type": "eia_record"
+    },
+    {
+      "id": "temporal_02_new",
+      "category": "temporal",
+      "query": "What is the earliest year in the EIA dataset?",
+      "expected_answer_contains": "2007",
+      "expected_entity_type": "eia_record",
+      "notes": "MIN aggregation test"
+    },
+    {
+      "id": "temporal_03_new",
+      "category": "temporal",
+      "query": "How many years of data are covered in the EIA records?",
+      "expected_answer_contains": "17",
+      "expected_entity_type": "eia_record",
+      "notes": "Range calculation test"
+    },
+    {
+      "id": "temporal_04_stress",
+      "category": "temporal",
+      "query": "Show all EIA production months from 2020 onwards",
+      "expected_entity_type": "eia_record",
+      "notes": "Stress test - temporal filtering"
+    },
+    {
+      "id": "spatial_01",
+      "category": "spatial",
+      "query": "What data is available from Indiana?",
+      "expected_answer_contains": "EIA",
+      "expected_entity_type": "eia_record"
+    },
+    {
+      "id": "spatial_02",
+      "category": "spatial",
+      "query": "Where is the Vermilion River monitoring site located?",
+      "expected_answer_contains": "Danville"
+    },
+    {
+      "id": "spatial_03_new",
+      "category": "spatial",
+      "query": "Which EIA regions are represented in the data?",
+      "expected_answer_contains": "Anadarko",
+      "expected_entity_type": "eia_record",
+      "notes": "Region identification test"
+    },
+    {
+      "id": "multi_01",
+      "category": "multi_constraint",
+      "query": "How many subsurface data records are there?",
+      "expected_count": 28,
+      "domain_filter": "subsurface"
+    },
+    {
+      "id": "multi_02",
+      "category": "multi_constraint",
+      "query": "What spectral gamma ray curves are available?",
+      "expected_answer_contains": "GSGR",
+      "expected_entity_type": "las_curve"
+    },
+    {
+      "id": "multi_03_new",
+      "category": "multi_constraint",
+      "query": "How many LAS curves have descriptions containing porosity?",
+      "expected_entity_type": "las_curve",
+      "notes": "Text search within attributes"
+    },
+    {
+      "id": "multi_04_stress",
+      "category": "multi_constraint",
+      "query": "What curves measure both density and neutron properties?",
+      "expected_entity_type": "las_curve",
+      "notes": "Stress test - multi-attribute matching"
+    },
+    {
+      "id": "comparison_01",
+      "category": "comparison",
+      "query": "Which domain has the most data records?",
+      "expected_answer_contains": "energy"
+    },
+    {
+      "id": "comparison_02_new",
+      "category": "comparison",
+      "query": "Which has more records: LAS curves or USGS measurements?",
+      "expected_answer_contains": "LAS",
+      "notes": "Cross-entity comparison"
+    },
+    {
+      "id": "comparison_03_new",
+      "category": "comparison",
+      "query": "Are there more oil or gas metrics in the EIA data?",
+      "expected_answer_contains": "equal",
+      "expected_entity_type": "eia_record",
+      "notes": "Attribute-level comparison"
+    },
+    {
+      "id": "complex_01",
+      "category": "complex_analytical",
+      "query": "What types of porosity measurements are available in the well logs?",
+      "expected_answer_contains": ["NCNPL", "DLDPL"],
+      "expected_entity_type": "las_curve",
+      "notes": "Changed from NPHI to actual curves: NCNPL (neutron), DLDPL (density)"
+    },
+    {
+      "id": "complex_02_new",
+      "category": "complex_analytical",
+      "query": "What measurements would you use to identify hydrocarbon-bearing zones?",
+      "expected_answer_contains": ["porosity", "gamma"],
+      "expected_entity_type": "las_curve",
+      "notes": "Multi-hop reasoning - looking for curves that exist in data"
+    },
+    {
+      "id": "complex_03_new",
+      "category": "complex_analytical",
+      "query": "Which well log curves are essential for characterizing subsurface formations?",
+      "expected_answer_contains": ["porosity", "density", "gamma"],
+      "expected_entity_type": "las_curve",
+      "notes": "Domain knowledge synthesis - uses curves available in dataset"
+    },
+    {
+      "id": "edge_01",
+      "category": "edge_cases",
+      "query": "What is the weather forecast for tomorrow?"
+    },
+    {
+      "id": "edge_02",
+      "category": "edge_cases",
+      "query": "How many Bitcoin records are in the database?"
+    },
+    {
+      "id": "edge_03_complex",
+      "category": "edge_cases",
+      "query": "What is the correlation between oil prices and production volumes?",
+      "notes": "Complexity increase - requires data not in system"
+    }
+  ]
+}

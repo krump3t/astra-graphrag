@@ -6,7 +6,7 @@ maintainability and testability.
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List, Any, Optional
+from typing import TYPE_CHECKING, Dict, List, Any, Optional, Callable, Protocol
 
 from services.langgraph.domain_maps import (
     RESISTIVITY_SET,
@@ -18,6 +18,14 @@ from services.langgraph.domain_maps import (
 
 if TYPE_CHECKING:
     from services.langgraph.state import WorkflowState
+
+
+# Handler function protocol for type safety
+class WellQueryHandler(Protocol):
+    """Protocol for well query handler functions."""
+    def __call__(self, state: 'WorkflowState', *args, **kwargs) -> bool:
+        """Execute handler and return True if query was handled."""
+        ...
 
 
 def _build_curve_groups(ordered_mnemonics: List[str]) -> Dict[str, List[str]]:
@@ -595,3 +603,170 @@ def handle_triple_combo_exclusion_query(
     state.metadata['relationship_structured_answer'] = True
     state.metadata['non_triple_combo'] = remainder
     return True
+
+
+# ============================================================================
+# HANDLER REGISTRY PATTERN
+# ============================================================================
+
+class WellQueryHandlerRegistry:
+    """Registry for well-specific query handlers with priority-based dispatch.
+
+    This pattern reduces the complexity of the main dispatcher function from
+    F(119) to D(15-20) by delegating to specialized handlers in priority order.
+    """
+
+    def __init__(self):
+        """Initialize handler registry with prioritized handlers."""
+        # Handlers are executed in order of registration
+        # Higher priority (more specific) handlers first
+        self._handlers: List[tuple[str, Callable]] = []
+
+    def register(self, name: str, handler: Callable) -> None:
+        """Register a handler with a descriptive name.
+
+        Args:
+            name: Human-readable name for logging/debugging
+            handler: Handler function matching WellQueryHandler protocol
+        """
+        self._handlers.append((name, handler))
+
+    def dispatch(
+        self,
+        state: 'WorkflowState',
+        curves: List[Dict[str, Any]],
+        mnemonics: set,
+        ordered_mnemonics: List[str],
+        groups: Dict[str, List[str]],
+        well_attrs: Dict[str, Any],
+        well_id: str,
+        basin: Optional[str],
+        normalize_unit_fn,
+    ) -> bool:
+        """Dispatch query to appropriate handler in priority order.
+
+        Args:
+            state: Current workflow state
+            curves: Raw curve data from graph traverser
+            mnemonics: Set of all curve mnemonics
+            ordered_mnemonics: Complete list of ordered mnemonics
+            groups: Curve groups by measurement type
+            well_attrs: Well node attributes
+            well_id: Raw well identifier
+            basin: Inferred basin name if available
+            normalize_unit_fn: Function to normalize unit strings
+
+        Returns:
+            True if any handler processed the query, False otherwise
+        """
+        for handler_name, handler in self._handlers:
+            try:
+                # Try each handler with appropriate arguments
+                # Handlers return True if they handled the query
+                result = self._invoke_handler(
+                    handler, state, curves, mnemonics, ordered_mnemonics,
+                    groups, well_attrs, well_id, basin, normalize_unit_fn
+                )
+                if result:
+                    state.metadata['handler_used'] = handler_name
+                    return True
+            except Exception as e:
+                # Log but don't fail - try next handler
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.warning(
+                    "Handler %s failed: %s. Trying next handler.",
+                    handler_name, str(e)
+                )
+                continue
+
+        return False
+
+    def _invoke_handler(
+        self, handler, state, curves, mnemonics, ordered_mnemonics,
+        groups, well_attrs, well_id, basin, normalize_unit_fn
+    ) -> bool:
+        """Invoke handler with appropriate subset of arguments.
+
+        Different handlers require different arguments. This method
+        inspects the handler signature and provides only needed args.
+        """
+        import inspect
+        sig = inspect.signature(handler)
+        params = sig.parameters
+
+        # Build kwargs based on handler signature
+        kwargs = {'state': state}
+
+        if 'groups' in params:
+            kwargs['groups'] = groups
+        if 'ordered_mnemonics' in params:
+            kwargs['ordered_mnemonics'] = ordered_mnemonics
+        if 'curves' in params:
+            kwargs['curves'] = curves
+        if 'mnemonics' in params:
+            kwargs['mnemonics'] = mnemonics
+        if 'well_attrs' in params:
+            kwargs['well_attrs'] = well_attrs
+        if 'well_id' in params:
+            kwargs['well_id'] = well_id
+        if 'basin' in params:
+            kwargs['basin'] = basin
+        if 'normalize_unit_fn' in params:
+            kwargs['normalize_unit_fn'] = normalize_unit_fn
+
+        return handler(**kwargs)
+
+
+def create_default_handler_registry() -> WellQueryHandlerRegistry:
+    """Create and configure the default handler registry.
+
+    Handlers are registered in priority order (most specific first).
+    This ordering is critical for correct query routing.
+
+    Returns:
+        Configured WellQueryHandlerRegistry instance
+    """
+    registry = WellQueryHandlerRegistry()
+
+    # Priority 1: Highly specific queries
+    registry.register('petrophysical_evaluation', handle_petrophysical_evaluation_query)
+    registry.register('hydrocarbon_identification', handle_hydrocarbon_identification_query)
+    registry.register('unit_filter', handle_unit_filter_query)
+    registry.register('capability_matrix', handle_capability_matrix_query)
+
+    # Priority 2: Well metadata and classification
+    registry.register('log_suite_classification', handle_log_suite_classification_query)
+    registry.register('geological_setting', handle_geological_setting_query)
+
+    # Priority 3: Specific curve type queries
+    registry.register('gamma_ray_neutron', handle_gamma_ray_neutron_query)
+    registry.register('resistivity_curves', handle_resistivity_curves_query)
+    registry.register('porosity_curves', handle_porosity_curves_query)
+    registry.register('depth_curves', handle_depth_curves_query)
+
+    # Priority 4: Grouping and categorization
+    registry.register('curve_grouping', handle_curve_grouping_query)
+    registry.register('underscore_count', handle_underscore_count_query)
+    registry.register('triple_combo_exclusion', handle_triple_combo_exclusion_query)
+
+    # Priority 5: General listing (fallback)
+    registry.register('curve_listing', handle_curve_listing_query)
+
+    return registry
+
+
+# Global registry instance (singleton pattern)
+_REGISTRY: Optional[WellQueryHandlerRegistry] = None
+
+
+def get_handler_registry() -> WellQueryHandlerRegistry:
+    """Get or create the global handler registry instance.
+
+    Returns:
+        Global WellQueryHandlerRegistry singleton
+    """
+    global _REGISTRY
+    if _REGISTRY is None:
+        _REGISTRY = create_default_handler_registry()
+    return _REGISTRY

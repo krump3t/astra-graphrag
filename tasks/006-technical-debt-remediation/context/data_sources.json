@@ -1,0 +1,224 @@
+{
+  "task_id": "006",
+  "task_name": "technical-debt-remediation",
+  "inputs": [
+    {
+      "id": "lizard_report_task005",
+      "description": "Lizard complexity analysis from Task 005",
+      "file_path": "tasks/005-functionality-verification-qa/artifacts/validation/lizard_report.txt",
+      "format": "text",
+      "rows": 66,
+      "columns": null,
+      "sha256": "pending",
+      "licensing": "internal",
+      "licensing_url": null,
+      "pii": false,
+      "retention_days": null,
+      "usage": "Baseline complexity metrics for 4 high-CCN functions"
+    },
+    {
+      "id": "workflow_py",
+      "description": "Main LangGraph workflow module with high-complexity functions",
+      "file_path": "services/langgraph/workflow.py",
+      "format": "python",
+      "rows": 745,
+      "columns": null,
+      "sha256": "pending",
+      "licensing": "internal",
+      "licensing_url": null,
+      "pii": false,
+      "retention_days": null,
+      "usage": "Target for reasoning_step and retrieval_step refactoring"
+    },
+    {
+      "id": "graph_traverser_py",
+      "description": "Graph traversal module with indexing complexity",
+      "file_path": "services/graph_index/graph_traverser.py",
+      "format": "python",
+      "rows": 314,
+      "columns": null,
+      "sha256": "pending",
+      "licensing": "internal",
+      "licensing_url": null,
+      "pii": false,
+      "retention_days": null,
+      "usage": "Target for _build_edge_index and expand_search_results refactoring"
+    },
+    {
+      "id": "mcp_server_py",
+      "description": "MCP server with glossary scraper",
+      "file_path": "mcp_server.py",
+      "format": "python",
+      "rows": 450,
+      "columns": null,
+      "sha256": "pending",
+      "licensing": "internal",
+      "licensing_url": null,
+      "pii": false,
+      "retention_days": null,
+      "usage": "Target for resilience features (rate limiting, fallbacks)"
+    },
+    {
+      "id": "e2e_test_suite",
+      "description": "Critical Path E2E test suite (19 tests)",
+      "file_path": "tests/critical_path/test_cp_workflow_e2e.py",
+      "format": "python",
+      "rows": 580,
+      "columns": null,
+      "sha256": "pending",
+      "licensing": "internal",
+      "licensing_url": null,
+      "pii": false,
+      "retention_days": null,
+      "usage": "Regression testing after refactoring"
+    },
+    {
+      "id": "pip_audit_task005",
+      "description": "Security audit results from Task 005",
+      "file_path": "tasks/005-functionality-verification-qa/artifacts/validation/pip_audit_report.json",
+      "format": "json",
+      "rows": null,
+      "columns": null,
+      "sha256": "pending",
+      "licensing": "internal",
+      "licensing_url": null,
+      "pii": false,
+      "retention_days": null,
+      "usage": "Baseline vulnerability status (CVE-2025-8869)"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "refactored_workflow",
+      "description": "Refactored workflow.py with CCN≤10 functions",
+      "file_path": "services/langgraph/workflow.py",
+      "format": "python",
+      "rows": "~800",
+      "columns": null,
+      "sha256": "pending",
+      "retention_days": null,
+      "usage": "Reduced complexity version with extracted helper functions"
+    },
+    {
+      "id": "refactored_graph_traverser",
+      "description": "Refactored graph_traverser.py with CCN≤10 functions",
+      "file_path": "services/graph_index/graph_traverser.py",
+      "format": "python",
+      "rows": "~350",
+      "columns": null,
+      "sha256": "pending",
+      "retention_days": null,
+      "usage": "Reduced complexity version with type-safe graph operations"
+    },
+    {
+      "id": "resilient_mcp_server",
+      "description": "MCP server with production resilience features",
+      "file_path": "mcp_server.py",
+      "format": "python",
+      "rows": "~550",
+      "columns": null,
+      "sha256": "pending",
+      "retention_days": null,
+      "usage": "Rate limiting, retry logic, graceful fallbacks implemented"
+    },
+    {
+      "id": "lizard_report_after",
+      "description": "Post-refactoring complexity analysis",
+      "file_path": "tasks/006-technical-debt-remediation/artifacts/validation/lizard_report_after.txt",
+      "format": "text",
+      "rows": "~70",
+      "columns": null,
+      "sha256": "pending",
+      "retention_days": 365,
+      "usage": "Verification that all functions meet CCN≤10"
+    },
+    {
+      "id": "mypy_report",
+      "description": "mypy --strict compliance report",
+      "file_path": "tasks/006-technical-debt-remediation/artifacts/validation/mypy_strict_report.txt",
+      "format": "text",
+      "rows": "~20",
+      "columns": null,
+      "sha256": "pending",
+      "retention_days": 365,
+      "usage": "Verification of 0 type errors on Critical Path files"
+    },
+    {
+      "id": "resilience_test_results",
+      "description": "Resilience feature test results",
+      "file_path": "tasks/006-technical-debt-remediation/artifacts/validation/resilience_test_results.json",
+      "format": "json",
+      "rows": null,
+      "columns": null,
+      "sha256": "pending",
+      "retention_days": 365,
+      "usage": "Validation of rate limiting, retry logic, cache fallback"
+    },
+    {
+      "id": "regression_test_results",
+      "description": "E2E regression test results post-refactoring",
+      "file_path": "tasks/006-technical-debt-remediation/artifacts/validation/regression_test_results.txt",
+      "format": "text",
+      "rows": "~50",
+      "columns": null,
+      "sha256": "pending",
+      "retention_days": 365,
+      "usage": "Verification of 19/19 tests passing (0 regressions)"
+    },
+    {
+      "id": "reproducibility_doc",
+      "description": "Reproducibility guide for environment setup",
+      "file_path": "REPRODUCIBILITY.md",
+      "format": "markdown",
+      "rows": "~100",
+      "columns": null,
+      "sha256": "pending",
+      "retention_days": null,
+      "usage": "Instructions for reproducing environment and test results"
+    },
+    {
+      "id": "validation_report",
+      "description": "Final Task 006 validation report",
+      "file_path": "tasks/006-technical-debt-remediation/artifacts/validation/validation_report.md",
+      "format": "markdown",
+      "rows": "~200",
+      "columns": null,
+      "sha256": "pending",
+      "retention_days": 365,
+      "usage": "Comprehensive report with before/after metrics, QA results"
+    }
+  ],
+  "transformations": [
+    {
+      "id": "complexity_reduction",
+      "description": "Extract Method refactoring to reduce CCN from 42/25/15/12 to ≤10",
+      "input_ids": ["workflow_py", "graph_traverser_py"],
+      "output_ids": ["refactored_workflow", "refactored_graph_traverser"],
+      "method": "Manual refactoring following Fowler's Extract Method pattern",
+      "validation": "Lizard analysis + pytest regression testing"
+    },
+    {
+      "id": "type_safety_hardening",
+      "description": "Add type annotations for mypy --strict compliance",
+      "input_ids": ["workflow_py", "graph_traverser_py"],
+      "output_ids": ["refactored_workflow", "refactored_graph_traverser"],
+      "method": "Gradual typing with explicit type hints (Dict, List, Optional, Union)",
+      "validation": "mypy --strict (0 errors)"
+    },
+    {
+      "id": "resilience_implementation",
+      "description": "Add rate limiting, retry logic, connection pooling, graceful fallbacks",
+      "input_ids": ["mcp_server_py", "workflow_py"],
+      "output_ids": ["resilient_mcp_server", "refactored_workflow"],
+      "method": "Decorator pattern for retry logic, connection pool for Redis, token bucket for rate limiting",
+      "validation": "Custom resilience test suite (5 scenarios)"
+    }
+  ],
+  "metadata": {
+    "created_date": "2025-10-14",
+    "protocol": "SCA v9-Compact",
+    "data_classification": "internal",
+    "requires_api_keys": false,
+    "requires_external_data": false
+  }
+}

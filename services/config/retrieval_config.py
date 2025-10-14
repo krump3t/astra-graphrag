@@ -5,7 +5,6 @@ retrieval pipeline to improve maintainability and configurability.
 """
 from __future__ import annotations
 
-from typing import Dict, Any
 
 
 class RetrievalConfig:

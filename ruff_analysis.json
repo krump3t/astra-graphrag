@@ -1,0 +1,926 @@
+[
+  {
+    "cell": null,
+    "code": "F541",
+    "end_location": {
+      "column": 34,
+      "row": 205
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\mcp_http_server.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "\"Available Endpoints:\"",
+          "end_location": {
+            "column": 34,
+            "row": 205
+          },
+          "location": {
+            "column": 11,
+            "row": 205
+          }
+        }
+      ],
+      "message": "Remove extraneous `f` prefix"
+    },
+    "location": {
+      "column": 11,
+      "row": 205
+    },
+    "message": "f-string without any placeholders",
+    "noqa_row": 205,
+    "url": "https://docs.astral.sh/ruff/rules/f-string-missing-placeholders"
+  },
+  {
+    "cell": null,
+    "code": "F541",
+    "end_location": {
+      "column": 57,
+      "row": 206
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\mcp_http_server.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "\"  - POST /api/query - Query knowledge graph\"",
+          "end_location": {
+            "column": 57,
+            "row": 206
+          },
+          "location": {
+            "column": 11,
+            "row": 206
+          }
+        }
+      ],
+      "message": "Remove extraneous `f` prefix"
+    },
+    "location": {
+      "column": 11,
+      "row": 206
+    },
+    "message": "f-string without any placeholders",
+    "noqa_row": 206,
+    "url": "https://docs.astral.sh/ruff/rules/f-string-missing-placeholders"
+  },
+  {
+    "cell": null,
+    "code": "F541",
+    "end_location": {
+      "column": 61,
+      "row": 207
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\mcp_http_server.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "\"  - POST /api/definition - Get term definitions\"",
+          "end_location": {
+            "column": 61,
+            "row": 207
+          },
+          "location": {
+            "column": 11,
+            "row": 207
+          }
+        }
+      ],
+      "message": "Remove extraneous `f` prefix"
+    },
+    "location": {
+      "column": 11,
+      "row": 207
+    },
+    "message": "f-string without any placeholders",
+    "noqa_row": 207,
+    "url": "https://docs.astral.sh/ruff/rules/f-string-missing-placeholders"
+  },
+  {
+    "cell": null,
+    "code": "F541",
+    "end_location": {
+      "column": 52,
+      "row": 208
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\mcp_http_server.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "\"  - POST /api/data - Access data files\"",
+          "end_location": {
+            "column": 52,
+            "row": 208
+          },
+          "location": {
+            "column": 11,
+            "row": 208
+          }
+        }
+      ],
+      "message": "Remove extraneous `f` prefix"
+    },
+    "location": {
+      "column": 11,
+      "row": 208
+    },
+    "message": "f-string without any placeholders",
+    "noqa_row": 208,
+    "url": "https://docs.astral.sh/ruff/rules/f-string-missing-placeholders"
+  },
+  {
+    "cell": null,
+    "code": "F541",
+    "end_location": {
+      "column": 51,
+      "row": 209
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\mcp_http_server.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "\"  - POST /api/convert - Convert units\"",
+          "end_location": {
+            "column": 51,
+            "row": 209
+          },
+          "location": {
+            "column": 11,
+            "row": 209
+          }
+        }
+      ],
+      "message": "Remove extraneous `f` prefix"
+    },
+    "location": {
+      "column": 11,
+      "row": 209
+    },
+    "message": "f-string without any placeholders",
+    "noqa_row": 209,
+    "url": "https://docs.astral.sh/ruff/rules/f-string-missing-placeholders"
+  },
+  {
+    "cell": null,
+    "code": "F541",
+    "end_location": {
+      "column": 44,
+      "row": 210
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\mcp_http_server.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "\"  - GET /health - Health check\"",
+          "end_location": {
+            "column": 44,
+            "row": 210
+          },
+          "location": {
+            "column": 11,
+            "row": 210
+          }
+        }
+      ],
+      "message": "Remove extraneous `f` prefix"
+    },
+    "location": {
+      "column": 11,
+      "row": 210
+    },
+    "message": "f-string without any placeholders",
+    "noqa_row": 210,
+    "url": "https://docs.astral.sh/ruff/rules/f-string-missing-placeholders"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 12,
+      "row": 7
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\mcp_server.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 8
+          },
+          "location": {
+            "column": 1,
+            "row": 7
+          }
+        }
+      ],
+      "message": "Remove unused import: `json`"
+    },
+    "location": {
+      "column": 8,
+      "row": 7
+    },
+    "message": "`json` imported but unused",
+    "noqa_row": 7,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 16,
+      "row": 8
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\mcp_server.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 9
+          },
+          "location": {
+            "column": 1,
+            "row": 8
+          }
+        }
+      ],
+      "message": "Remove unused import: `requests`"
+    },
+    "location": {
+      "column": 8,
+      "row": 8
+    },
+    "message": "`requests` imported but unused",
+    "noqa_row": 8,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 45,
+      "row": 9
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\mcp_server.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import Dict, Any, List",
+          "end_location": {
+            "column": 52,
+            "row": 9
+          },
+          "location": {
+            "column": 1,
+            "row": 9
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 37,
+      "row": 9
+    },
+    "message": "`typing.Optional` imported but unused",
+    "noqa_row": 9,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 52,
+      "row": 9
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\mcp_server.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import Dict, Any, List",
+          "end_location": {
+            "column": 52,
+            "row": 9
+          },
+          "location": {
+            "column": 1,
+            "row": 9
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 47,
+      "row": 9
+    },
+    "message": "`typing.Tuple` imported but unused",
+    "noqa_row": 9,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F841",
+    "end_location": {
+      "column": 23,
+      "row": 438
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\mcp_server.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 26,
+            "row": 438
+          },
+          "location": {
+            "column": 9,
+            "row": 438
+          }
+        }
+      ],
+      "message": "Remove assignment to unused variable `available_from`"
+    },
+    "location": {
+      "column": 9,
+      "row": 438
+    },
+    "message": "Local variable `available_from` is assigned to but never used",
+    "noqa_row": 438,
+    "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+  },
+  {
+    "cell": null,
+    "code": "F841",
+    "end_location": {
+      "column": 21,
+      "row": 439
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\mcp_server.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 24,
+            "row": 439
+          },
+          "location": {
+            "column": 9,
+            "row": 439
+          }
+        }
+      ],
+      "message": "Remove assignment to unused variable `available_to`"
+    },
+    "location": {
+      "column": 9,
+      "row": 439
+    },
+    "message": "Local variable `available_to` is assigned to but never used",
+    "noqa_row": 439,
+    "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+  },
+  {
+    "cell": null,
+    "code": "F541",
+    "end_location": {
+      "column": 30,
+      "row": 463
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\mcp_server.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "\"Available tools:\"",
+          "end_location": {
+            "column": 30,
+            "row": 463
+          },
+          "location": {
+            "column": 11,
+            "row": 463
+          }
+        }
+      ],
+      "message": "Remove extraneous `f` prefix"
+    },
+    "location": {
+      "column": 11,
+      "row": 463
+    },
+    "message": "f-string without any placeholders",
+    "noqa_row": 463,
+    "url": "https://docs.astral.sh/ruff/rules/f-string-missing-placeholders"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 24,
+      "row": 8
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\services\\config\\retrieval_config.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 9
+          },
+          "location": {
+            "column": 1,
+            "row": 8
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 20,
+      "row": 8
+    },
+    "message": "`typing.Dict` imported but unused",
+    "noqa_row": 8,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 29,
+      "row": 8
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\services\\config\\retrieval_config.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 9
+          },
+          "location": {
+            "column": 1,
+            "row": 8
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 26,
+      "row": 8
+    },
+    "message": "`typing.Any` imported but unused",
+    "noqa_row": 8,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 55,
+      "row": 8
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\services\\langgraph\\extraction_strategies.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import TYPE_CHECKING, List, Optional",
+          "end_location": {
+            "column": 60,
+            "row": 8
+          },
+          "location": {
+            "column": 1,
+            "row": 8
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 51,
+      "row": 8
+    },
+    "message": "`typing.Dict` imported but unused",
+    "noqa_row": 8,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 60,
+      "row": 8
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\services\\langgraph\\extraction_strategies.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import TYPE_CHECKING, List, Optional",
+          "end_location": {
+            "column": 60,
+            "row": 8
+          },
+          "location": {
+            "column": 1,
+            "row": 8
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 57,
+      "row": 8
+    },
+    "message": "`typing.Any` imported but unused",
+    "noqa_row": 8,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 20,
+      "row": 35
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\services\\langgraph\\workflow.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 41
+          },
+          "location": {
+            "column": 1,
+            "row": 34
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 5,
+      "row": 35
+    },
+    "message": "`services.langgraph.domain_maps.RESISTIVITY_SET` imported but unused",
+    "noqa_row": 35,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 17,
+      "row": 36
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\services\\langgraph\\workflow.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 41
+          },
+          "location": {
+            "column": 1,
+            "row": 34
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 5,
+      "row": 36
+    },
+    "message": "`services.langgraph.domain_maps.POROSITY_SET` imported but unused",
+    "noqa_row": 36,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 14,
+      "row": 37
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\services\\langgraph\\workflow.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 41
+          },
+          "location": {
+            "column": 1,
+            "row": 34
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 5,
+      "row": 37
+    },
+    "message": "`services.langgraph.domain_maps.DEPTH_SET` imported but unused",
+    "noqa_row": 37,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 14,
+      "row": 38
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\services\\langgraph\\workflow.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 41
+          },
+          "location": {
+            "column": 1,
+            "row": 34
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 5,
+      "row": 38
+    },
+    "message": "`services.langgraph.domain_maps.LITHO_SET` imported but unused",
+    "noqa_row": 38,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 25,
+      "row": 39
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\services\\langgraph\\workflow.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 41
+          },
+          "location": {
+            "column": 1,
+            "row": 34
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 5,
+      "row": 39
+    },
+    "message": "`services.langgraph.domain_maps.is_standard_mnemonic` imported but unused",
+    "noqa_row": 39,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F541",
+    "end_location": {
+      "column": 41,
+      "row": 55
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\test_mcp_locally.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "\"No definition found\"",
+          "end_location": {
+            "column": 41,
+            "row": 55
+          },
+          "location": {
+            "column": 19,
+            "row": 55
+          }
+        }
+      ],
+      "message": "Remove extraneous `f` prefix"
+    },
+    "location": {
+      "column": 19,
+      "row": 55
+    },
+    "message": "f-string without any placeholders",
+    "noqa_row": 55,
+    "url": "https://docs.astral.sh/ruff/rules/f-string-missing-placeholders"
+  },
+  {
+    "cell": null,
+    "code": "F541",
+    "end_location": {
+      "column": 51,
+      "row": 81
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\test_mcp_locally.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "\"\\nFirst few lines of content:\"",
+          "end_location": {
+            "column": 51,
+            "row": 81
+          },
+          "location": {
+            "column": 19,
+            "row": 81
+          }
+        }
+      ],
+      "message": "Remove extraneous `f` prefix"
+    },
+    "location": {
+      "column": 19,
+      "row": 81
+    },
+    "message": "f-string without any placeholders",
+    "noqa_row": 81,
+    "url": "https://docs.astral.sh/ruff/rules/f-string-missing-placeholders"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 14,
+      "row": 4
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\tests\\unit\\test_retrieval_config.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 5
+          },
+          "location": {
+            "column": 1,
+            "row": 4
+          }
+        }
+      ],
+      "message": "Remove unused import: `pytest`"
+    },
+    "location": {
+      "column": 8,
+      "row": 4
+    },
+    "message": "`pytest` imported but unused",
+    "noqa_row": 4,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 11,
+      "row": 4
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\tests\\unit\\test_validators.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 5
+          },
+          "location": {
+            "column": 1,
+            "row": 4
+          }
+        }
+      ],
+      "message": "Remove unused import: `csv`"
+    },
+    "location": {
+      "column": 8,
+      "row": 4
+    },
+    "message": "`csv` imported but unused",
+    "noqa_row": 4,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 25,
+      "row": 7
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\tests\\unit\\test_validators.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 8
+          },
+          "location": {
+            "column": 1,
+            "row": 7
+          }
+        }
+      ],
+      "message": "Remove unused import: `pathlib.Path`"
+    },
+    "location": {
+      "column": 21,
+      "row": 7
+    },
+    "message": "`pathlib.Path` imported but unused",
+    "noqa_row": 7,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 43,
+      "row": 8
+    },
+    "filename": "C:\\projects\\Work Projects\\astra-graphrag\\tests\\unit\\test_validators.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from unittest.mock import patch",
+          "end_location": {
+            "column": 43,
+            "row": 8
+          },
+          "location": {
+            "column": 1,
+            "row": 8
+          }
+        }
+      ],
+      "message": "Remove unused import: `unittest.mock.MagicMock`"
+    },
+    "location": {
+      "column": 34,
+      "row": 8
+    },
+    "message": "`unittest.mock.MagicMock` imported but unused",
+    "noqa_row": 8,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  }
+]

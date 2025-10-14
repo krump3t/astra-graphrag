@@ -2,7 +2,7 @@
 
 Identifies queries that require graph traversal and determines traversal strategy.
 """
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Any
 import re
 
 
@@ -174,7 +174,7 @@ class RelationshipQueryDetector:
         """
         query_lower = query.lower()
 
-        result = {
+        result: Dict[str, Any] = {
             "is_relationship_query": False,
             "relationship_type": None,
             "entities": {},

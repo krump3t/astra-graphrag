@@ -1,0 +1,82 @@
+{
+  "test_cases": [
+    {
+      "id": "well_log_basic",
+      "query": "What well log data is available from Kansas?",
+      "expected_entities": ["Kansas Geological Survey", "well", "LAS file"],
+      "expected_answer_contains": ["Kansas", "well", "log"],
+      "ground_truth": "The dataset contains LAS (Log ASCII Standard) well log files from the Kansas Geological Survey, including various well measurements and formation data.",
+      "category": "factual_retrieval"
+    },
+    {
+      "id": "usgs_site_info",
+      "query": "Tell me about USGS monitoring sites in the dataset",
+      "expected_entities": ["USGS", "site", "monitoring"],
+      "expected_answer_contains": ["USGS", "site", "water"],
+      "ground_truth": "The dataset includes USGS National Water Information System (NWIS) monitoring sites with site codes, names, and water quality measurements.",
+      "category": "factual_retrieval"
+    },
+    {
+      "id": "curve_mnemonics",
+      "query": "What types of log curves are recorded in the well data?",
+      "expected_entities": ["curve", "mnemonic", "log"],
+      "expected_answer_contains": ["density", "porosity", "gamma"],
+      "ground_truth": "Log curves include gamma ray (GR), density (DLDN/DLDPL), porosity measurements, resistivity, and uranium content among others.",
+      "category": "factual_retrieval"
+    },
+    {
+      "id": "data_source_comparison",
+      "query": "What is the difference between USGS data and KGS well log data?",
+      "expected_entities": ["USGS", "Kansas Geological Survey", "well log"],
+      "expected_answer_contains": ["USGS", "surface water", "KGS", "subsurface"],
+      "ground_truth": "USGS data focuses on surface water monitoring from rivers and streams, while KGS well log data provides subsurface geological and petrophysical measurements from oil and gas wells.",
+      "category": "comparison"
+    },
+    {
+      "id": "porosity_measurement",
+      "query": "How is porosity measured in the well logs?",
+      "expected_entities": ["porosity", "density", "limestone"],
+      "expected_answer_contains": ["porosity", "density", "measurement"],
+      "ground_truth": "Porosity is measured using density porosity logs (DLDPL for limestone basis) and potentially neutron porosity measurements.",
+      "category": "technical_explanation"
+    },
+    {
+      "id": "temporal_data",
+      "query": "What time period does the well log data cover?",
+      "expected_entities": ["1999", "date", "updated"],
+      "expected_answer_contains": ["1999", "date"],
+      "ground_truth": "The well log metadata shows updates from 1999, with specific entries from February and March 1999.",
+      "category": "temporal"
+    },
+    {
+      "id": "geographic_scope",
+      "query": "What geographic regions are covered in this dataset?",
+      "expected_entities": ["Kansas", "Illinois", "location"],
+      "expected_answer_contains": ["Kansas", "region"],
+      "ground_truth": "The dataset covers Kansas (from KGS well logs) and potentially Illinois (from USGS site data showing Vermilion River near Danville, IL).",
+      "category": "geographic"
+    },
+    {
+      "id": "measurement_units",
+      "query": "What units are used for density measurements?",
+      "expected_entities": ["density", "GM/CC", "unit"],
+      "expected_answer_contains": ["density", "GM/CC", "grams"],
+      "ground_truth": "Bulk density is measured in GM/CC (grams per cubic centimeter).",
+      "category": "technical_detail"
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "created": "2025-01-02",
+    "description": "Evaluation dataset for subsurface data GraphRAG system",
+    "total_test_cases": 8,
+    "categories": {
+      "factual_retrieval": 3,
+      "comparison": 1,
+      "technical_explanation": 1,
+      "temporal": 1,
+      "geographic": 1,
+      "technical_detail": 1
+    }
+  }
+}

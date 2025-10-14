@@ -1,0 +1,341 @@
+{
+  "test_cases": [
+    {
+      "id": "entity_eia_count",
+      "query": "How many EIA energy records are in the dataset?",
+      "expected_entities": ["EIA", "record", "energy"],
+      "expected_answer_contains": ["211", "EIA", "records"],
+      "ground_truth": "The dataset contains 211 EIA (Energy Information Administration) energy production and consumption records.",
+      "category": "entity_centric",
+      "optimization_target": "embedding_quality",
+      "diagnostic_value": "Tests if embeddings can identify and count specific entity types"
+    },
+    {
+      "id": "entity_las_curves",
+      "query": "List all types of LAS well log curves available",
+      "expected_entities": ["LAS", "curve", "well log"],
+      "expected_answer_contains": ["curve", "porosity", "density", "gamma"],
+      "ground_truth": "The dataset includes 27 different LAS curve types including density (DLDN, DLDPL), porosity (ACAPL), gamma ray (GST, GR), uranium (GSUR), and resistivity measurements.",
+      "category": "entity_centric",
+      "optimization_target": "embedding_quality",
+      "diagnostic_value": "Tests entity type discrimination and attribute extraction"
+    },
+    {
+      "id": "entity_usgs_sites",
+      "query": "What USGS water monitoring sites are included?",
+      "expected_entities": ["USGS", "site", "water", "monitoring"],
+      "expected_answer_contains": ["USGS", "site", "Vermilion River", "03339000"],
+      "ground_truth": "The dataset includes USGS site 03339000: VERMILION RIVER NEAR DANVILLE, IL.",
+      "category": "entity_centric",
+      "optimization_target": "embedding_quality",
+      "diagnostic_value": "Tests specific entity retrieval accuracy"
+    },
+    {
+      "id": "semantic_subsurface",
+      "query": "What information is available about subsurface geological formations?",
+      "expected_entities": ["well log", "formation", "geological"],
+      "expected_answer_contains": ["well", "log", "formation", "subsurface"],
+      "ground_truth": "Subsurface geological information is available through well log data from Kansas Geological Survey, including formation properties measured via density, porosity, and gamma ray logs.",
+      "category": "semantic_similarity",
+      "optimization_target": "embedding_domain_knowledge",
+      "diagnostic_value": "Tests semantic understanding of domain concepts beyond exact keyword matches"
+    },
+    {
+      "id": "semantic_surface_water",
+      "query": "Show me surface water quality data",
+      "expected_entities": ["USGS", "water", "surface", "river"],
+      "expected_answer_contains": ["USGS", "river", "water", "site"],
+      "ground_truth": "Surface water quality data is available from USGS monitoring site on the Vermilion River near Danville, IL.",
+      "category": "semantic_similarity",
+      "optimization_target": "embedding_domain_knowledge",
+      "diagnostic_value": "Tests if embeddings understand 'surface water' relates to rivers/USGS not wells"
+    },
+    {
+      "id": "semantic_reservoir_properties",
+      "query": "What reservoir rock properties can I find?",
+      "expected_entities": ["porosity", "density", "rock"],
+      "expected_answer_contains": ["porosity", "density", "formation"],
+      "ground_truth": "Reservoir rock properties available include porosity (from density and neutron porosity logs), bulk density measurements, and gamma ray signatures indicating lithology.",
+      "category": "semantic_similarity",
+      "optimization_target": "embedding_domain_knowledge",
+      "diagnostic_value": "Tests domain-specific semantic mapping (reservoir properties → porosity/density)"
+    },
+    {
+      "id": "aggregation_curve_count",
+      "query": "How many different types of well log measurements are recorded?",
+      "expected_entities": ["curve", "measurement", "well log"],
+      "expected_answer_contains": ["27", "curves", "types"],
+      "ground_truth": "There are 27 different types of well log curve measurements recorded in the dataset.",
+      "category": "aggregation",
+      "optimization_target": "multi_document_retrieval",
+      "diagnostic_value": "Tests ability to aggregate counts across multiple curve entities"
+    },
+    {
+      "id": "aggregation_unit_types",
+      "query": "What different unit types are used across all measurements?",
+      "expected_entities": ["unit", "measurement"],
+      "expected_answer_contains": ["GM/CC", "API", "PERCNT", "PPM"],
+      "ground_truth": "Measurement units include GM/CC (grams per cubic centimeter), API (American Petroleum Institute units), PERCNT (percentage), PPM (parts per million), and others.",
+      "category": "aggregation",
+      "optimization_target": "multi_document_retrieval",
+      "diagnostic_value": "Tests retrieval completeness across heterogeneous entities"
+    },
+    {
+      "id": "aggregation_data_sources",
+      "query": "What are all the different data sources in this dataset?",
+      "expected_entities": ["EIA", "USGS", "Kansas Geological Survey"],
+      "expected_answer_contains": ["EIA", "USGS", "KGS", "Kansas"],
+      "ground_truth": "Data sources include: EIA (Energy Information Administration) for energy production data, USGS (United States Geological Survey) for water monitoring, and Kansas Geological Survey (KGS) for well logs.",
+      "category": "aggregation",
+      "optimization_target": "entity_type_diversity",
+      "diagnostic_value": "Tests cross-entity-type aggregation and source identification"
+    },
+    {
+      "id": "temporal_most_recent",
+      "query": "What is the most recent data update timestamp in the well logs?",
+      "expected_entities": ["date", "update", "1999"],
+      "expected_answer_contains": ["1999", "March", "updated"],
+      "ground_truth": "The most recent well log update was on 03/04/1999 at 21:59 by the Kansas Geological Survey.",
+      "category": "temporal",
+      "optimization_target": "temporal_indexing",
+      "diagnostic_value": "Tests temporal extraction and chronological ordering"
+    },
+    {
+      "id": "temporal_date_range",
+      "query": "What date range does the well log data cover?",
+      "expected_entities": ["date", "1999", "February", "March"],
+      "expected_answer_contains": ["1999", "February", "March"],
+      "ground_truth": "Well log data updates span from 02/24/1999 to 03/04/1999.",
+      "category": "temporal",
+      "optimization_target": "temporal_indexing",
+      "diagnostic_value": "Tests date range extraction across multiple records"
+    },
+    {
+      "id": "spatial_kansas_data",
+      "query": "What data is specifically from Kansas?",
+      "expected_entities": ["Kansas", "well log", "KGS"],
+      "expected_answer_contains": ["Kansas", "well", "KGS"],
+      "ground_truth": "Kansas data includes well log files from the Kansas Geological Survey (KGS) with measurements from wells in Kansas including section 30S39W and EIA energy production records.",
+      "category": "spatial",
+      "optimization_target": "geographic_indexing",
+      "diagnostic_value": "Tests geographic entity recognition and location-based filtering"
+    },
+    {
+      "id": "spatial_section_location",
+      "query": "Find data from well section 30S39W",
+      "expected_entities": ["30S39W", "section", "well"],
+      "expected_answer_contains": ["30S39W", "well", "Kansas"],
+      "ground_truth": "Section 30S39W contains well 1001178549 (Collingwood well) operated by the Kansas Geological Survey.",
+      "category": "spatial",
+      "optimization_target": "geographic_indexing",
+      "diagnostic_value": "Tests specific location identifier retrieval"
+    },
+    {
+      "id": "spatial_illinois_data",
+      "query": "What measurements are from Illinois?",
+      "expected_entities": ["Illinois", "USGS", "Danville"],
+      "expected_answer_contains": ["Illinois", "Vermilion", "Danville"],
+      "ground_truth": "Illinois data includes USGS site 03339000 on the Vermilion River near Danville, IL with water quality measurements.",
+      "category": "spatial",
+      "optimization_target": "geographic_indexing",
+      "diagnostic_value": "Tests cross-state geographic filtering"
+    },
+    {
+      "id": "technical_bulk_density",
+      "query": "How is bulk density measured in these well logs?",
+      "expected_entities": ["bulk density", "DLDN", "measurement"],
+      "expected_answer_contains": ["density", "GM/CC", "DLDN"],
+      "ground_truth": "Bulk density is measured using the DLDN curve (curve 12) with units in GM/CC (grams per cubic centimeter).",
+      "category": "technical_domain",
+      "optimization_target": "prompt_engineering",
+      "diagnostic_value": "Tests technical accuracy and method explanation"
+    },
+    {
+      "id": "technical_porosity_types",
+      "query": "What types of porosity measurements are available?",
+      "expected_entities": ["porosity", "density", "neutron", "DLDPL", "ACAPL"],
+      "expected_answer_contains": ["density porosity", "DLDPL", "limestone"],
+      "ground_truth": "Porosity measurements include density porosity (DLDPL for limestone basis - curve 8) and acoustic porosity (ACAPL - curve 18) measured in percent.",
+      "category": "technical_domain",
+      "optimization_target": "prompt_engineering",
+      "diagnostic_value": "Tests discrimination between related technical concepts"
+    },
+    {
+      "id": "technical_gamma_ray",
+      "query": "What does the gamma ray log measure?",
+      "expected_entities": ["gamma", "GST", "uranium", "lithology"],
+      "expected_answer_contains": ["gamma", "uranium", "formation"],
+      "ground_truth": "Gamma ray logs (GST curve) measure natural radioactivity in formations, with uranium content (GSUR) measured in PPM, used to identify lithology and clay content.",
+      "category": "technical_domain",
+      "optimization_target": "prompt_engineering",
+      "diagnostic_value": "Tests explanation quality for technical concepts"
+    },
+    {
+      "id": "comparison_porosity_methods",
+      "query": "Compare the different porosity measurement methods",
+      "expected_entities": ["porosity", "density", "acoustic", "DLDPL", "ACAPL"],
+      "expected_answer_contains": ["density", "acoustic", "difference", "porosity"],
+      "ground_truth": "Density porosity (DLDPL) uses bulk density measurements on a limestone basis, while acoustic porosity (ACAPL) uses acoustic wave travel time. Both are measured in percent but use different physical principles.",
+      "category": "comparison",
+      "optimization_target": "multi_entity_reasoning",
+      "diagnostic_value": "Tests comparative analysis across related entities"
+    },
+    {
+      "id": "comparison_data_sources",
+      "query": "How do well log curves differ from USGS measurements?",
+      "expected_entities": ["well log", "USGS", "subsurface", "surface water"],
+      "expected_answer_contains": ["well", "subsurface", "USGS", "surface", "water"],
+      "ground_truth": "Well log curves measure subsurface geological properties (porosity, density, resistivity) from boreholes, while USGS measurements track surface water quality and flow in rivers and streams.",
+      "category": "comparison",
+      "optimization_target": "cross_domain_understanding",
+      "diagnostic_value": "Tests ability to contrast fundamentally different data types"
+    },
+    {
+      "id": "metadata_data_source",
+      "query": "What is the source organization for the well log data?",
+      "expected_entities": ["Kansas Geological Survey", "KGS", "source"],
+      "expected_answer_contains": ["Kansas Geological Survey", "KGS"],
+      "ground_truth": "Well log data is sourced from the Kansas Geological Survey (KGS).",
+      "category": "metadata",
+      "optimization_target": "provenance_tracking",
+      "diagnostic_value": "Tests metadata/provenance retrieval"
+    },
+    {
+      "id": "metadata_file_info",
+      "query": "What files are associated with well 1001178549?",
+      "expected_entities": ["1001178549", "file", "additions"],
+      "expected_answer_contains": ["1001178549", "file", "additions"],
+      "ground_truth": "Well 1001178549 has an additions file (1001178549.add) and an input LAS file (/home/crude2_3/WellLogs/Guy/100-Amoco/disc09/18720743.las.las).",
+      "category": "metadata",
+      "optimization_target": "provenance_tracking",
+      "diagnostic_value": "Tests file-level metadata retrieval"
+    },
+    {
+      "id": "metadata_operator",
+      "query": "Which company operated the wells in this dataset?",
+      "expected_entities": ["operator", "company", "Amoco"],
+      "expected_answer_contains": ["operator", "company"],
+      "ground_truth": "The dataset contains references to Amoco in the file path (/100-Amoco/), suggesting Amoco was involved in well operations, though explicit operator fields would need to be confirmed in the detailed well metadata.",
+      "category": "metadata",
+      "optimization_target": "entity_extraction",
+      "diagnostic_value": "Tests entity extraction from file paths and metadata"
+    },
+    {
+      "id": "relationship_well_to_curves",
+      "query": "What curves are recorded for the Collingwood well?",
+      "expected_entities": ["Collingwood", "well", "curve"],
+      "expected_answer_contains": ["Collingwood", "curve"],
+      "ground_truth": "This query requires graph relationships between well documents and curve entities to answer accurately. Current single-hop retrieval may not connect these.",
+      "category": "relationship_aware",
+      "optimization_target": "graph_architecture",
+      "diagnostic_value": "Exposes need for well→curve relationships in graph"
+    },
+    {
+      "id": "relationship_site_to_measurements",
+      "query": "What measurements are associated with USGS site 03339000?",
+      "expected_entities": ["03339000", "USGS", "measurement"],
+      "expected_answer_contains": ["03339000", "measurement"],
+      "ground_truth": "This query requires site→measurement relationships. Current architecture may not traverse these connections.",
+      "category": "relationship_aware",
+      "optimization_target": "graph_architecture",
+      "diagnostic_value": "Exposes need for site→measurement edges"
+    },
+    {
+      "id": "relationship_location_to_wells",
+      "query": "What wells are in the same geographic area as the Vermilion River?",
+      "expected_entities": ["Vermilion River", "well", "geographic"],
+      "expected_answer_contains": ["Illinois", "well"],
+      "ground_truth": "This requires spatial relationships or geographic indexing to connect USGS sites with nearby wells.",
+      "category": "relationship_aware",
+      "optimization_target": "spatial_graph_edges",
+      "diagnostic_value": "Tests geographic relationship needs"
+    },
+    {
+      "id": "null_weather",
+      "query": "What is the weather forecast for Kansas?",
+      "expected_entities": [],
+      "expected_answer_contains": ["not contain", "insufficient"],
+      "ground_truth": "The dataset does not contain weather forecast information.",
+      "category": "null_negative",
+      "optimization_target": "scope_boundaries",
+      "diagnostic_value": "Tests out-of-scope query handling"
+    },
+    {
+      "id": "null_covid",
+      "query": "Show me COVID-19 case counts for Illinois",
+      "expected_entities": [],
+      "expected_answer_contains": ["not contain", "insufficient"],
+      "ground_truth": "The dataset does not contain COVID-19 or public health data.",
+      "category": "null_negative",
+      "optimization_target": "scope_boundaries",
+      "diagnostic_value": "Tests rejection of completely unrelated queries"
+    },
+    {
+      "id": "null_stock_prices",
+      "query": "What are current oil and gas stock prices?",
+      "expected_entities": [],
+      "expected_answer_contains": ["not contain", "insufficient"],
+      "ground_truth": "The dataset does not contain financial market or stock price data.",
+      "category": "null_negative",
+      "optimization_target": "scope_boundaries",
+      "diagnostic_value": "Tests handling of tangentially related but out-of-scope queries"
+    },
+    {
+      "id": "complex_multi_constraint",
+      "query": "Find all density measurements from Kansas wells updated in March 1999",
+      "expected_entities": ["density", "Kansas", "March", "1999"],
+      "expected_answer_contains": ["density", "Kansas", "March", "1999"],
+      "ground_truth": "This requires combining temporal, spatial, and attribute filters. The Collingwood well (1001178549) in Kansas was updated 03/04/1999 and contains density measurements (DLDN, DLDPL).",
+      "category": "complex_multi_constraint",
+      "optimization_target": "multi_constraint_filtering",
+      "diagnostic_value": "Tests handling of queries with multiple filter dimensions"
+    },
+    {
+      "id": "complex_cross_domain",
+      "query": "Compare subsurface porosity with surface water quality indicators",
+      "expected_entities": ["porosity", "water quality", "subsurface", "surface"],
+      "expected_answer_contains": ["porosity", "well", "water", "USGS"],
+      "ground_truth": "This requires retrieving and contrasting different data domains: porosity from well logs (subsurface) and water quality from USGS (surface). These are fundamentally different measurement types from different environments.",
+      "category": "complex_multi_constraint",
+      "optimization_target": "cross_domain_synthesis",
+      "diagnostic_value": "Tests ability to reason across heterogeneous data types"
+    }
+  ],
+  "metadata": {
+    "version": "2.0",
+    "created": "2025-01-02",
+    "description": "Expanded evaluation dataset for comprehensive GraphRAG system optimization",
+    "total_test_cases": 30,
+    "categories": {
+      "entity_centric": 3,
+      "semantic_similarity": 3,
+      "aggregation": 3,
+      "temporal": 2,
+      "spatial": 3,
+      "technical_domain": 3,
+      "comparison": 2,
+      "metadata": 3,
+      "relationship_aware": 3,
+      "null_negative": 3,
+      "complex_multi_constraint": 2
+    },
+    "optimization_targets": {
+      "embedding_quality": 6,
+      "embedding_domain_knowledge": 3,
+      "multi_document_retrieval": 3,
+      "temporal_indexing": 2,
+      "geographic_indexing": 3,
+      "prompt_engineering": 3,
+      "multi_entity_reasoning": 2,
+      "provenance_tracking": 3,
+      "graph_architecture": 3,
+      "scope_boundaries": 3,
+      "multi_constraint_filtering": 1,
+      "cross_domain_synthesis": 1,
+      "entity_extraction": 1,
+      "cross_domain_understanding": 1,
+      "spatial_graph_edges": 1,
+      "entity_type_diversity": 1
+    }
+  }
+}

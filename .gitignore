@@ -1,19 +1,32 @@
+# ============================================================================
 # Environment and credentials
+# ============================================================================
 .env
 *.env
 .env.*
+.env.local
+.env.*.local
 configs/env/
 
+# ============================================================================
 # Data files - exclude all raw and processed data
+# ============================================================================
 data/
+data/raw/
+data/processed/
 *.csv
 *.las
-*.json
 *.parquet
 *.pkl
 *.pickle
 *.xlsx
 *.xls
+
+# EXCEPTION: Keep critical JSON fixtures and configs
+!tests/fixtures/*.json
+!configs/*.json
+!schemas/*.json
+!tasks/*/context/*.json
 
 # Python
 __pycache__/
@@ -54,21 +67,29 @@ coverage.xml
 *.cover
 .cache
 
+# ============================================================================
 # IDE and editors
+# ============================================================================
 .vscode/
 .idea/
+.cursor/
 *.swp
 *.swo
 *~
 .project
 .pydevproject
 .settings/
-.claude/
 *.sublime-project
 *.sublime-workspace
 
+# EXCEPTION: Keep .claude protocol for project reference
+!.claude/full_protocol.md
+
+# ============================================================================
 # Logs and temporary files
+# ============================================================================
 logs/
+logs/**/*.log
 *.log
 *.tmp
 temp/
@@ -78,7 +99,16 @@ __segment*.txt
 __reasoning*.txt
 __*.txt
 
+# EXCEPTION: Keep log directory structure
+!logs/.gitkeep
+!logs/generation/.gitkeep
+!logs/retrieval/.gitkeep
+!logs/traces/.gitkeep
+
+# ============================================================================
 # Documentation artifacts (keeping only essential docs)
+# ============================================================================
+# Exclude temporary/generated documentation
 AUTHENTIC_*.md
 CLEANUP_*.md
 CODE_ANALYSIS_*.md
@@ -92,7 +122,6 @@ FINAL_*.md
 FIXES_*.md
 GRAPHRAG_*.md
 PHASED_*.md
-README_*.md
 REFACTORING_*.md
 REMEDIATION_*.md
 TEST_*.md
@@ -102,11 +131,41 @@ checkpoint*.md
 compass_artifact_*.md
 CONFIGURATION_EXTRACTION.md
 
+# Exclude session-specific and temporary documentation
+CAPABILITY_VALIDATION_REPORT.md
+CLAUDE_INSTRUCTIONS.md
+DOCUMENTATION_UPDATE_SUMMARY.md
+E2E_VALIDATION_REPORT.md
+HYPOTHESIS_AND_SCOPE.md
+MCP_INTEGRATION_ANALYSIS.md
+MCP_SERVER_GUIDE.md
+PHASE1_AUTHENTICITY_VERIFICATION.md
+PHASE1_PROTOCOL_COMPLIANCE_REPORT.md
+PREPARATION_COMPLETE.md
+PROJECT_STATUS.md
+README_EVALUATION_COMPLETE.md
+REMEDIATION_COMPLETE.txt
+SESSION_PROGRESS_SUMMARY.md
+SESSION_SUMMARY_*.md
+TDD_ALIGNMENT_ANALYSIS.md
+
+# EXCEPTION: Keep primary project documentation
+!README.md
+!docs/**/*.md
+!tasks/*/context/*.md
+!.claude/full_protocol.md
+
+# ============================================================================
 # Reports and analysis outputs
-*.csv
+# ============================================================================
 bandit_report.*
-*_report.*
-*_results.*
+*_report.txt
+*_report.json
+*_report.html
+*_results.txt
+*_results.json
+validation_results.*
+diagnostic_results.*
 
 # Models and large files
 models/
@@ -120,8 +179,34 @@ embeddings/
 *.safetensors
 *.ckpt
 
-# Artifacts and cache
+# ============================================================================
+# Task artifacts and validation outputs
+# ============================================================================
+# Exclude all task validation artifacts and generated outputs
+tasks/*/artifacts/
+tasks/*/reports/
 artifacts/
+artifacts/demo/
+artifacts/validation/
+
+# EXCEPTION: Keep task context (hypotheses, designs, evidence)
+!tasks/*/context/
+
+# ============================================================================
+# QA and analysis outputs
+# ============================================================================
+qa/
+qa/*.xml
+qa/*.txt
+qa/*.json
+qa/*.html
+
+# EXCEPTION: Keep QA directory structure
+!qa/.gitkeep
+
+# ============================================================================
+# Cache directories
+# ============================================================================
 .ruff_cache/
 .mypy_cache/
 .dmypy.json

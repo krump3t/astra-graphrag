@@ -1,0 +1,388 @@
+[
+  {
+    "id": "simple-001",
+    "query": "What is porosity in petroleum engineering?",
+    "expected_answer_pattern": "pore.*space|void.*volume|rock.*volume",
+    "query_type": "simple",
+    "metadata": {"domain_term": "porosity", "requires_glossary": true},
+    "validation_notes": "Should trigger glossary scraper (SLB/SPE) or cache hit"
+  },
+  {
+    "id": "simple-002",
+    "query": "What is permeability?",
+    "expected_answer_pattern": "fluid.*flow|ability.*transmit|darcy",
+    "query_type": "simple",
+    "metadata": {"domain_term": "permeability", "requires_glossary": true}
+  },
+  {
+    "id": "simple-003",
+    "query": "Explain gamma ray logging",
+    "expected_answer_pattern": "gamma.*ray|natural.*radioactivity|gr.*log|shale",
+    "query_type": "simple",
+    "metadata": {"domain_term": "gamma_ray", "requires_glossary": false}
+  },
+  {
+    "id": "simple-004",
+    "query": "What does NPHI measure?",
+    "expected_answer_pattern": "neutron.*porosity|hydrogen.*index|porosity.*log",
+    "query_type": "simple",
+    "metadata": {"mnemonic": "NPHI", "requires_glossary": false}
+  },
+  {
+    "id": "simple-005",
+    "query": "What is lithofacies?",
+    "expected_answer_pattern": "rock.*type|lithology|facies|sediment|depositional",
+    "query_type": "simple",
+    "metadata": {"domain_term": "lithofacies", "requires_glossary": true}
+  },
+  {
+    "id": "simple-006",
+    "query": "What is resistivity logging?",
+    "expected_answer_pattern": "electrical.*resistance|hydrocarbon|formation.*resistivity",
+    "query_type": "simple",
+    "metadata": {"domain_term": "resistivity", "requires_glossary": false}
+  },
+  {
+    "id": "simple-007",
+    "query": "Explain sonic logging",
+    "expected_answer_pattern": "acoustic|compressional.*wave|dtc|travel.*time|velocity",
+    "query_type": "simple",
+    "metadata": {"domain_term": "sonic", "mnemonic": "DTC"}
+  },
+  {
+    "id": "simple-008",
+    "query": "What is bulk density?",
+    "expected_answer_pattern": "rhob|density.*log|formation.*density|g/cc",
+    "query_type": "simple",
+    "metadata": {"mnemonic": "RHOB", "requires_glossary": false}
+  },
+  {
+    "id": "simple-009",
+    "query": "What is caliper logging?",
+    "expected_answer_pattern": "wellbore.*diameter|hole.*size|cali|borehole",
+    "query_type": "simple",
+    "metadata": {"mnemonic": "CALI"}
+  },
+  {
+    "id": "simple-010",
+    "query": "What is spontaneous potential?",
+    "expected_answer_pattern": "sp.*log|natural.*potential|electrochemical|permeable.*bed",
+    "query_type": "simple",
+    "metadata": {"mnemonic": "SP", "requires_glossary": false}
+  },
+  {
+    "id": "relationship-001",
+    "query": "What curves are in well 15/9-13?",
+    "expected_answer_pattern": "gr|nphi|rhob|dept|cali|sp|dtc",
+    "query_type": "relationship",
+    "metadata": {"well_id": "15_9-13", "traversal_required": true, "well_name": "Sleipner East Appr"}
+  },
+  {
+    "id": "relationship-002",
+    "query": "Show me all curves in well 16/1-2",
+    "expected_answer_pattern": "gr|nphi|rhob|dept|cali",
+    "query_type": "relationship",
+    "metadata": {"well_id": "16_1-2", "traversal_required": true, "well_name": "Ivar Aasen Appr"}
+  },
+  {
+    "id": "relationship-003",
+    "query": "List curves for well 15/9-15",
+    "expected_answer_pattern": "gr|nphi|rhob|dept",
+    "query_type": "relationship",
+    "metadata": {"well_id": "15_9-15", "traversal_required": true, "well_name": "Gungne"}
+  },
+  {
+    "id": "relationship-004",
+    "query": "What well log curves does Sleipner East Appr have?",
+    "expected_answer_pattern": "gr|nphi|rhob|dept|cali",
+    "query_type": "relationship",
+    "metadata": {"well_name": "Sleipner East Appr", "traversal_required": true}
+  },
+  {
+    "id": "relationship-005",
+    "query": "Which well contains the GR curve?",
+    "expected_answer_pattern": "15/9|16/1|16/10|well",
+    "query_type": "relationship",
+    "metadata": {"mnemonic": "GR", "traversal_required": true}
+  },
+  {
+    "id": "relationship-006",
+    "query": "Find wells with NPHI curve",
+    "expected_answer_pattern": "15/9|16/1|16/10|well",
+    "query_type": "relationship",
+    "metadata": {"mnemonic": "NPHI", "traversal_required": true}
+  },
+  {
+    "id": "relationship-007",
+    "query": "What curves are available in Ivar Aasen Appr?",
+    "expected_answer_pattern": "gr|nphi|rhob|dept",
+    "query_type": "relationship",
+    "metadata": {"well_name": "Ivar Aasen Appr", "well_id": "16_1-2", "traversal_required": true}
+  },
+  {
+    "id": "relationship-008",
+    "query": "Show curves for well 15/9-17",
+    "expected_answer_pattern": "gr|nphi|rhob|dept",
+    "query_type": "relationship",
+    "metadata": {"well_id": "15_9-17", "traversal_required": true}
+  },
+  {
+    "id": "relationship-009",
+    "query": "Which wells have RHOB curves?",
+    "expected_answer_pattern": "15/9|16/1|16/10|well",
+    "query_type": "relationship",
+    "metadata": {"mnemonic": "RHOB", "traversal_required": true}
+  },
+  {
+    "id": "relationship-010",
+    "query": "What curves does well 16/10-1 contain?",
+    "expected_answer_pattern": "gr|nphi|rhob|dept",
+    "query_type": "relationship",
+    "metadata": {"well_id": "16_10-1", "well_name": "Alpha", "traversal_required": true}
+  },
+  {
+    "id": "aggregation-001",
+    "query": "How many wells are there?",
+    "expected_answer_pattern": "119|118|11[0-9]|1[0-2][0-9]",
+    "query_type": "aggregation",
+    "metadata": {"aggregation_type": "COUNT", "entity_type": "las_document", "expected_count": 119}
+  },
+  {
+    "id": "aggregation-002",
+    "query": "How many curves are in well 15/9-13?",
+    "expected_answer_pattern": "[2-9][0-9]|[1-9][0-9]{2}",
+    "query_type": "aggregation",
+    "metadata": {"aggregation_type": "COUNT", "well_id": "15_9-13", "traversal_required": true}
+  },
+  {
+    "id": "aggregation-003",
+    "query": "Count the curves in well 16/1-2",
+    "expected_answer_pattern": "[2-9][0-9]|[1-9][0-9]{2}",
+    "query_type": "aggregation",
+    "metadata": {"aggregation_type": "COUNT", "well_id": "16_1-2", "traversal_required": true}
+  },
+  {
+    "id": "aggregation-004",
+    "query": "How many wells have NPHI curves?",
+    "expected_answer_pattern": "[5-9][0-9]|1[0-1][0-9]",
+    "query_type": "aggregation",
+    "metadata": {"aggregation_type": "COUNT", "mnemonic": "NPHI", "entity_filter": true}
+  },
+  {
+    "id": "aggregation-005",
+    "query": "How many curves does Sleipner East Appr have?",
+    "expected_answer_pattern": "[2-9][0-9]|[1-9][0-9]{2}",
+    "query_type": "aggregation",
+    "metadata": {"aggregation_type": "COUNT", "well_name": "Sleipner East Appr", "traversal_required": true}
+  },
+  {
+    "id": "aggregation-006",
+    "query": "Count all wells in the database",
+    "expected_answer_pattern": "119|118|11[0-9]",
+    "query_type": "aggregation",
+    "metadata": {"aggregation_type": "COUNT", "entity_type": "las_document"}
+  },
+  {
+    "id": "aggregation-007",
+    "query": "How many wells are in block 15/9?",
+    "expected_answer_pattern": "[1-9][0-9]?",
+    "query_type": "aggregation",
+    "metadata": {"aggregation_type": "COUNT", "block": "15/9", "entity_filter": true}
+  },
+  {
+    "id": "aggregation-008",
+    "query": "Count curves in well 15/9-15",
+    "expected_answer_pattern": "[2-9][0-9]|[1-9][0-9]{2}",
+    "query_type": "aggregation",
+    "metadata": {"aggregation_type": "COUNT", "well_id": "15_9-15", "traversal_required": true}
+  },
+  {
+    "id": "aggregation-009",
+    "query": "How many wells have GR curves?",
+    "expected_answer_pattern": "[5-9][0-9]|1[0-1][0-9]",
+    "query_type": "aggregation",
+    "metadata": {"aggregation_type": "COUNT", "mnemonic": "GR"}
+  },
+  {
+    "id": "aggregation-010",
+    "query": "How many curves are there in total?",
+    "expected_answer_pattern": "[5-9][0-9]{2}|[1-9][0-9]{3}",
+    "query_type": "aggregation",
+    "metadata": {"aggregation_type": "COUNT", "entity_type": "las_curve", "expected_count": 1000}
+  },
+  {
+    "id": "extraction-001",
+    "query": "What is the well name for 15/9-13?",
+    "expected_answer_pattern": "sleipner.*east.*appr",
+    "query_type": "extraction",
+    "metadata": {"attribute": "WELL", "well_id": "15_9-13", "expected_value": "Sleipner East Appr"}
+  },
+  {
+    "id": "extraction-002",
+    "query": "What is the well name for 16/1-2?",
+    "expected_answer_pattern": "ivar.*aasen.*appr",
+    "query_type": "extraction",
+    "metadata": {"attribute": "WELL", "well_id": "16_1-2", "expected_value": "Ivar Aasen Appr"}
+  },
+  {
+    "id": "extraction-003",
+    "query": "What is the well name for 15/9-15?",
+    "expected_answer_pattern": "gungne",
+    "query_type": "extraction",
+    "metadata": {"attribute": "WELL", "well_id": "15_9-15", "expected_value": "Gungne"}
+  },
+  {
+    "id": "extraction-004",
+    "query": "What is the UWI for well 15/9-13?",
+    "expected_answer_pattern": "15/9-13",
+    "query_type": "extraction",
+    "metadata": {"attribute": "UWI", "well_id": "15_9-13", "expected_value": "15/9-13"}
+  },
+  {
+    "id": "extraction-005",
+    "query": "What is the well name for 16/10-1?",
+    "expected_answer_pattern": "alpha",
+    "query_type": "extraction",
+    "metadata": {"attribute": "WELL", "well_id": "16_10-1", "expected_value": "Alpha"}
+  },
+  {
+    "id": "extraction-006",
+    "query": "What is the well name for 16/10-2?",
+    "expected_answer_pattern": "delta",
+    "query_type": "extraction",
+    "metadata": {"attribute": "WELL", "well_id": "16_10-2", "expected_value": "Delta"}
+  },
+  {
+    "id": "extraction-007",
+    "query": "What is the well name for 15/9-23?",
+    "expected_answer_pattern": "skardkollen",
+    "query_type": "extraction",
+    "metadata": {"attribute": "WELL", "well_id": "15_9-23", "expected_value": "Skardkollen"}
+  },
+  {
+    "id": "extraction-008",
+    "query": "What is the UWI for Ivar Aasen Appr?",
+    "expected_answer_pattern": "16/1-2",
+    "query_type": "extraction",
+    "metadata": {"attribute": "UWI", "well_name": "Ivar Aasen Appr", "expected_value": "16/1-2"}
+  },
+  {
+    "id": "extraction-009",
+    "query": "What is the well name for 16/10-3?",
+    "expected_answer_pattern": "tyr.*central",
+    "query_type": "extraction",
+    "metadata": {"attribute": "WELL", "well_id": "16_10-3", "expected_value": "Tyr Central"}
+  },
+  {
+    "id": "extraction-010",
+    "query": "What is the UWI for Gungne?",
+    "expected_answer_pattern": "15/9-15",
+    "query_type": "extraction",
+    "metadata": {"attribute": "UWI", "well_name": "Gungne", "expected_value": "15/9-15"}
+  },
+  {
+    "id": "glossary-001",
+    "query": "Define reservoir in petroleum engineering context",
+    "expected_answer_pattern": "rock.*formation|hydrocarbon|accumulation|trap",
+    "query_type": "glossary",
+    "metadata": {"domain_term": "reservoir", "requires_glossary": true, "sources": ["slb", "spe", "aapg"]}
+  },
+  {
+    "id": "glossary-002",
+    "query": "What is a wellbore?",
+    "expected_answer_pattern": "hole|drill|bore|well.*shaft",
+    "query_type": "glossary",
+    "metadata": {"domain_term": "wellbore", "requires_glossary": true}
+  },
+  {
+    "id": "glossary-003",
+    "query": "Explain formation evaluation",
+    "expected_answer_pattern": "reservoir.*characterization|well.*log|rock.*property|measurement",
+    "query_type": "glossary",
+    "metadata": {"domain_term": "formation_evaluation", "requires_glossary": true}
+  },
+  {
+    "id": "glossary-004",
+    "query": "What is saturation in oil and gas?",
+    "expected_answer_pattern": "fluid.*content|pore.*space|water|oil|gas",
+    "query_type": "glossary",
+    "metadata": {"domain_term": "saturation", "requires_glossary": true}
+  },
+  {
+    "id": "glossary-005",
+    "query": "Define completion in drilling",
+    "expected_answer_pattern": "well.*completion|production|equipment|tubing|perforation",
+    "query_type": "glossary",
+    "metadata": {"domain_term": "completion", "requires_glossary": true}
+  },
+  {
+    "id": "glossary-006",
+    "query": "What is viscosity in petroleum context?",
+    "expected_answer_pattern": "fluid.*resistance|flow|thickness|centipose",
+    "query_type": "glossary",
+    "metadata": {"domain_term": "viscosity", "requires_glossary": true}
+  },
+  {
+    "id": "glossary-007",
+    "query": "Explain hydrocarbon recovery",
+    "expected_answer_pattern": "production|extraction|oil|gas|recovery.*factor",
+    "query_type": "glossary",
+    "metadata": {"domain_term": "hydrocarbon_recovery", "requires_glossary": true}
+  },
+  {
+    "id": "glossary-008",
+    "query": "What is seismic interpretation?",
+    "expected_answer_pattern": "seismic.*data|interpretation|structure|stratigraphy|reflection",
+    "query_type": "glossary",
+    "metadata": {"domain_term": "seismic_interpretation", "requires_glossary": true}
+  },
+  {
+    "id": "glossary-009",
+    "query": "Define fracture in reservoir context",
+    "expected_answer_pattern": "rock.*fracture|crack|natural|induced|permeability",
+    "query_type": "glossary",
+    "metadata": {"domain_term": "fracture", "requires_glossary": true}
+  },
+  {
+    "id": "glossary-010",
+    "query": "What is production logging?",
+    "expected_answer_pattern": "production.*log|flow.*measurement|downhole|well.*performance",
+    "query_type": "glossary",
+    "metadata": {"domain_term": "production_logging", "requires_glossary": true}
+  },
+  {
+    "id": "out_of_scope-001",
+    "query": "Who won the 2024 US presidential election?",
+    "expected_answer_pattern": "out.*of.*scope|outside.*domain|petroleum|subsurface|cannot.*answer",
+    "query_type": "out_of_scope",
+    "metadata": {"should_defuse": true, "scope_confidence": ">0.8"}
+  },
+  {
+    "id": "out_of_scope-002",
+    "query": "What is the weather in Houston today?",
+    "expected_answer_pattern": "out.*of.*scope|outside.*domain|petroleum|cannot.*answer",
+    "query_type": "out_of_scope",
+    "metadata": {"should_defuse": true, "scope_confidence": ">0.8"}
+  },
+  {
+    "id": "out_of_scope-003",
+    "query": "How do I bake a chocolate cake?",
+    "expected_answer_pattern": "out.*of.*scope|outside.*domain|petroleum|cannot.*answer",
+    "query_type": "out_of_scope",
+    "metadata": {"should_defuse": true, "scope_confidence": ">0.8"}
+  },
+  {
+    "id": "out_of_scope-004",
+    "query": "What is the capital of France?",
+    "expected_answer_pattern": "out.*of.*scope|outside.*domain|petroleum|cannot.*answer",
+    "query_type": "out_of_scope",
+    "metadata": {"should_defuse": true, "scope_confidence": ">0.8"}
+  },
+  {
+    "id": "out_of_scope-005",
+    "query": "Tell me about machine learning algorithms",
+    "expected_answer_pattern": "out.*of.*scope|outside.*domain|petroleum|subsurface|cannot.*answer",
+    "query_type": "out_of_scope",
+    "metadata": {"should_defuse": true, "scope_confidence": ">0.8"}
+  }
+]

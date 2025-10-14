@@ -73,8 +73,29 @@ class LocalOrchestrator:
         Detect if query is requesting a glossary definition.
 
         Uses simple keyword matching for fast, reliable detection.
+        Excludes queries asking for specific data extraction (well names, attributes, etc.).
         """
         query_lower = query.lower()
+
+        # Exclude queries asking for specific well/curve data or in-scope petroleum concepts
+        exclusion_patterns = [
+            'well name for',
+            'uwi for',
+            'well id for',
+            'curve',
+            'how many',
+            'measurement',
+            'value of',
+            'data for',
+            'logging',  # In-scope petroleum: "gamma ray logging", "sonic logging", etc.
+            'analysis',
+            'interpretation',
+            'method'
+        ]
+
+        if any(pattern in query_lower for pattern in exclusion_patterns):
+            return False
+
         return any(keyword in query_lower for keyword in self.GLOSSARY_KEYWORDS)
 
     def extract_term(self, query: str) -> Optional[str]:

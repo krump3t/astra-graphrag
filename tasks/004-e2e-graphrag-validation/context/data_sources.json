@@ -1,0 +1,84 @@
+{
+  "inputs": [
+    {
+      "name": "E2E_QA_PAIRS",
+      "path_or_url": "tests/fixtures/e2e_qa_pairs.json",
+      "sha256": "2bff465c49b07ad685e070b1286bd2c283fd82bddd8143cfbe3578b24fb357df",
+      "rows": 55,
+      "cols": 5,
+      "licensing": "internal",
+      "pii": false,
+      "description": "Held-out test set of 55 manually-curated Q&A pairs stratified by query type (simple, relationship, aggregation, extraction, glossary, out-of-scope). Based on real FORCE 2020 Norwegian North Sea well data (118 wells, 26 mnemonics). Never used during development - true unbiased test set.",
+      "created_date": "2025-10-14",
+      "schema": {
+        "id": "string (unique test ID, e.g., 'simple-001')",
+        "query": "string (1-1000 chars, natural language question)",
+        "expected_answer_pattern": "string (regex or keywords for validation)",
+        "query_type": "enum (simple, relationship, aggregation, extraction, glossary, out_of_scope)",
+        "metadata": "object (optional, e.g., well_id, mnemonic, expected_value)"
+      }
+    },
+    {
+      "name": "FORCE_2020_WELLS",
+      "path_or_url": "AstraDB collection: graph_nodes (entity_type=las_document)",
+      "sha256": "N/A (live database, not static file)",
+      "rows": 118,
+      "cols": 8,
+      "licensing": "public",
+      "pii": false,
+      "description": "FORCE 2020 Norwegian North Sea well log dataset. Wells with attributes: UWI, WELL, FIELD, OPERATOR, COUNTRY, STATE, COUNTY, BASIN. Used by E2E tests via real AstraDB vector search.",
+      "created_date": "2020-06-01",
+      "source_url": "https://github.com/bolgebrygg/Force-2020-Machine-Learning-competition",
+      "note": "Live data in AstraDB, accessed via real API calls (no mocks). Test queries reference specific wells: 15/9-13 (Sleipner East Appr), 16/1-2 (Ivar Aasen Appr), 15/9-15 (Gungne)."
+    },
+    {
+      "name": "FORCE_2020_CURVES",
+      "path_or_url": "AstraDB collection: graph_nodes (entity_type=las_curve)",
+      "sha256": "N/A (live database, not static file)",
+      "rows": 5900,
+      "cols": 6,
+      "licensing": "public",
+      "pii": false,
+      "description": "LAS curve data from FORCE 2020 wells. 26 unique mnemonics: GR, NPHI, RHOB, DTC, CALI, DRHO, PEF, RMED, RXO, RDEP, RSHA, SP, BS, DCAL, DTS, MUDWEIGHT, ROP, etc. Used by E2E tests for relationship queries (well → curves).",
+      "created_date": "2020-06-01",
+      "source_url": "https://github.com/bolgebrygg/Force-2020-Machine-Learning-competition",
+      "note": "Live data accessed via real Graph Traverser (in-memory graph with precomputed indices). No mocks."
+    },
+    {
+      "name": "GRAPH_STRUCTURE",
+      "path_or_url": "data/processed/graphs/combined_graph.json",
+      "sha256": "N/A (not validated in this task, dependency of graph_traverser)",
+      "rows": 6018,
+      "cols": 0,
+      "licensing": "internal",
+      "pii": false,
+      "description": "Combined graph structure with nodes (wells + curves + sites + measurements) and edges (describes, reports_on). Used by real Graph Traverser for relationship queries. Precomputed indices: well_to_curves, curve_to_well, well_mnemonics.",
+      "created_date": "2025-10-14",
+      "note": "Loaded once on graph traverser initialization (singleton pattern). ~5-10MB in memory."
+    },
+    {
+      "name": "GLOSSARY_CACHE",
+      "path_or_url": "Cache (Redis or file-based): data/cache/glossary_cache.json",
+      "sha256": "N/A (dynamic cache, changes with scraper usage)",
+      "rows": "Variable",
+      "cols": 6,
+      "licensing": "internal",
+      "pii": false,
+      "description": "Glossary term definitions scraped from SLB/SPE/AAPG. Cache used by MCP glossary server. Terms: porosity, permeability, gamma ray, lithofacies, reservoir, wellbore, etc. Real scraper used in E2E tests (no mocks).",
+      "created_date": "2025-10-14",
+      "note": "Cache may be cold (no definitions) or warm (cached from previous runs). Test accepts both glossary-enriched answers AND honest 'no definition' responses."
+    },
+    {
+      "name": "LLM_GENERATION",
+      "path_or_url": "watsonx.ai API (real LLM, no mocks)",
+      "sha256": "N/A (external API service)",
+      "rows": "N/A",
+      "cols": "N/A",
+      "licensing": "commercial",
+      "pii": false,
+      "description": "Real LLM generation used for reasoning step in E2E tests. Model: watsonx.ai (or equivalent). Decoding: greedy (deterministic). Max tokens: 1500 (default), 500 (aggregation). All 19 E2E tests use real LLM calls (no mocks per user requirement).",
+      "created_date": "2025-10-14",
+      "note": "API key required (WATSONX_API_KEY in .env). No mocks, no fake responses - all tests validate real LLM integration."
+    }
+  ]
+}
