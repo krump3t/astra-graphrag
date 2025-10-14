@@ -5,6 +5,7 @@ from typing import Any, Dict, Iterable, List
 from urllib import request, error
 
 from services.config import get_settings
+from services.graph_index.retry_utils import retry_with_backoff
 
 JSON = Dict[str, Any]
 
@@ -27,6 +28,7 @@ class AstraApiClient:
     def _url(self, path: str) -> str:
         return f"{self.base}{path}"
 
+    @retry_with_backoff(max_retries=3, base_delay=1.0)
     def _post(self, path: str, payload: JSON) -> JSON:
         data = json.dumps(payload).encode("utf-8")
         req = request.Request(self._url(path), data=data, headers=self._headers(), method="POST")
@@ -36,6 +38,7 @@ class AstraApiClient:
         except error.HTTPError as exc:  # pragma: no cover - network path
             raise RuntimeError(f"Astra POST {path} failed: {exc.code} {exc.read().decode('utf-8', errors='ignore')}")
 
+    @retry_with_backoff(max_retries=3, base_delay=1.0)
     def _get(self, path: str) -> JSON:
         req = request.Request(self._url(path), headers=self._headers(), method="GET")
         try:

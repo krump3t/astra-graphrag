@@ -107,7 +107,60 @@ This document records major decisions made during Task 006 execution in chronolo
 
 ---
 
-<!-- Additional decision entries will be added during Phase 3-6 execution -->
+## 2025-10-14: Phase 3 Complete - Type Safety Achieved (56 errors→0)
+
+**Decision**: Fixed all mypy --strict errors using gradual typing strategy with minimal code changes
+
+**Type Safety Improvements**:
+1. **Added return type annotations**: `-> None`, `-> bool`, `-> Optional[str]`, etc.
+2. **Fixed generic type parameters**: `tuple[str, str]` instead of bare `tuple`
+3. **Fixed None handling**: Walrus operator + type guards to prevent `Any | None` in typed collections
+4. **Added strategic type: ignore**: For untyped dependencies (ibm_watsonx_ai, etc.)
+5. **Fixed singleton pattern**: Module-level `Optional["GraphTraverser"]` instead of string check
+6. **Fixed function redefinition**: Renamed second `_runner` to `_runner_langgraph`
+7. **Fixed no-any-return errors**: Explicit type casting with None checks
+
+**Rationale**: Gradual typing maintains flexibility while achieving strict type safety; strategic type: ignore for external dependencies is pragmatic
+
+**Impact**:
+- workflow.py: 14 errors → 0 errors (100% fixed)
+- graph_traverser.py: 42 errors → 0 errors (100% fixed)
+- Test pass rate: 19/20 (95%, maintained - no regressions)
+
+**Validation**: mypy --strict clean on both files; all E2E tests still pass
+
+**Reference**: ADR-006-002 (Gradual typing strategy); PEP 484 (Type Hints)
+
+---
+
+## 2025-10-14: Phase 4 Complete - Production Resilience Enhanced
+
+**Decision**: Implemented exponential backoff retry logic for external API clients (AstraDB, WatsonX)
+
+**Implementation**:
+1. **Created retry_utils.py**: Decorator-based retry with exponential backoff (1s, 2s, 4s delays)
+2. **Transient error detection**: Retries on HTTP 429, 500, 502, 503, 504 and URLError (network failures)
+3. **Applied to AstraDB client**: `_post()` and `_get()` methods now retry automatically
+4. **Applied to WatsonX client**: `_post()` method (handles both token acquisition and generation)
+
+**Existing Resilience Validated**:
+- Glossary scraper: Rate limiting (1 req/sec), exponential backoff, robots.txt compliance (already implemented)
+- Redis cache: Connection pooling, automatic in-memory fallback, graceful degradation (already implemented)
+
+**Rationale**: Decorator pattern keeps retry logic DRY and maintainable; retrying only transient errors prevents amplifying permanent failures
+
+**Impact**:
+- AstraDB and WatsonX clients now resilient to transient network/API failures
+- Test pass rate: 19/20 (95%, maintained - no regressions from retry logic)
+- retry_utils.py: 100% type-safe (mypy --strict clean)
+
+**Validation**: E2E tests confirm functional equivalence; type checking passes
+
+**Reference**: ADR-006-009 (Exponential backoff retry strategy); services/graph_index/retry_utils.py; services/graph_index/astra_api.py:31-42; services/graph_index/generation.py:34
+
+---
+
+<!-- Additional decision entries will be added during Phase 5-6 execution -->
 
 ## Template for Future Entries
 

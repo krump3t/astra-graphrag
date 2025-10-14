@@ -5,6 +5,7 @@ from typing import Any, Dict
 from urllib import error, parse, request
 
 from services.config import get_settings
+from services.graph_index.retry_utils import retry_with_backoff
 
 IAM_TOKEN_URL = "https://iam.cloud.ibm.com/identity/token"
 
@@ -30,6 +31,7 @@ class WatsonxGenerationClient:
         if not all([self.api_key, self.project_id, self.url, self.model_id]):
             raise RuntimeError("Watsonx generation configuration incomplete. Set WATSONX_API_KEY, WATSONX_PROJECT_ID, WATSONX_URL in .env")
 
+    @retry_with_backoff(max_retries=3, base_delay=1.0)
     def _post(self, url: str, data: bytes, headers: Dict[str, str]) -> Dict[str, Any]:
         req = request.Request(url, data=data, headers=headers, method="POST")
         try:
