@@ -1,0 +1,19 @@
+# Task 021: E2E Progressive Complexity Validation Framework
+# All dependencies pinned for reproducibility
+
+# Testing framework
+pytest==7.4.3
+pytest-cov==4.1.0
+hypothesis==6.92.1
+
+# HTTP requests
+requests==2.31.0
+
+# Code quality
+lizard==1.17.10
+bandit==1.7.5
+detect-secrets==1.4.0
+mypy==1.7.1
+
+# Data handling
+pathlib2==2.3.7.post1

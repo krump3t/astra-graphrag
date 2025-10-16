@@ -1,0 +1,66 @@
+# Pre-commit hooks for code quality and security
+# Install: pre-commit install
+# Run manually: pre-commit run --all-files
+
+repos:
+  # Ruff - Fast Python linter and formatter (replaces flake8, black, isort)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.4
+    hooks:
+      # Linter
+      - id: ruff
+        args: [--fix]
+        types_or: [python, pyi]
+
+      # Formatter
+      - id: ruff-format
+        types_or: [python, pyi]
+
+  # Bandit - Security linting for Python
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.0
+    hooks:
+      - id: bandit
+        args: [-ll, -r, services/]  # Only HIGH/CRITICAL severity
+        exclude: ^tests/
+        pass_filenames: false
+
+  # detect-secrets - Prevent committing secrets
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: |
+          (?x)^(
+            \.env\.example|
+            \.secrets\.baseline|
+            analysis_reports/.*\.json|
+            tasks/.*/.*\.md
+          )$
+
+  # Standard pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        exclude: ^\.claude/.*\.md$
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+      - id: check-merge-conflict
+      - id: check-json
+        exclude: ^\.vscode/.*\.json$
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  # MyPy - Static type checking (optional, can be slow)
+  # Uncomment when ready for strict type checking
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v1.13.0
+  #   hooks:
+  #     - id: mypy
+  #       args: [--strict, --ignore-missing-imports]
+  #       additional_dependencies: [types-all]
+  #       files: ^services/

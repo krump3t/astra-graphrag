@@ -1,0 +1,72 @@
+# Task 008: Docker Integration & Deployment
+# Multi-container orchestration: MCP Server + Redis Cache
+# Note: 'version' attribute is obsolete in Docker Compose v2 (removed per Docker best practices)
+
+services:
+  # ========================================
+  # Redis Cache Service
+  # ========================================
+  redis:
+    image: redis:7-alpine
+    container_name: graphrag-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data  # Persistent storage across restarts
+    command: redis-server --appendonly yes --maxmemory 100mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    networks:
+      - graphrag-network
+
+  # ========================================
+  # GraphRAG Application Service
+  # ========================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: graphrag-app
+    restart: unless-stopped
+    command: ["python", "mcp_http_server.py"]  # Task 012: Override to run HTTP server
+    ports:
+      - "8000:8000"  # Task 012: Expose HTTP API port
+    env_file:
+      - configs/env/.env  # Secrets and API keys (not copied into image)
+    environment:
+      # Docker-specific Redis configuration (overrides .env)
+      - REDIS_HOST=redis  # Docker service name (not localhost)
+      - REDIS_PORT=6379
+      - REDIS_TTL=86400  # 24 hours (Task 007 Phase 4A)
+    depends_on:
+      redis:
+        condition: service_healthy  # Wait for Redis to be ready
+    volumes:
+      - ./logs:/app/logs  # Persist logs outside container
+      - ./data:/app/data:ro  # Read-only data mount (security)
+    networks:
+      - graphrag-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]  # Task 012: HTTP health check
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+# ========================================
+# Named Volumes (Persistent Storage)
+# ========================================
+volumes:
+  redis-data:
+    driver: local  # Persists across container restarts
+
+# ========================================
+# Networks (Service Isolation)
+# ========================================
+networks:
+  graphrag-network:
+    driver: bridge

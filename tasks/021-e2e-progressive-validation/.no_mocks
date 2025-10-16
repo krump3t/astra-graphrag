@@ -1,0 +1,20 @@
+This task prohibits mock objects and stub functions per Protocol v12.2 §2
+
+Task 021: E2E Progressive Complexity Validation Framework
+
+All validation must use genuine system execution:
+- Real HTTP requests to mcp_http_server.py
+- Actual MCP tool invocations (validate, compare, statistics, export)
+- Live LangGraph workflow execution
+- Genuine Astra DB graph queries
+- Real IBM Watsonx API calls
+- No mocked responses or hardcoded test data
+
+Authenticity is verified via authenticity_inspector.py which scans for:
+- unittest.mock imports
+- @patch decorators
+- MagicMock/Mock usage
+- Stub functions (pass-only implementations)
+- Hardcoded return values
+
+All tests must demonstrate variable outputs for different inputs.

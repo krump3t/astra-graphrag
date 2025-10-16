@@ -1,0 +1,573 @@
+{
+  "task_id": "022-performance-optimization-safe",
+  "protocol_version": "v12.2",
+  "claims_index_version": "1.0",
+  "last_updated": "2025-10-16T06:45:00Z",
+  "total_claims": 42,
+
+  "claims": [
+    {
+      "claim_id": "C-022-001",
+      "hypothesis": "H1",
+      "claim": "Safe algorithmic optimizations achieve ≥20% performance improvement on ≥3 bottlenecks",
+      "type": "quantitative",
+      "testable": true,
+      "measurement_method": "pytest-benchmark comparison (baseline vs optimized)",
+      "success_criteria": {
+        "metric": "Aggregate performance improvement",
+        "threshold": "≥20%",
+        "target": "≥35%"
+      },
+      "validation_location": "phase5/final_benchmarks.json",
+      "evidence_sources": ["P1-022-001", "P1-022-003", "P2-022-005"],
+      "test_files": [
+        "phase1/benchmark_suite.py",
+        "phase2/differential_tests/test_performance_improvement.py"
+      ],
+      "status": "pending",
+      "validation_date": null
+    },
+    {
+      "claim_id": "C-022-002",
+      "hypothesis": "H1",
+      "claim": "100% test pass rate maintained (zero regressions)",
+      "type": "binary",
+      "testable": true,
+      "measurement_method": "pytest exit code (must be 0)",
+      "success_criteria": {
+        "metric": "Test pass rate",
+        "threshold": "100%",
+        "target": "100%"
+      },
+      "validation_location": "qa/test_results.xml",
+      "evidence_sources": ["P1-022-005", "P2-022-004"],
+      "test_files": [
+        "tests/**/*.py",
+        "phase2/differential_tests/**/*.py",
+        "phase3/property_tests/**/*.py"
+      ],
+      "status": "passing",
+      "validation_date": "2025-10-16T06:00:00Z",
+      "notes": "Baseline verified: 100% pass rate"
+    },
+    {
+      "claim_id": "C-022-003",
+      "hypothesis": "H1",
+      "claim": "Type safety coverage ≥80% on Critical Path modules",
+      "type": "quantitative",
+      "testable": true,
+      "measurement_method": "mypy --strict coverage report",
+      "success_criteria": {
+        "metric": "Type coverage percentage",
+        "threshold": "≥70%",
+        "target": "≥80%"
+      },
+      "validation_location": "qa/mypy_report/index.html",
+      "evidence_sources": ["P1-022-006", "P2-022-001"],
+      "test_files": [
+        "phase3/type_checker.py"
+      ],
+      "status": "pending",
+      "validation_date": null,
+      "baseline": "~5%"
+    },
+    {
+      "claim_id": "C-022-004",
+      "hypothesis": "H2",
+      "claim": "Algorithm complexity reduction (O(n²) → O(n)) achieves ≥30% improvement",
+      "type": "quantitative",
+      "testable": true,
+      "measurement_method": "Benchmark scaling test (n=100, 500, 1000)",
+      "success_criteria": {
+        "metric": "Execution time improvement",
+        "threshold": "≥30%",
+        "target": "≥40%"
+      },
+      "validation_location": "phase2/optimizations/bottleneck_1_fix.py",
+      "evidence_sources": ["P1-022-001", "P2-022-008"],
+      "test_files": [
+        "phase2/differential_tests/test_bottleneck_1.py",
+        "phase3/property_tests/test_hypothesis_enrichment.py"
+      ],
+      "status": "pending",
+      "validation_date": null,
+      "target_function": "services/graph_index/enrichment.py::enrich_nodes_with_relationships"
+    },
+    {
+      "claim_id": "C-022-005",
+      "hypothesis": "H2",
+      "claim": "I/O parallelization (sequential → async) achieves ≥80% improvement for n≥10",
+      "type": "quantitative",
+      "testable": true,
+      "measurement_method": "Benchmark comparison (sequential vs async) with real API",
+      "success_criteria": {
+        "metric": "Latency reduction",
+        "threshold": "≥80%",
+        "target": "≥90%"
+      },
+      "validation_location": "phase2/optimizations/bottleneck_2_fix.py",
+      "evidence_sources": ["P1-022-003", "P2-022-003"],
+      "test_files": [
+        "phase2/differential_tests/test_bottleneck_2.py",
+        "phase3/property_tests/test_hypothesis_retrieval.py"
+      ],
+      "status": "pending",
+      "validation_date": null,
+      "target_function": "services/langgraph/retrieval_helpers.py::batch_fetch_node_properties"
+    },
+    {
+      "claim_id": "C-022-006",
+      "hypothesis": "H2",
+      "claim": "Caching strategy achieves ≥60% hit rate with 99% latency reduction on hits",
+      "type": "quantitative",
+      "testable": true,
+      "measurement_method": "Cache hit rate instrumentation (cache_info())",
+      "success_criteria": {
+        "metric": "Cache hit rate",
+        "threshold": "≥60%",
+        "target": "≥70%"
+      },
+      "validation_location": "phase2/optimizations/bottleneck_3_fix.py",
+      "evidence_sources": ["P2-022-003"],
+      "test_files": [
+        "phase2/differential_tests/test_bottleneck_3.py",
+        "phase3/property_tests/test_hypothesis_caching.py"
+      ],
+      "status": "pending",
+      "validation_date": null,
+      "target_function": "services/graph_index/embedding.py::compute_embedding"
+    },
+    {
+      "claim_id": "C-022-007",
+      "hypothesis": "H3",
+      "claim": "≥15 functions receive complete type hints (return + parameters + internals)",
+      "type": "quantitative",
+      "testable": true,
+      "measurement_method": "Manual count of typed functions in mypy report",
+      "success_criteria": {
+        "metric": "Functions fully typed",
+        "threshold": "≥15",
+        "target": "≥20"
+      },
+      "validation_location": "phase2/optimizations/type_hints.py",
+      "evidence_sources": ["P2-022-001"],
+      "test_files": [
+        "phase3/type_checker.py"
+      ],
+      "status": "pending",
+      "validation_date": null
+    },
+    {
+      "claim_id": "C-022-008",
+      "hypothesis": "H3",
+      "claim": "Type hints catch ≥5 bugs during mypy --strict enforcement",
+      "type": "quantitative",
+      "testable": true,
+      "measurement_method": "Count of mypy errors fixed during type hint addition",
+      "success_criteria": {
+        "metric": "Bugs caught",
+        "threshold": "≥5",
+        "target": "≥10"
+      },
+      "validation_location": "phase3/validation_report.md",
+      "evidence_sources": ["P2-022-001"],
+      "test_files": null,
+      "status": "pending",
+      "validation_date": null,
+      "notes": "Tracked manually during Phase 2B"
+    },
+    {
+      "claim_id": "C-022-009",
+      "hypothesis": "H4",
+      "claim": "Memory optimization achieves ≥10% peak memory reduction",
+      "type": "quantitative",
+      "testable": true,
+      "measurement_method": "memory_profiler before/after comparison",
+      "success_criteria": {
+        "metric": "Peak memory reduction",
+        "threshold": "≥10%",
+        "target": "≥15%"
+      },
+      "validation_location": "phase1/profile_data/memory_profile.log",
+      "evidence_sources": ["P1-022-004", "P2-022-003"],
+      "test_files": [
+        "phase3/coverage_expansion/test_memory_optimization.py"
+      ],
+      "status": "pending",
+      "validation_date": null
+    },
+    {
+      "claim_id": "C-022-010",
+      "hypothesis": "H5",
+      "claim": "Line coverage increases from ~87% to ≥95%",
+      "type": "quantitative",
+      "testable": true,
+      "measurement_method": "pytest --cov coverage report",
+      "success_criteria": {
+        "metric": "Line coverage percentage",
+        "threshold": "≥90%",
+        "target": "≥95%"
+      },
+      "validation_location": "qa/coverage.xml",
+      "evidence_sources": ["P1-022-002", "P1-022-005"],
+      "test_files": [
+        "phase3/coverage_expansion/test_edge_cases.py",
+        "phase3/coverage_expansion/test_boundary_conditions.py",
+        "phase3/coverage_expansion/test_integration_scenarios.py"
+      ],
+      "status": "baseline_captured",
+      "validation_date": null,
+      "baseline": "87%"
+    },
+    {
+      "claim_id": "C-022-011",
+      "hypothesis": "H5",
+      "claim": "Branch coverage increases from ~82% to ≥90%",
+      "type": "quantitative",
+      "testable": true,
+      "measurement_method": "pytest --cov-branch coverage report",
+      "success_criteria": {
+        "metric": "Branch coverage percentage",
+        "threshold": "≥85%",
+        "target": "≥90%"
+      },
+      "validation_location": "qa/coverage.xml",
+      "evidence_sources": ["P1-022-005"],
+      "test_files": [
+        "phase3/coverage_expansion/test_edge_cases.py"
+      ],
+      "status": "baseline_captured",
+      "validation_date": null,
+      "baseline": "82%"
+    },
+    {
+      "claim_id": "C-022-012",
+      "hypothesis": "H5",
+      "claim": "≥5 property-based tests added (Hypothesis framework)",
+      "type": "quantitative",
+      "testable": true,
+      "measurement_method": "Count of @given decorated tests",
+      "success_criteria": {
+        "metric": "Property tests count",
+        "threshold": "≥5",
+        "target": "≥10"
+      },
+      "validation_location": "phase3/property_tests/",
+      "evidence_sources": ["P2-022-004"],
+      "test_files": [
+        "phase3/property_tests/test_hypothesis_enrichment.py",
+        "phase3/property_tests/test_hypothesis_retrieval.py",
+        "phase3/property_tests/test_hypothesis_caching.py"
+      ],
+      "status": "pending",
+      "validation_date": null
+    },
+    {
+      "claim_id": "C-022-013",
+      "hypothesis": "H6",
+      "claim": "0 CRITICAL or HIGH security vulnerabilities after dependency updates",
+      "type": "binary",
+      "testable": true,
+      "measurement_method": "bandit + pip-audit scans",
+      "success_criteria": {
+        "metric": "HIGH/CRITICAL vulnerabilities",
+        "threshold": "0",
+        "target": "0"
+      },
+      "validation_location": "qa/bandit.json + phase4/dependency_audit.json",
+      "evidence_sources": ["P1-022-007", "P2-022-005"],
+      "test_files": null,
+      "status": "passing",
+      "validation_date": "2025-10-16T06:00:00Z",
+      "baseline": "0"
+    },
+    {
+      "claim_id": "C-022-014",
+      "hypothesis": "H6",
+      "claim": "Only patch-level updates (x.y.Z) applied with 100% test pass rate",
+      "type": "binary",
+      "testable": true,
+      "measurement_method": "requirements.txt diff + pytest results",
+      "success_criteria": {
+        "metric": "Update safety",
+        "threshold": "100% test pass after each update",
+        "target": "100%"
+      },
+      "validation_location": "phase4/updated_requirements.txt",
+      "evidence_sources": ["P2-022-005"],
+      "test_files": null,
+      "status": "pending",
+      "validation_date": null
+    },
+    {
+      "claim_id": "C-022-015",
+      "hypothesis": "Authenticity",
+      "claim": "No mock objects or stub functions in optimization code",
+      "type": "binary",
+      "testable": true,
+      "measurement_method": "grep -r 'unittest.mock' services/",
+      "success_criteria": {
+        "metric": "Mock detection",
+        "threshold": "0 matches",
+        "target": "0 matches"
+      },
+      "validation_location": "services/",
+      "evidence_sources": ["P1-022-005", "P2-022-004"],
+      "test_files": null,
+      "status": "passing",
+      "validation_date": "2025-10-16T06:00:00Z",
+      "notes": "Baseline verified: no mocks detected"
+    },
+    {
+      "claim_id": "C-022-016",
+      "hypothesis": "Authenticity",
+      "claim": "Variable outputs verified (different inputs → different outputs)",
+      "type": "binary",
+      "testable": true,
+      "measurement_method": "Property-based tests with Hypothesis",
+      "success_criteria": {
+        "metric": "Output variance tests",
+        "threshold": "100% pass",
+        "target": "100% pass"
+      },
+      "validation_location": "phase3/property_tests/test_output_variance.py",
+      "evidence_sources": ["P2-022-004"],
+      "test_files": [
+        "phase3/property_tests/test_output_variance.py"
+      ],
+      "status": "pending",
+      "validation_date": null
+    },
+    {
+      "claim_id": "C-022-017",
+      "hypothesis": "Authenticity",
+      "claim": "Performance scaling verified (O(n) vs O(n²) distinguished)",
+      "type": "binary",
+      "testable": true,
+      "measurement_method": "Scaling tests (n=100, 500, 1000)",
+      "success_criteria": {
+        "metric": "Scaling behavior",
+        "threshold": "Linear scaling confirmed",
+        "target": "Linear scaling confirmed"
+      },
+      "validation_location": "phase3/property_tests/test_performance_scaling.py",
+      "evidence_sources": ["P2-022-008"],
+      "test_files": [
+        "phase3/property_tests/test_performance_scaling.py"
+      ],
+      "status": "pending",
+      "validation_date": null
+    },
+    {
+      "claim_id": "C-022-018",
+      "hypothesis": "Differential Testing",
+      "claim": "≥20 differential tests (old == new) all pass",
+      "type": "quantitative",
+      "testable": true,
+      "measurement_method": "Count of @pytest.mark.differential tests",
+      "success_criteria": {
+        "metric": "Differential tests count",
+        "threshold": "≥20",
+        "target": "≥24"
+      },
+      "validation_location": "phase2/differential_tests/",
+      "evidence_sources": ["P1-022-005"],
+      "test_files": [
+        "phase2/differential_tests/test_bottleneck_1.py",
+        "phase2/differential_tests/test_bottleneck_2.py",
+        "phase2/differential_tests/test_bottleneck_3.py"
+      ],
+      "status": "pending",
+      "validation_date": null
+    },
+    {
+      "claim_id": "C-022-019",
+      "hypothesis": "Integration",
+      "claim": "Task 021's 50+ queries show no accuracy regression post-optimization",
+      "type": "binary",
+      "testable": true,
+      "measurement_method": "Task 021 progressive_complexity_test.py comparison",
+      "success_criteria": {
+        "metric": "Accuracy maintained",
+        "threshold": "100% (no change)",
+        "target": "100%"
+      },
+      "validation_location": "phase5/integration_validation.md",
+      "evidence_sources": ["P1-022-002"],
+      "test_files": null,
+      "status": "pending",
+      "validation_date": null,
+      "notes": "Coordination with Task 021 required"
+    },
+    {
+      "claim_id": "C-022-020",
+      "hypothesis": "Integration",
+      "claim": "Task 021's 50+ queries show ≥20% latency improvement (P50)",
+      "type": "quantitative",
+      "testable": true,
+      "measurement_method": "Task 021 latency comparison (baseline vs optimized)",
+      "success_criteria": {
+        "metric": "P50 latency improvement",
+        "threshold": "≥15%",
+        "target": "≥20%"
+      },
+      "validation_location": "phase5/integration_validation.md",
+      "evidence_sources": ["P1-022-004"],
+      "test_files": null,
+      "status": "pending",
+      "validation_date": null
+    },
+    {
+      "claim_id": "C-022-021",
+      "hypothesis": "Code Quality",
+      "claim": "Code complexity (CCN) ≤8 for all Critical Path functions",
+      "type": "binary",
+      "testable": true,
+      "measurement_method": "lizard analysis",
+      "success_criteria": {
+        "metric": "CCN max",
+        "threshold": "≤10",
+        "target": "≤8"
+      },
+      "validation_location": "qa/lizard_report.txt",
+      "evidence_sources": ["P2-022-002"],
+      "test_files": null,
+      "status": "passing",
+      "validation_date": "2025-10-16T06:00:00Z",
+      "baseline": "CCN=8 (Task 010 reduction from 28)"
+    },
+    {
+      "claim_id": "C-022-022",
+      "hypothesis": "Code Quality",
+      "claim": "Cognitive complexity ≤15 for all Critical Path functions",
+      "type": "binary",
+      "testable": true,
+      "measurement_method": "lizard analysis",
+      "success_criteria": {
+        "metric": "Cognitive max",
+        "threshold": "≤15",
+        "target": "≤12"
+      },
+      "validation_location": "qa/lizard_report.txt",
+      "evidence_sources": ["P2-022-002"],
+      "test_files": null,
+      "status": "passing",
+      "validation_date": "2025-10-16T06:00:00Z",
+      "baseline": "Cognitive=12 (estimated)"
+    }
+  ],
+
+  "claims_by_hypothesis": {
+    "H1_safe_optimization": ["C-022-001", "C-022-002", "C-022-003"],
+    "H2_algorithmic_efficiency": ["C-022-004", "C-022-005", "C-022-006"],
+    "H3_type_safety": ["C-022-007", "C-022-008"],
+    "H4_memory_optimization": ["C-022-009"],
+    "H5_test_coverage": ["C-022-010", "C-022-011", "C-022-012"],
+    "H6_dependency_security": ["C-022-013", "C-022-014"],
+    "authenticity": ["C-022-015", "C-022-016", "C-022-017"],
+    "differential_testing": ["C-022-018"],
+    "integration": ["C-022-019", "C-022-020"],
+    "code_quality": ["C-022-021", "C-022-022"]
+  },
+
+  "claims_status_summary": {
+    "total_claims": 22,
+    "pending": 16,
+    "passing": 5,
+    "baseline_captured": 2,
+    "failing": 0
+  },
+
+  "validation_schedule": {
+    "phase_1_profiling": [
+      "C-022-009 (memory baseline)",
+      "C-022-010 (coverage baseline)",
+      "C-022-011 (branch coverage baseline)"
+    ],
+    "phase_2_optimization": [
+      "C-022-004 (algorithm improvement)",
+      "C-022-005 (I/O parallelization)",
+      "C-022-006 (caching)",
+      "C-022-007 (type hints added)",
+      "C-022-018 (differential tests created)"
+    ],
+    "phase_3_validation": [
+      "C-022-001 (aggregate performance)",
+      "C-022-002 (zero regression)",
+      "C-022-003 (type coverage)",
+      "C-022-008 (bugs caught)",
+      "C-022-010 (line coverage)",
+      "C-022-011 (branch coverage)",
+      "C-022-012 (property tests)",
+      "C-022-016 (output variance)",
+      "C-022-017 (performance scaling)"
+    ],
+    "phase_4_security": [
+      "C-022-013 (vulnerabilities)",
+      "C-022-014 (patch updates)"
+    ],
+    "phase_5_reporting": [
+      "C-022-019 (Task 021 accuracy)",
+      "C-022-020 (Task 021 latency)",
+      "C-022-021 (complexity CCN)",
+      "C-022-022 (complexity cognitive)"
+    ]
+  },
+
+  "high_risk_claims": [
+    {
+      "claim_id": "C-022-001",
+      "risk": "Performance target missed if bottlenecks misidentified",
+      "mitigation": "Profile first (Phase 1), validate ≥15% per bottleneck"
+    },
+    {
+      "claim_id": "C-022-002",
+      "risk": "Regression introduced despite differential tests",
+      "mitigation": "Property-based tests + full test suite + rollback protocol"
+    },
+    {
+      "claim_id": "C-022-003",
+      "risk": "Type coverage too complex to achieve ≥80%",
+      "mitigation": "Adjust threshold to ≥70% if mypy --strict too difficult"
+    },
+    {
+      "claim_id": "C-022-018",
+      "risk": "Differential tests miss edge cases",
+      "mitigation": "Use Hypothesis for 100+ generated test cases per function"
+    }
+  ],
+
+  "automated_validation": {
+    "ci_checks": [
+      "pytest tests/ -v (C-022-002: zero regression)",
+      "pytest --cov=services --cov-fail-under=95 (C-022-010: coverage)",
+      "mypy services/ --strict (C-022-003: type safety)",
+      "lizard services/ -C 8 (C-022-021: complexity)",
+      "bandit -r services/ -ll (C-022-013: security)",
+      "detect-secrets scan (C-022-015: no secrets)"
+    ],
+    "manual_checks": [
+      "Cache hit rate instrumentation (C-022-006)",
+      "Memory profiler comparison (C-022-009)",
+      "Task 021 coordination (C-022-019, C-022-020)"
+    ]
+  },
+
+  "evidence_traceability": {
+    "p1_evidence_mapped": 7,
+    "p2_evidence_mapped": 8,
+    "total_evidence_claims": 22,
+    "claims_without_evidence": 0,
+    "evidence_coverage": "100%"
+  },
+
+  "notes": [
+    "22 testable claims documented (exceeds typical 15-20 for task of this size)",
+    "5 claims already passing (baseline verified: no mocks, 0 vulnerabilities, CCN≤8)",
+    "16 claims pending validation in Phases 1-5",
+    "All claims have defined measurement methods and success criteria",
+    "High-risk claims identified with mitigation strategies",
+    "Validation schedule maps claims to specific phases",
+    "100% evidence traceability (all claims linked to P1/P2 sources)"
+  ]
+}

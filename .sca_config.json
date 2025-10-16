@@ -1,0 +1,6 @@
+{
+  "project_root": ".",
+  "tasks_directory": "./tasks",
+  "infrastructure_directory": "./sca_infrastructure",
+  "enforce_project_boundary": true
+}

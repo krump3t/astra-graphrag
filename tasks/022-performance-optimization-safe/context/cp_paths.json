@@ -1,0 +1,386 @@
+{
+  "task_id": "022-performance-optimization-safe",
+  "protocol_version": "v12.2",
+  "critical_path_version": "1.0",
+  "last_updated": "2025-10-16T06:00:00Z",
+
+  "critical_path_definition": {
+    "description": "Production modules targeted for safe performance optimization",
+    "rationale": "These 9 modules are performance bottlenecks identified in hypothesis and contain critical business logic",
+    "coverage_threshold_line": 0.95,
+    "coverage_threshold_branch": 0.90,
+    "type_coverage_threshold": 0.80,
+    "complexity_threshold_ccn": 8,
+    "complexity_threshold_cognitive": 12,
+    "authenticity_required": true
+  },
+
+  "paths": [
+    {
+      "path": "services/langgraph/workflow.py",
+      "category": "workflow_orchestration",
+      "priority": "HIGH",
+      "rationale": "Core workflow orchestration logic - primary execution path for all queries",
+      "estimated_loc": 250,
+      "current_complexity_ccn": 8,
+      "optimization_targets": [
+        "Type safety (add return types, parameter types)",
+        "Error handling improvements",
+        "Async workflow steps"
+      ],
+      "test_requirements": {
+        "unit_tests": 15,
+        "integration_tests": 5,
+        "property_tests": 3,
+        "differential_tests": 2
+      },
+      "dependencies": [
+        "services/langgraph/retrieval_helpers.py",
+        "services/orchestration/local_orchestrator.py"
+      ]
+    },
+    {
+      "path": "services/langgraph/retrieval_helpers.py",
+      "category": "retrieval",
+      "priority": "CRITICAL",
+      "rationale": "Contains batch_fetch_node_properties - primary I/O parallelization target",
+      "estimated_loc": 180,
+      "current_complexity_ccn": 6,
+      "optimization_targets": [
+        "I/O parallelization (sequential → async)",
+        "Batch fetch optimization (asyncio.gather)",
+        "Type safety (async return types)"
+      ],
+      "expected_improvement_percent": 80,
+      "test_requirements": {
+        "unit_tests": 12,
+        "integration_tests": 4,
+        "property_tests": 2,
+        "differential_tests": 3,
+        "performance_tests": 2
+      },
+      "dependencies": [
+        "services/astra/client.py"
+      ]
+    },
+    {
+      "path": "services/langgraph/extraction_strategies.py",
+      "category": "extraction",
+      "priority": "MEDIUM",
+      "rationale": "Entity extraction logic - complexity reduction target",
+      "estimated_loc": 200,
+      "current_complexity_ccn": 9,
+      "optimization_targets": [
+        "Algorithm simplification",
+        "Type safety (extraction result types)",
+        "Test coverage expansion (+10%)"
+      ],
+      "test_requirements": {
+        "unit_tests": 10,
+        "integration_tests": 3,
+        "property_tests": 4,
+        "differential_tests": 2
+      },
+      "dependencies": []
+    },
+    {
+      "path": "services/astra/client.py",
+      "category": "database",
+      "priority": "CRITICAL",
+      "rationale": "Astra DB client - memory optimization and async support",
+      "estimated_loc": 300,
+      "current_complexity_ccn": 7,
+      "optimization_targets": [
+        "Memory optimization (generator expressions)",
+        "Async query execution",
+        "Type safety (query result types)",
+        "Connection pooling"
+      ],
+      "expected_improvement_percent": 15,
+      "test_requirements": {
+        "unit_tests": 18,
+        "integration_tests": 6,
+        "property_tests": 3,
+        "differential_tests": 4,
+        "authenticity_tests": 5
+      },
+      "dependencies": [
+        "services/astra/graphrag.py"
+      ]
+    },
+    {
+      "path": "services/astra/graphrag.py",
+      "category": "graph_operations",
+      "priority": "HIGH",
+      "rationale": "Graph traversal and query logic - algorithm optimization target",
+      "estimated_loc": 220,
+      "current_complexity_ccn": 10,
+      "optimization_targets": [
+        "Graph traversal optimization",
+        "Type safety (graph node/edge types)",
+        "Complexity reduction (CCN 10 → 8)"
+      ],
+      "test_requirements": {
+        "unit_tests": 14,
+        "integration_tests": 5,
+        "property_tests": 4,
+        "differential_tests": 3
+      },
+      "dependencies": [
+        "services/graph_index/enrichment.py"
+      ]
+    },
+    {
+      "path": "services/graph_index/enrichment.py",
+      "category": "graph_enrichment",
+      "priority": "CRITICAL",
+      "rationale": "Contains enrich_nodes_with_relationships - primary algorithm optimization target (O(n²) → O(n))",
+      "estimated_loc": 150,
+      "current_complexity_ccn": 8,
+      "optimization_targets": [
+        "Algorithm complexity reduction (O(n²) → O(n))",
+        "Pre-build edge index for O(1) lookup",
+        "Type safety (node/edge types)"
+      ],
+      "expected_improvement_percent": 40,
+      "baseline_performance": {
+        "operation": "enrich_nodes_with_relationships",
+        "input_size_n": 500,
+        "current_time_sec": 1.8,
+        "target_time_sec": 1.08,
+        "complexity_before": "O(n²)",
+        "complexity_after": "O(n)"
+      },
+      "test_requirements": {
+        "unit_tests": 16,
+        "integration_tests": 4,
+        "property_tests": 5,
+        "differential_tests": 4,
+        "performance_tests": 3
+      },
+      "dependencies": []
+    },
+    {
+      "path": "services/graph_index/embedding.py",
+      "category": "embedding",
+      "priority": "HIGH",
+      "rationale": "Embedding API calls - caching optimization target",
+      "estimated_loc": 140,
+      "current_complexity_ccn": 5,
+      "optimization_targets": [
+        "LRU caching (@lru_cache)",
+        "Async embedding generation",
+        "Type safety (embedding vector types)"
+      ],
+      "expected_improvement_percent": 60,
+      "baseline_performance": {
+        "operation": "compute_embedding",
+        "api_latency_ms": 500,
+        "cache_hit_rate_target": 0.60,
+        "expected_time_with_cache_ms": 200
+      },
+      "test_requirements": {
+        "unit_tests": 12,
+        "integration_tests": 3,
+        "property_tests": 2,
+        "differential_tests": 2,
+        "cache_tests": 3
+      },
+      "dependencies": []
+    },
+    {
+      "path": "services/graph_index/generation.py",
+      "category": "generation",
+      "priority": "MEDIUM",
+      "rationale": "LLM response generation - type safety and error handling",
+      "estimated_loc": 160,
+      "current_complexity_ccn": 6,
+      "optimization_targets": [
+        "Type safety (generation config types)",
+        "Error handling improvements",
+        "Test coverage expansion"
+      ],
+      "test_requirements": {
+        "unit_tests": 10,
+        "integration_tests": 4,
+        "property_tests": 2,
+        "differential_tests": 2
+      },
+      "dependencies": []
+    },
+    {
+      "path": "services/orchestration/local_orchestrator.py",
+      "category": "orchestration",
+      "priority": "MEDIUM",
+      "rationale": "Local orchestration logic - type safety target",
+      "estimated_loc": 190,
+      "current_complexity_ccn": 7,
+      "optimization_targets": [
+        "Type safety (orchestrator state types)",
+        "Complexity reduction",
+        "Test coverage expansion"
+      ],
+      "test_requirements": {
+        "unit_tests": 13,
+        "integration_tests": 5,
+        "property_tests": 3,
+        "differential_tests": 2
+      },
+      "dependencies": [
+        "services/langgraph/workflow.py"
+      ]
+    }
+  ],
+
+  "critical_path_summary": {
+    "total_modules": 9,
+    "total_estimated_loc": 1790,
+    "priority_breakdown": {
+      "CRITICAL": 3,
+      "HIGH": 3,
+      "MEDIUM": 3
+    },
+    "optimization_categories": {
+      "algorithm_complexity": 2,
+      "io_parallelization": 2,
+      "caching": 1,
+      "memory_optimization": 1,
+      "type_safety": 9,
+      "test_coverage": 4
+    },
+    "total_tests_required": {
+      "unit_tests": 120,
+      "integration_tests": 39,
+      "property_tests": 28,
+      "differential_tests": 24,
+      "performance_tests": 5,
+      "authenticity_tests": 5,
+      "cache_tests": 3
+    },
+    "expected_aggregate_improvement_percent": 35
+  },
+
+  "non_critical_path": {
+    "description": "Supporting modules that are NOT optimization targets",
+    "rationale": "These modules are not performance bottlenecks or are out of scope for safe optimization",
+    "paths": [
+      "scripts/",
+      "tests/",
+      "data/",
+      "config/",
+      "utils/",
+      "services/external/",
+      "services/deprecated/"
+    ]
+  },
+
+  "qa_gates_for_critical_path": {
+    "coverage_line": {
+      "threshold": 0.95,
+      "current_estimated": 0.87,
+      "gap": 0.08,
+      "enforcement": "pytest --cov=services --cov-branch --cov-fail-under=95"
+    },
+    "coverage_branch": {
+      "threshold": 0.90,
+      "current_estimated": 0.82,
+      "gap": 0.08,
+      "enforcement": "pytest --cov=services --cov-branch --cov-fail-under=90"
+    },
+    "type_coverage": {
+      "threshold": 0.80,
+      "current_estimated": 0.05,
+      "gap": 0.75,
+      "enforcement": "mypy services/ --strict --config-file mypy.ini"
+    },
+    "complexity_ccn": {
+      "threshold": 8,
+      "current_max": 10,
+      "violations": 1,
+      "enforcement": "lizard services/ -l python -C 8"
+    },
+    "complexity_cognitive": {
+      "threshold": 12,
+      "current_max": 15,
+      "violations": 0,
+      "enforcement": "lizard services/ -l python --CCN 15"
+    },
+    "security": {
+      "threshold_high_critical": 0,
+      "current_violations": 0,
+      "enforcement": "bandit -r services/ -ll -f json"
+    },
+    "secrets": {
+      "threshold": 0,
+      "current_violations": 0,
+      "enforcement": "detect-secrets scan --baseline qa/secrets.baseline"
+    }
+  },
+
+  "tdd_enforcement": {
+    "description": "Test-Driven Development requirements for Critical Path",
+    "marker": "@pytest.mark.cp",
+    "requirements": [
+      "All CP tests must have @pytest.mark.cp marker",
+      "CP tests must exist before implementation (MTime check)",
+      "Property tests required for algorithm changes (Hypothesis)",
+      "Differential tests required for all optimizations (old == new)"
+    ],
+    "total_cp_tests_required": 224,
+    "current_cp_tests_estimated": 150,
+    "gap": 74
+  },
+
+  "authenticity_requirements": {
+    "no_mocks": true,
+    "no_stubs": true,
+    "no_hardcoded_returns": true,
+    "variable_outputs_required": true,
+    "performance_scaling_verified": true,
+    "differential_testing_required": true,
+    "property_based_testing_required": true,
+    "enforcement": [
+      "grep -r 'unittest.mock' services/ (must return 0 matches)",
+      "grep -r 'from mock import' services/ (must return 0 matches)",
+      "pytest phase3/property_tests/ -v (must pass)",
+      "pytest phase2/differential_tests/ -v (must pass)"
+    ]
+  },
+
+  "dependency_graph": {
+    "description": "Critical Path module dependencies (affects optimization order)",
+    "graph": {
+      "services/langgraph/workflow.py": ["services/langgraph/retrieval_helpers.py", "services/orchestration/local_orchestrator.py"],
+      "services/langgraph/retrieval_helpers.py": ["services/astra/client.py"],
+      "services/astra/client.py": ["services/astra/graphrag.py"],
+      "services/astra/graphrag.py": ["services/graph_index/enrichment.py"],
+      "services/graph_index/enrichment.py": [],
+      "services/graph_index/embedding.py": [],
+      "services/graph_index/generation.py": [],
+      "services/langgraph/extraction_strategies.py": [],
+      "services/orchestration/local_orchestrator.py": ["services/langgraph/workflow.py"]
+    },
+    "optimization_order": [
+      "1. services/graph_index/enrichment.py (no dependencies)",
+      "2. services/graph_index/embedding.py (no dependencies)",
+      "3. services/graph_index/generation.py (no dependencies)",
+      "4. services/astra/graphrag.py (depends on enrichment)",
+      "5. services/astra/client.py (depends on graphrag)",
+      "6. services/langgraph/retrieval_helpers.py (depends on client)",
+      "7. services/langgraph/extraction_strategies.py (no dependencies)",
+      "8. services/orchestration/local_orchestrator.py (depends on workflow)",
+      "9. services/langgraph/workflow.py (depends on retrieval_helpers, orchestrator)"
+    ]
+  },
+
+  "validation_notes": [
+    "All 9 modules are in services/ directory (no test files, no scripts)",
+    "Total estimated LOC: 1,790 (manageable for 6-8 week timeline)",
+    "3 CRITICAL priority modules contain primary bottlenecks",
+    "Expected aggregate improvement: 35% (exceeds ≥20% target)",
+    "Total tests required: 224 (expansion from estimated 150 current)",
+    "Type coverage gap largest: 75% (from 5% → 80%)",
+    "All modules have defined optimization targets",
+    "Dependency graph enables bottom-up optimization (enrichment → graphrag → client → retrieval_helpers → workflow)"
+  ]
+}

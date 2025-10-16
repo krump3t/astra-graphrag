@@ -1,0 +1,156 @@
+{
+  "protocol_version": "v12.0",
+  "task_id": "020-retrospective-quality-remediation",
+  "phase": "context",
+  "status": "in_progress",
+  "blockers": [],
+  "seeds": {
+    "SEED": 42,
+    "NP_SEED": 42,
+    "TORCH_SEED": 42,
+    "PYTHONHASHSEED": "42"
+  },
+  "flags": {
+    "AUTO": 2,
+    "SAFE_MODE": "on",
+    "DRY_RUN": "off",
+    "DS_STACK": "off",
+    "USE_GPU": "auto"
+  },
+  "timestamps": {
+    "created": "2025-10-15T22:00:00.000000",
+    "updated": "2025-10-15T22:30:00.000000",
+    "phase_started": "2025-10-15T22:00:00.000000"
+  },
+  "context_gate": {
+    "hypothesis_md": true,
+    "design_md": true,
+    "evidence_json": true,
+    "data_sources_json": true,
+    "adr_md": false,
+    "assumptions_md": false,
+    "cp_paths_json": true,
+    "claims_index_json": false,
+    "executive_summary_md": true
+  },
+  "critical_path": [
+    "scripts/qa_artifact_generator.py",
+    "scripts/cp_definer.py",
+    "scripts/coverage_enforcer.py",
+    "scripts/context_completer.py",
+    "tests/test_qa_generator.py",
+    "tests/test_cp_definer.py"
+  ],
+  "phase_history": [],
+  "current_phase": {
+    "phase": "context",
+    "name": "Context Documentation",
+    "started": "2025-10-15T22:00:00.000000",
+    "completed": null,
+    "status": "in_progress",
+    "objectives": [
+      "Create hypothesis.md with 3 testable hypotheses",
+      "Create design.md with architecture and validation approach",
+      "Create evidence.json with ≥3 P1 sources",
+      "Create data_sources.json with SHA256 checksums",
+      "Define Critical Path (6 files)"
+    ],
+    "deliverables": [
+      "context/hypothesis.md (H1: artifact generation, H2: CP coverage, H3: gate pass rates)",
+      "context/design.md (4 components: generator, CP definer, enforcer, completer)",
+      "context/evidence.json (3 P1 sources on pytest-cov, lizard, bandit)",
+      "context/data_sources.json (3 sources: eval report, task dirs, protocol)",
+      "context/state.json (this file)"
+    ],
+    "next_phase": "Phase 1: Data Preparation & CP Definition"
+  },
+  "hypotheses": {
+    "H1_artifact_generation": {
+      "statement": "≥95% artifact generation success rate across 21 tasks",
+      "target": 0.95,
+      "threshold": 0.80,
+      "validation_method": "Binomial test (p<0.05)",
+      "status": "pending",
+      "baseline": {
+        "current_success_rate": 0.0,
+        "tasks_with_artifacts": 0,
+        "total_tasks": 21
+      }
+    },
+    "H2_cp_coverage": {
+      "statement": "≥80% tasks achieve ≥95% CP coverage",
+      "target": 0.80,
+      "threshold": 0.60,
+      "validation_method": "Proportion test (p<0.05)",
+      "status": "pending",
+      "baseline": {
+        "current_tasks_meeting_threshold": 0,
+        "total_tasks": 21,
+        "average_cp_coverage": 0.0
+      }
+    },
+    "H3_gate_improvement": {
+      "statement": "≥70% average gate pass rate (from 24.7%)",
+      "target": 0.70,
+      "threshold": 0.50,
+      "validation_method": "Paired t-test (p<0.05)",
+      "status": "pending",
+      "baseline": {
+        "current_average_gate_pass_rate": 0.247,
+        "gate_pass_rates": {
+          "context": 0.722,
+          "coverage": 0.0,
+          "tdd": 0.0,
+          "complexity": 0.0,
+          "security": 1.0,
+          "documentation": 0.0,
+          "hygiene": 0.0,
+          "dci": 0.0,
+          "authenticity": 1.0
+        }
+      }
+    }
+  },
+  "qa_gates": {
+    "coverage_line_branch": 0.95,
+    "mypy_strict_errors": 0,
+    "ccn_max": 10,
+    "cognitive_max": 15,
+    "doc_coverage": 0.95,
+    "tdd_guard": "not_yet_run",
+    "secrets_clean": "not_yet_run",
+    "security_high_critical": 0
+  },
+  "metadata": {
+    "task_type": "meta_task",
+    "scope": "retrospective_quality_remediation",
+    "target_tasks": "001-016, 019 (exclude 017, 018)",
+    "estimated_duration_hours": 15,
+    "estimated_cp_loc": 800,
+    "artifact_generation_count": 84,
+    "cp_definition_count": 19
+  },
+  "dependencies": {
+    "evaluation_report": "available (evaluation_reports/retrospective_v2_20251015_220746.json)",
+    "task_directories": "available (tasks/001-019)",
+    "protocol_spec": "available (.claude/full_protocol.md)",
+    "pytest": "required",
+    "pytest_cov": "required",
+    "lizard": "required",
+    "bandit": "required",
+    "detect_secrets": "required",
+    "mypy": "required"
+  },
+  "exclusions": {
+    "task_017": "active (phase 2 ok)",
+    "task_018": "in_progress (phase 2 in_progress)",
+    "code_modification": "forbidden (QA infrastructure only)",
+    "functional_changes": "forbidden (no feature additions)"
+  },
+  "conflict_analysis": {
+    "task_017_status": "ok (phase 2 complete)",
+    "task_018_status": "in_progress (phase 2, 39% complete)",
+    "conflict_risk": "none (no code modification, independent meta-task)",
+    "validation_date": "2025-10-15T22:00:00.000000"
+  }
+}

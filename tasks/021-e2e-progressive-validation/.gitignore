@@ -1,0 +1,264 @@
+# ============================================================================
+# Environment and credentials
+# ============================================================================
+.env
+*.env
+.env.*
+.env.local
+.env.*.local
+configs/env/
+
+# ============================================================================
+# Data files - exclude all raw and processed data
+# ============================================================================
+data/
+data/raw/
+data/processed/
+*.csv
+*.las
+*.parquet
+*.pkl
+*.pickle
+*.xlsx
+*.xls
+
+# EXCEPTION: Keep critical JSON fixtures and configs
+!tests/fixtures/*.json
+!configs/*.json
+!schemas/*.json
+!tasks/*/context/*.json
+
+# EXCEPTION: Keep production environment template for deployment reference
+!configs/env/.env.production.template
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.manifest
+*.spec
+
+# Virtual environments
+venv/
+ENV/
+/env/
+.venv/
+
+# Testing and coverage
+.coverage
+.coverage.*
+.pytest_cache/
+.tox/
+htmlcov/
+.hypothesis/
+nosetests.xml
+coverage.xml
+*.cover
+.cache
+
+# ============================================================================
+# IDE and editors
+# ============================================================================
+.vscode/
+.idea/
+.cursor/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# EXCEPTION: Keep .claude protocol for project reference
+!.claude/full_protocol.md
+
+# ============================================================================
+# Logs and temporary files
+# ============================================================================
+logs/
+logs/**/*.log
+*.log
+*.tmp
+temp/
+tmp/
+__chunk_*.txt
+__segment*.txt
+__reasoning*.txt
+__*.txt
+
+# EXCEPTION: Keep log directory structure
+!logs/.gitkeep
+!logs/generation/.gitkeep
+!logs/retrieval/.gitkeep
+!logs/traces/.gitkeep
+
+# ============================================================================
+# Documentation artifacts (keeping only essential docs)
+# ============================================================================
+# Exclude temporary/generated documentation
+AUTHENTIC_*.md
+CLEANUP_*.md
+CODE_ANALYSIS_*.md
+CODE_ANALYSIS_*.txt
+CODE_CLEANUP_*.md
+COMPREHENSIVE_*.md
+CONTEXTUAL_*.md
+EVALUATION_*.md
+EXPANDED_*.md
+FINAL_*.md
+FIXES_*.md
+GRAPHRAG_*.md
+PHASED_*.md
+REFACTORING_*.md
+REMEDIATION_*.md
+TEST_*.md
+VALIDATION_*.md
+WEAKEST_*.md
+checkpoint*.md
+compass_artifact_*.md
+CONFIGURATION_EXTRACTION.md
+
+# Exclude session-specific and temporary documentation
+CAPABILITY_VALIDATION_REPORT.md
+CLAUDE_INSTRUCTIONS.md
+DEMO_QUICK_START.md
+DOCUMENTATION_UPDATE_SUMMARY.md
+E2E_VALIDATION_REPORT.md
+HYPOTHESIS_AND_SCOPE.md
+MCP_ENHANCEMENT_*.md
+MCP_INTEGRATION_ANALYSIS.md
+MCP_QUERY_*.md
+MCP_SERVER_GUIDE.md
+MCP_TOOL_*.md
+PARALLEL_TASK_*.md
+PHASE1_AUTHENTICITY_VERIFICATION.md
+PHASE1_PROTOCOL_COMPLIANCE_REPORT.md
+PREPARATION_COMPLETE.md
+PRODUCTION_DEPLOYMENT_CHECKLIST.md
+PROJECT_HYGIENE_REPORT.md
+PROJECT_STATUS.md
+PROTOCOL_V*.md
+README_EVALUATION_COMPLETE.md
+REMAINING_CRITICAL_GAPS.md
+REMEDIATION_COMPLETE.txt
+REPRODUCIBILITY.md
+SESSION_PROGRESS_SUMMARY.md
+SESSION_SUMMARY_*.md
+TDD_ALIGNMENT_ANALYSIS.md
+USAGE_GUIDE_FOR_BEGINNERS.md
+
+# EXCEPTION: Keep primary project documentation
+!README.md
+!docs/**/*.md
+!tasks/*/context/*.md
+!.claude/full_protocol.md
+
+# ============================================================================
+# Reports and analysis outputs
+# ============================================================================
+bandit_report.*
+*_report.txt
+*_report.json
+*_report.html
+*_results.txt
+*_results.json
+validation_results.*
+diagnostic_results.*
+
+# Models and large files
+models/
+embeddings/
+*.bin
+*.h5
+*.keras
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.ckpt
+
+# ============================================================================
+# Task artifacts and validation outputs
+# ============================================================================
+# Exclude all task validation artifacts and generated outputs
+tasks/*/artifacts/
+tasks/*/reports/
+artifacts/
+artifacts/demo/
+artifacts/validation/
+
+# EXCEPTION: Keep task context (hypotheses, designs, evidence)
+!tasks/*/context/
+
+# ============================================================================
+# QA and analysis outputs
+# ============================================================================
+qa/
+qa/*.xml
+qa/*.txt
+qa/*.json
+qa/*.html
+
+# EXCEPTION: Keep QA directory structure
+!qa/.gitkeep
+
+# ============================================================================
+# Cache directories
+# ============================================================================
+.ruff_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+nul
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Documentation build artifacts
+docs/_build/
+docs/_static/
+docs/_templates/
+
+# Package manager files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Local configuration
+local_settings.py
+instance/
+.webassets-cache
+
+# Secrets and keys
+*.key
+*.pem
+*.crt
+*.p12
+secrets.yaml
+secrets.yml

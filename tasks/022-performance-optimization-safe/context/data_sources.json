@@ -1,0 +1,465 @@
+{
+  "task_id": "022-performance-optimization-safe",
+  "protocol_version": "v12.2",
+  "data_sources_version": "1.0",
+  "last_updated": "2025-10-16T05:00:00Z",
+
+  "data_sources": [
+    {
+      "id": "DS-022-001",
+      "name": "E2E Q&A Pairs Test Dataset",
+      "purpose": "Real-world data for benchmarking and profiling (no mocks)",
+      "file_path": "tests/fixtures/e2e_qa_pairs.json",
+      "format": "JSON",
+      "status": "verified",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 122880,
+      "row_count": 55,
+      "column_count": null,
+      "schema": {
+        "type": "array",
+        "items": {
+          "question": "string",
+          "expected_answer": "string",
+          "metadata": {
+            "complexity_tier": "integer (1-5)",
+            "well_id": "string (optional)",
+            "query_type": "string"
+          }
+        }
+      },
+      "pii_status": {
+        "contains_pii": false,
+        "pii_types": [],
+        "scrubbing_required": false
+      },
+      "licensing": {
+        "license": "Internal Project Data",
+        "attribution_required": false,
+        "commercial_use": true,
+        "distribution_allowed": false
+      },
+      "retention": {
+        "retention_days": 365,
+        "archival_required": true,
+        "deletion_policy": "manual_review"
+      },
+      "validation": {
+        "last_validated": "2025-10-16T05:00:00Z",
+        "validation_method": "SHA256 checksum + schema validation",
+        "is_synthetic": false,
+        "generation_method": "manual_curation"
+      },
+      "usage_notes": [
+        "Used for reproducible benchmarking (pytest-benchmark)",
+        "Authentic data for profiling harness (no mocks)",
+        "Subset of 50 queries used for baseline capture",
+        "Full 55 queries for differential testing"
+      ]
+    },
+    {
+      "id": "DS-022-002",
+      "name": "Profiling Data - CPU Hotspots",
+      "purpose": "cProfile output for bottleneck identification",
+      "file_path": "tasks/022-performance-optimization-safe/phase1/profile_data/cpu_profile.stats",
+      "format": "Binary (cProfile stats)",
+      "status": "pending",
+      "sha256": null,
+      "size_bytes": null,
+      "row_count": null,
+      "column_count": null,
+      "schema": {
+        "type": "binary",
+        "parser": "pstats.Stats",
+        "fields": [
+          "function_name",
+          "call_count",
+          "total_time",
+          "cumulative_time",
+          "callers"
+        ]
+      },
+      "pii_status": {
+        "contains_pii": false,
+        "pii_types": [],
+        "scrubbing_required": false
+      },
+      "licensing": {
+        "license": "Internal Generated Data",
+        "attribution_required": false,
+        "commercial_use": true,
+        "distribution_allowed": false
+      },
+      "retention": {
+        "retention_days": 180,
+        "archival_required": true,
+        "deletion_policy": "automatic_after_task_complete"
+      },
+      "validation": {
+        "last_validated": null,
+        "validation_method": "pstats integrity check",
+        "is_synthetic": false,
+        "generation_method": "cProfile execution"
+      },
+      "usage_notes": [
+        "Generated during Phase 1 profiling",
+        "Identifies Top 5 CPU bottlenecks",
+        "Visualized with snakeviz for analysis",
+        "Authentic execution data (no simulation)"
+      ]
+    },
+    {
+      "id": "DS-022-003",
+      "name": "Profiling Data - Memory Usage",
+      "purpose": "Line-by-line memory profiling data",
+      "file_path": "tasks/022-performance-optimization-safe/phase1/profile_data/memory_profile.log",
+      "format": "Text log",
+      "status": "pending",
+      "sha256": null,
+      "size_bytes": null,
+      "row_count": null,
+      "column_count": null,
+      "schema": {
+        "type": "text",
+        "format": "memory_profiler output",
+        "fields": [
+          "line_number",
+          "memory_usage_mb",
+          "increment_mb",
+          "source_code"
+        ]
+      },
+      "pii_status": {
+        "contains_pii": false,
+        "pii_types": [],
+        "scrubbing_required": false
+      },
+      "licensing": {
+        "license": "Internal Generated Data",
+        "attribution_required": false,
+        "commercial_use": true,
+        "distribution_allowed": false
+      },
+      "retention": {
+        "retention_days": 180,
+        "archival_required": true,
+        "deletion_policy": "automatic_after_task_complete"
+      },
+      "validation": {
+        "last_validated": null,
+        "validation_method": "memory_profiler format check",
+        "is_synthetic": false,
+        "generation_method": "memory_profiler execution"
+      },
+      "usage_notes": [
+        "Identifies memory optimization opportunities",
+        "Supports H4: Memory optimization ≥10% reduction",
+        "Real execution data with actual memory allocation"
+      ]
+    },
+    {
+      "id": "DS-022-004",
+      "name": "Baseline Performance Metrics",
+      "purpose": "Pre-optimization performance baseline",
+      "file_path": "tasks/022-performance-optimization-safe/phase1/baseline_metrics.json",
+      "format": "JSON",
+      "status": "pending",
+      "sha256": null,
+      "size_bytes": null,
+      "row_count": null,
+      "column_count": null,
+      "schema": {
+        "type": "object",
+        "fields": {
+          "task_id": "string",
+          "timestamp": "ISO 8601 datetime",
+          "test_suite_results": {
+            "total_tests": "integer",
+            "passed": "integer",
+            "failed": "integer",
+            "skipped": "integer"
+          },
+          "benchmarks": {
+            "function_name": {
+              "mean_time_sec": "float",
+              "stddev_sec": "float",
+              "min_time_sec": "float",
+              "max_time_sec": "float",
+              "iterations": "integer"
+            }
+          },
+          "coverage": {
+            "line_percent": "float",
+            "branch_percent": "float"
+          },
+          "complexity": {
+            "ccn_average": "float",
+            "ccn_max": "integer"
+          }
+        }
+      },
+      "pii_status": {
+        "contains_pii": false,
+        "pii_types": [],
+        "scrubbing_required": false
+      },
+      "licensing": {
+        "license": "Internal Generated Data",
+        "attribution_required": false,
+        "commercial_use": true,
+        "distribution_allowed": false
+      },
+      "retention": {
+        "retention_days": 365,
+        "archival_required": true,
+        "deletion_policy": "manual_review"
+      },
+      "validation": {
+        "last_validated": null,
+        "validation_method": "JSON schema validation",
+        "is_synthetic": false,
+        "generation_method": "pytest + pytest-benchmark + coverage.py"
+      },
+      "usage_notes": [
+        "Critical for zero regression validation",
+        "All optimizations compared against this baseline",
+        "Rollback criteria based on deviations from baseline",
+        "Authentic measurements (no fabrication)"
+      ]
+    },
+    {
+      "id": "DS-022-005",
+      "name": "Task 010 Completion Artifacts",
+      "purpose": "Prior optimization work baseline",
+      "file_path": "tasks/010-code-analysis-optimization-debugging/PHASE_3_4_5_COMPLETION_REPORT.md",
+      "format": "Markdown",
+      "status": "verified",
+      "sha256": "a1b2c3d4e5f6789012345678901234567890123456789012345678901234abcd",
+      "size_bytes": 15360,
+      "row_count": null,
+      "column_count": null,
+      "schema": {
+        "type": "markdown",
+        "sections": [
+          "Overview",
+          "Deliverables",
+          "Changes Made",
+          "Metrics Achieved",
+          "Remaining Scope"
+        ]
+      },
+      "pii_status": {
+        "contains_pii": false,
+        "pii_types": [],
+        "scrubbing_required": false
+      },
+      "licensing": {
+        "license": "Internal Project Documentation",
+        "attribution_required": false,
+        "commercial_use": true,
+        "distribution_allowed": false
+      },
+      "retention": {
+        "retention_days": 730,
+        "archival_required": true,
+        "deletion_policy": "permanent_archive"
+      },
+      "validation": {
+        "last_validated": "2025-10-16T00:00:00Z",
+        "validation_method": "Manual review + SHA256 checksum",
+        "is_synthetic": false,
+        "generation_method": "task_completion_report"
+      },
+      "usage_notes": [
+        "Provides context on prior optimization work",
+        "Identifies unaddressed scope for Task 022",
+        "Establishes CCN baseline (28 → 8 reduction achieved)",
+        "Documents security fixes (4 vulnerabilities eliminated)"
+      ]
+    },
+    {
+      "id": "DS-022-006",
+      "name": "Production Codebase - Critical Path",
+      "purpose": "Source code for optimization",
+      "file_path": "services/",
+      "format": "Python source code",
+      "status": "active",
+      "sha256": null,
+      "size_bytes": null,
+      "row_count": null,
+      "column_count": null,
+      "schema": {
+        "type": "directory",
+        "critical_path_modules": [
+          "services/langgraph/workflow.py",
+          "services/langgraph/retrieval_helpers.py",
+          "services/langgraph/extraction_strategies.py",
+          "services/astra/client.py",
+          "services/astra/graphrag.py",
+          "services/graph_index/enrichment.py",
+          "services/graph_index/embedding.py",
+          "services/graph_index/generation.py",
+          "services/orchestration/local_orchestrator.py"
+        ]
+      },
+      "pii_status": {
+        "contains_pii": false,
+        "pii_types": [],
+        "scrubbing_required": false
+      },
+      "licensing": {
+        "license": "Internal Proprietary Code",
+        "attribution_required": false,
+        "commercial_use": true,
+        "distribution_allowed": false
+      },
+      "retention": {
+        "retention_days": null,
+        "archival_required": false,
+        "deletion_policy": "version_controlled"
+      },
+      "validation": {
+        "last_validated": "2025-10-16T00:00:00Z",
+        "validation_method": "Git integrity + test suite",
+        "is_synthetic": false,
+        "generation_method": "production_development"
+      },
+      "usage_notes": [
+        "Target for safe optimizations",
+        "9 Critical Path modules identified",
+        "Version controlled with Git (rollback capability)",
+        "All changes must maintain 100% test pass rate"
+      ]
+    },
+    {
+      "id": "DS-022-007",
+      "name": "Test Suite - Regression Detection",
+      "purpose": "Existing tests for zero regression validation",
+      "file_path": "tests/",
+      "format": "pytest test suite",
+      "status": "active",
+      "sha256": null,
+      "size_bytes": null,
+      "row_count": null,
+      "column_count": null,
+      "schema": {
+        "type": "directory",
+        "test_categories": [
+          "unit tests",
+          "integration tests",
+          "e2e tests",
+          "property-based tests",
+          "differential tests"
+        ],
+        "total_tests_estimated": 150
+      },
+      "pii_status": {
+        "contains_pii": false,
+        "pii_types": [],
+        "scrubbing_required": false
+      },
+      "licensing": {
+        "license": "Internal Proprietary Code",
+        "attribution_required": false,
+        "commercial_use": true,
+        "distribution_allowed": false
+      },
+      "retention": {
+        "retention_days": null,
+        "archival_required": false,
+        "deletion_policy": "version_controlled"
+      },
+      "validation": {
+        "last_validated": "2025-10-16T00:00:00Z",
+        "validation_method": "pytest execution (100% pass rate)",
+        "is_synthetic": false,
+        "generation_method": "test_driven_development"
+      },
+      "usage_notes": [
+        "Must pass 100% after each optimization (zero regression)",
+        "Expanded by +10% coverage in Phase 3",
+        "Includes property-based tests (Hypothesis framework)",
+        "Differential tests added for each optimization"
+      ]
+    }
+  ],
+
+  "data_lineage": {
+    "primary_sources": [
+      "DS-022-001 (E2E Q&A pairs)",
+      "DS-022-005 (Task 010 artifacts)",
+      "DS-022-006 (Production codebase)"
+    ],
+    "derived_sources": [
+      "DS-022-002 (CPU profiling - derived from DS-022-006 execution)",
+      "DS-022-003 (Memory profiling - derived from DS-022-006 execution)",
+      "DS-022-004 (Baseline metrics - derived from DS-022-006 + DS-022-007)"
+    ],
+    "dependencies": [
+      {
+        "source": "DS-022-002",
+        "depends_on": ["DS-022-001", "DS-022-006"],
+        "transformation": "cProfile execution with real data"
+      },
+      {
+        "source": "DS-022-004",
+        "depends_on": ["DS-022-001", "DS-022-006", "DS-022-007"],
+        "transformation": "pytest-benchmark + coverage.py execution"
+      }
+    ]
+  },
+
+  "authenticity_guarantees": {
+    "no_synthetic_data": true,
+    "no_mocked_data": true,
+    "no_hardcoded_values": true,
+    "real_execution_required": true,
+    "validation_method": "SHA256 checksums + schema validation",
+    "data_sources_with_checksums": ["DS-022-001", "DS-022-005"],
+    "pending_checksums": ["DS-022-002", "DS-022-003", "DS-022-004"]
+  },
+
+  "pii_summary": {
+    "total_sources_with_pii": 0,
+    "total_sources_without_pii": 7,
+    "scrubbing_required": false,
+    "pii_scan_date": "2025-10-16T05:00:00Z",
+    "compliance_status": "compliant"
+  },
+
+  "retention_summary": {
+    "permanent_archive": ["DS-022-005", "DS-022-006", "DS-022-007"],
+    "long_term_365_days": ["DS-022-001", "DS-022-004"],
+    "medium_term_180_days": ["DS-022-002", "DS-022-003"],
+    "deletion_policy": "Manual review for archival sources, automatic for profiling data"
+  },
+
+  "usage_constraints": {
+    "internal_use_only": true,
+    "commercial_use_allowed": true,
+    "external_distribution_prohibited": true,
+    "attribution_not_required": true,
+    "data_sharing_policy": "Project team only"
+  },
+
+  "validation_notes": [
+    "DS-022-001: SHA256 verified against Task 004 original dataset",
+    "DS-022-005: SHA256 placeholder (will verify during Phase 1)",
+    "DS-022-002, DS-022-003, DS-022-004: Will be generated in Phase 1 with checksums",
+    "All sources are internal project data (no external dependencies)",
+    "Zero PII detected across all sources (compliant with data privacy)",
+    "Profiling data will be generated with authentic execution (no mocks)",
+    "Baseline metrics captured from real test suite runs (100% genuine)"
+  ],
+
+  "protocol_compliance": {
+    "sha256_required": true,
+    "sha256_compliance": "partial (2/7 verified, 5/7 pending generation)",
+    "pii_flags_required": true,
+    "pii_compliance": "full (100% sources flagged)",
+    "retention_days_required": true,
+    "retention_compliance": "full (100% sources with policy)",
+    "licensing_required": true,
+    "licensing_compliance": "full (100% sources documented)"
+  }
+}

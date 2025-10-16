@@ -1,0 +1,6 @@
+[
+  "scripts/validation/progressive_complexity_test.py",
+  "scripts/validation/ground_truth_validator.py",
+  "scripts/validation/authenticity_inspector.py",
+  "scripts/validation/complexity_scorer.py"
+]

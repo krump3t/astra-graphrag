@@ -1,0 +1,1223 @@
+{
+  "meta": {
+    "evaluation_date": "2025-10-15T22:07:46.922885",
+    "evaluator_version": "2.0",
+    "total_tasks": 21,
+    "tasks_dir": "tasks"
+  },
+  "kpis": {
+    "dci_adherence": {
+      "average": 0.0,
+      "target": 98,
+      "passed": false
+    },
+    "context_accuracy": {
+      "average": 47.61904761904762,
+      "target": 100,
+      "passed": false
+    },
+    "gate_enforcement": {
+      "average": 0.0,
+      "target": 100,
+      "passed": false
+    },
+    "fabrication_rate": {
+      "average": 0.0,
+      "target": 0,
+      "passed": true
+    },
+    "reproducibility": {
+      "average": 28.571428571428573,
+      "target": 100,
+      "passed": false
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "001-mcp-integration",
+      "phase": "unknown",
+      "status": "unknown",
+      "overall_score": 49.25,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 75.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 35.0,
+        "context": 85.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 20.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "passed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 0,
+        "missing": 6
+      },
+      "issues": {
+        "total": 17,
+        "critical": 3,
+        "warning": 10
+      },
+      "created_at": null,
+      "last_modified": "2025-10-14T01:11:03.881742"
+    },
+    {
+      "task_id": "002-dynamic-glossary",
+      "phase": "unknown",
+      "status": "unknown",
+      "overall_score": 48.25,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 75.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 25.0,
+        "context": 85.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 20.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "passed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 0,
+        "missing": 6
+      },
+      "issues": {
+        "total": 21,
+        "critical": 3,
+        "warning": 10
+      },
+      "created_at": null,
+      "last_modified": "2025-10-14T02:18:16.538311"
+    },
+    {
+      "task_id": "003-cp-test-validation",
+      "phase": "unknown",
+      "status": "unknown",
+      "overall_score": 41.75,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 50.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 35.0,
+        "context": 35.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 20.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "failed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 0,
+        "missing": 6
+      },
+      "issues": {
+        "total": 17,
+        "critical": 6,
+        "warning": 8
+      },
+      "created_at": null,
+      "last_modified": "2025-10-14T02:35:13.109804"
+    },
+    {
+      "task_id": "004-e2e-graphrag-validation",
+      "phase": "unknown",
+      "status": "unknown",
+      "overall_score": 53.95,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 75.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 52.0,
+        "context": 85.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 50.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "passed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 0,
+        "missing": 6
+      },
+      "issues": {
+        "total": 16,
+        "critical": 3,
+        "warning": 9
+      },
+      "created_at": null,
+      "last_modified": "2025-10-14T03:50:54.884491"
+    },
+    {
+      "task_id": "005-functionality-verification-qa",
+      "phase": "unknown",
+      "status": "unknown",
+      "overall_score": 50.75,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 75.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 50.0,
+        "context": 85.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 20.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "passed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 0,
+        "missing": 6
+      },
+      "issues": {
+        "total": 16,
+        "critical": 3,
+        "warning": 9
+      },
+      "created_at": null,
+      "last_modified": "2025-10-14T08:54:45.603963"
+    },
+    {
+      "task_id": "006-technical-debt-remediation",
+      "phase": "unknown",
+      "status": "unknown",
+      "overall_score": 44.2,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 50.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 37.0,
+        "context": 50.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 20.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "passed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 0,
+        "missing": 6
+      },
+      "issues": {
+        "total": 16,
+        "critical": 3,
+        "warning": 9
+      },
+      "created_at": null,
+      "last_modified": "2025-10-14T11:14:26.013296"
+    },
+    {
+      "task_id": "007-optimization-and-remediation",
+      "phase": "unknown",
+      "status": "unknown",
+      "overall_score": 42.5,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 50.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 20.0,
+        "context": 50.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 20.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "passed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 0,
+        "missing": 6
+      },
+      "issues": {
+        "total": 21,
+        "critical": 3,
+        "warning": 9
+      },
+      "created_at": null,
+      "last_modified": "2025-10-14T13:24:28.104471"
+    },
+    {
+      "task_id": "008-docker-integration-deployment",
+      "phase": "unknown",
+      "status": "unknown",
+      "overall_score": 51.7,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 50.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 52.0,
+        "context": 70.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 50.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "failed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 0,
+        "missing": 6
+      },
+      "issues": {
+        "total": 16,
+        "critical": 4,
+        "warning": 9
+      },
+      "created_at": null,
+      "last_modified": "2025-10-14T14:08:46.711284"
+    },
+    {
+      "task_id": "009-watsonx-orchestrate-integration",
+      "phase": "unknown",
+      "status": "unknown",
+      "overall_score": 47.5,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 75.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 25.0,
+        "context": 80.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 20.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "failed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 0,
+        "missing": 6
+      },
+      "issues": {
+        "total": 16,
+        "critical": 4,
+        "warning": 10
+      },
+      "created_at": null,
+      "last_modified": "2025-10-14T15:08:12.860654"
+    },
+    {
+      "task_id": "010-code-analysis-optimization-debugging",
+      "phase": "unknown",
+      "status": "unknown",
+      "overall_score": 48.9,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 75.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 19.0,
+        "context": 80.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 40.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "failed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 0,
+        "missing": 6
+      },
+      "issues": {
+        "total": 17,
+        "critical": 4,
+        "warning": 10
+      },
+      "created_at": null,
+      "last_modified": "2025-10-14T19:24:16.975300"
+    },
+    {
+      "task_id": "011-security-test-hardening",
+      "phase": "unknown",
+      "status": "unknown",
+      "overall_score": 36.0,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 0.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 10.0,
+        "context": 0.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 40.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "inconclusive",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 0,
+        "missing": 6
+      },
+      "issues": {
+        "total": 18,
+        "critical": 7,
+        "warning": 10
+      },
+      "created_at": null,
+      "last_modified": "2025-10-14T22:01:57.573601"
+    },
+    {
+      "task_id": "012-http-api-ngrok-deployment",
+      "phase": "phase2_ngrok_installation",
+      "status": "ok",
+      "overall_score": 48.95,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 50.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 100.0
+      },
+      "scores": {
+        "structure": 52.0,
+        "context": 45.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 60.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": true
+      },
+      "gates_status": {
+        "context": "failed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 1,
+        "missing": 5
+      },
+      "issues": {
+        "total": 13,
+        "critical": 4,
+        "warning": 7
+      },
+      "created_at": null,
+      "last_modified": "2025-10-15T13:03:30.262127"
+    },
+    {
+      "task_id": "013-multi-tool-orchestration",
+      "phase": "5",
+      "status": "complete",
+      "overall_score": 50.5,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 50.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 100.0
+      },
+      "scores": {
+        "structure": 70.0,
+        "context": 50.0,
+        "code_quality": 100.0,
+        "testing": 10.0,
+        "documentation": 30.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 13.889999999999999,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": true
+      },
+      "gates_status": {
+        "context": "passed",
+        "coverage": "failed",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "failed",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 3,
+        "missing": 3
+      },
+      "issues": {
+        "total": 11,
+        "critical": 1,
+        "warning": 8
+      },
+      "created_at": null,
+      "last_modified": "2025-10-15T16:07:54.414268"
+    },
+    {
+      "task_id": "014-http-api-production-readiness",
+      "phase": "3",
+      "status": "ok",
+      "overall_score": 46.2,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 50.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 100.0
+      },
+      "scores": {
+        "structure": 57.0,
+        "context": 50.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 20.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": true
+      },
+      "gates_status": {
+        "context": "passed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 1,
+        "missing": 5
+      },
+      "issues": {
+        "total": 16,
+        "critical": 3,
+        "warning": 7
+      },
+      "created_at": null,
+      "last_modified": "2025-10-15T15:18:40.749521"
+    },
+    {
+      "task_id": "015-authenticity-validation-framework",
+      "phase": "5",
+      "status": "completed",
+      "overall_score": 56.0,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 50.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 100.0
+      },
+      "scores": {
+        "structure": 55.0,
+        "context": 50.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 20.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": true
+      },
+      "gates_status": {
+        "context": "passed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "passed",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 3,
+        "missing": 3
+      },
+      "issues": {
+        "total": 12,
+        "critical": 3,
+        "warning": 6
+      },
+      "created_at": null,
+      "last_modified": "2025-10-15T16:17:21.982865"
+    },
+    {
+      "task_id": "016",
+      "phase": "unknown",
+      "status": "unknown",
+      "overall_score": 35.0,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 0.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 20.0,
+        "context": 0.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 20.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "inconclusive",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 0,
+        "missing": 6
+      },
+      "issues": {
+        "total": 19,
+        "critical": 7,
+        "warning": 9
+      },
+      "created_at": null,
+      "last_modified": null
+    },
+    {
+      "task_id": "016-production-security-scalability",
+      "phase": "implementation_complete_tests_passing",
+      "status": "ok",
+      "overall_score": 50.0,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 50.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 65.0,
+        "context": 50.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 50.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "passed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "failed",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 2,
+        "missing": 4
+      },
+      "issues": {
+        "total": 14,
+        "critical": 2,
+        "warning": 8
+      },
+      "created_at": null,
+      "last_modified": "2025-10-15T18:28:08.687655"
+    },
+    {
+      "task_id": "017-ground-truth-failure-domain",
+      "phase": "2",
+      "status": "ok",
+      "overall_score": 48.5,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 50.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 100.0
+      },
+      "scores": {
+        "structure": 75.0,
+        "context": 50.0,
+        "code_quality": 50.0,
+        "testing": 40.0,
+        "documentation": 20.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 99.56,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": true
+      },
+      "gates_status": {
+        "context": "passed",
+        "coverage": "failed",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 2,
+        "missing": 4
+      },
+      "issues": {
+        "total": 14,
+        "critical": 2,
+        "warning": 7
+      },
+      "created_at": null,
+      "last_modified": "2025-10-15T21:59:30.003531"
+    },
+    {
+      "task_id": "018-production-remediation",
+      "phase": "2",
+      "status": "in_progress",
+      "overall_score": 47.0,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 0.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 65.0,
+        "context": 30.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 50.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "passed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 1,
+        "missing": 5
+      },
+      "issues": {
+        "total": 15,
+        "critical": 3,
+        "warning": 8
+      },
+      "created_at": null,
+      "last_modified": "2025-10-15T22:05:01.441973"
+    },
+    {
+      "task_id": "019-readme-comprehensive-update",
+      "phase": "context",
+      "status": "ok",
+      "overall_score": 40.0,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 50.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 100.0
+      },
+      "scores": {
+        "structure": 70.0,
+        "context": 50.0,
+        "code_quality": 50.0,
+        "testing": 0.0,
+        "documentation": 20.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": true
+      },
+      "gates_status": {
+        "context": "passed",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 1,
+        "missing": 5
+      },
+      "issues": {
+        "total": 16,
+        "critical": 3,
+        "warning": 7
+      },
+      "created_at": null,
+      "last_modified": "2025-10-15T21:47:33.244559"
+    },
+    {
+      "task_id": "phase2_dynamic_glossary",
+      "phase": "unknown",
+      "status": "unknown",
+      "overall_score": 33.7,
+      "critical_path": {
+        "discovery_method": "none",
+        "file_count": 0
+      },
+      "kpis": {
+        "dci_adherence_rate": 0.0,
+        "context_accuracy_rate": 0.0,
+        "gate_enforcement_efficacy": 0.0,
+        "fabrication_indicators": 0,
+        "reproducibility_score": 0.0
+      },
+      "scores": {
+        "structure": 7.0,
+        "context": 0.0,
+        "code_quality": 100.0,
+        "testing": 0.0,
+        "documentation": 20.0,
+        "hygiene": 60.0,
+        "authenticity": 100.0
+      },
+      "metrics": {
+        "coverage_percent": 0.0,
+        "cp_coverage_percent": 0.0,
+        "tdd_compliance": false,
+        "complexity_acceptable": null,
+        "seeds_fixed": false
+      },
+      "gates_status": {
+        "context": "inconclusive",
+        "coverage": "inconclusive",
+        "tdd": "inconclusive",
+        "complexity": "inconclusive",
+        "security": "inconclusive",
+        "documentation": "inconclusive",
+        "hygiene": "failed",
+        "dci": "inconclusive",
+        "authenticity": "passed"
+      },
+      "artifacts": {
+        "found": 0,
+        "missing": 6
+      },
+      "issues": {
+        "total": 20,
+        "critical": 7,
+        "warning": 10
+      },
+      "created_at": null,
+      "last_modified": "2025-10-14T00:58:13.828089"
+    }
+  ],
+  "summary": {
+    "total_tasks": 21,
+    "gate_pass_rates": {
+      "context": 72.22222222222221,
+      "coverage": 0.0,
+      "tdd": 0.0,
+      "complexity": 0.0,
+      "security": 100.0,
+      "documentation": 0.0,
+      "hygiene": 0.0,
+      "dci": 0.0,
+      "authenticity": 100.0
+    },
+    "phase_distribution": {
+      "unknown": 13,
+      "phase2_ngrok_installation": 1,
+      "5": 2,
+      "3": 1,
+      "implementation_complete_tests_passing": 1,
+      "2": 2,
+      "context": 1
+    },
+    "tasks_with_cp": 0,
+    "average_cp_coverage": 0.0
+  },
+  "recommendations": [
+    "\ud83d\udd04 Improve DCI loop adherence (current: 0.0%, target: 98%)",
+    "\ud83d\udcdd Complete context documentation (current: 47.6%, target: 100%)",
+    "\u26a0\ufe0f Focus on hygiene gate (21 failures)",
+    "\ud83d\udcca Generate missing artifact: qa/lizard_report.txt (21 tasks)"
+  ]
+}

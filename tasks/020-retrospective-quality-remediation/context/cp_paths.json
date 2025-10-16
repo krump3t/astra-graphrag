@@ -1,0 +1,25 @@
+{
+  "version": "1.0",
+  "discovery_method": "explicit",
+  "confidence": "high",
+  "paths": [
+    "scripts/qa_artifact_generator.py",
+    "scripts/cp_definer.py",
+    "scripts/coverage_enforcer.py",
+    "scripts/context_completer.py",
+    "tests/test_qa_generator.py",
+    "tests/test_cp_definer.py"
+  ],
+  "rationale": "Critical Path consists of core automation scripts for artifact generation, CP identification, coverage enforcement, and context completion. These 6 files implement the primary hypotheses (H1: artifact generation, H2: CP coverage, H3: gate improvement). Test files validate the core logic.",
+  "discovery_date": "2025-10-15T22:30:00",
+  "coverage_target": 0.95,
+  "complexity_constraints": {
+    "ccn_max": 10,
+    "cognitive_max": 15
+  },
+  "test_requirements": {
+    "cp_markers": true,
+    "property_tests": false,
+    "integration_tests": true
+  }
+}
