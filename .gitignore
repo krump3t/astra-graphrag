@@ -1,19 +1,41 @@
 # ============================================================================
-# Environment and credentials
+# ASTRA-GRAPHRAG .gitignore - Critical Application Files Only
+# Only essential production code, configurations, and documentation are tracked
+# ============================================================================
+
+# ============================================================================
+# SECURITY: Credentials and Secrets (NEVER COMMIT)
 # ============================================================================
 .env
 *.env
 .env.*
 .env.local
 .env.*.local
+.env.development
+.env.staging
 configs/env/
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+secrets.yaml
+secrets.yml
+*.secret
+credentials.*
+
+# EXCEPTION: Keep environment template for deployment reference
+!configs/env/.env.template
+!configs/env/.env.production.template
 
 # ============================================================================
-# Data files - exclude all raw and processed data
+# DATA FILES (All data excluded - use external storage)
 # ============================================================================
 data/
 data/raw/
 data/processed/
+data/test/
+data/validation/
 *.csv
 *.las
 *.parquet
@@ -21,17 +43,17 @@ data/processed/
 *.pickle
 *.xlsx
 *.xls
+*.tsv
+*.jsonl
+*.ndjson
 
-# EXCEPTION: Keep critical JSON fixtures and configs
+# EXCEPTION: Keep small test fixtures only
 !tests/fixtures/*.json
-!configs/*.json
-!schemas/*.json
-!tasks/*/context/*.json
+!tests/fixtures/*.csv
 
-# EXCEPTION: Keep production environment template for deployment reference
-!configs/env/.env.production.template
-
-# Python
+# ============================================================================
+# PYTHON BUILD & CACHE
+# ============================================================================
 __pycache__/
 *.py[cod]
 *$py.class
@@ -52,13 +74,16 @@ wheels/
 *.manifest
 *.spec
 
-# Virtual environments
+# Virtual environments (NEVER commit)
 venv/
 ENV/
-/env/
+env/
 .venv/
+.env_backup/
 
-# Testing and coverage
+# ============================================================================
+# TESTING & QA OUTPUTS (Reports excluded, tests included)
+# ============================================================================
 .coverage
 .coverage.*
 .pytest_cache/
@@ -69,9 +94,23 @@ nosetests.xml
 coverage.xml
 *.cover
 .cache
+.benchmarks/
+
+# QA generated reports
+qa/
+qa/*.xml
+qa/*.txt
+qa/*.json
+qa/*.html
+qa/*.baseline
+
+# EXCEPTION: Keep QA infrastructure and test files
+!qa/.gitkeep
+!tests/**/*.py
+!tests/**/*.json
 
 # ============================================================================
-# IDE and editors
+# IDE & EDITOR FILES (All excluded)
 # ============================================================================
 .vscode/
 .idea/
@@ -85,11 +124,12 @@ coverage.xml
 *.sublime-project
 *.sublime-workspace
 
-# EXCEPTION: Keep .claude protocol for project reference
-!.claude/full_protocol.md
+# EXCEPTION: Keep shared project configs
+!.vscode/settings.json.template
+!.vscode/launch.json.template
 
 # ============================================================================
-# Logs and temporary files
+# LOGS & TEMPORARY FILES (All excluded)
 # ============================================================================
 logs/
 logs/**/*.log
@@ -97,25 +137,34 @@ logs/**/*.log
 *.tmp
 temp/
 tmp/
+*.bak
+*.backup
+
+# Temporary text chunks (from LLM processing)
 __chunk_*.txt
 __segment*.txt
 __reasoning*.txt
 __*.txt
 
-# EXCEPTION: Keep log directory structure
+# EXCEPTION: Keep log directory structure only
 !logs/.gitkeep
-!logs/generation/.gitkeep
-!logs/retrieval/.gitkeep
-!logs/traces/.gitkeep
+!logs/README.md
 
 # ============================================================================
-# Documentation artifacts (keeping only essential docs)
+# DOCUMENTATION (Exclude generated/session docs, keep essential)
 # ============================================================================
-# Exclude temporary/generated documentation
+
+# Exclude ALL generated/session/temporary documentation
+*_REPORT.md
+*_SUMMARY.md
+*_ANALYSIS.md
+*_RESULTS.md
+*_VALIDATION.md
+*_COMPLETION.md
+*_PROGRESS.md
 AUTHENTIC_*.md
 CLEANUP_*.md
 CODE_ANALYSIS_*.md
-CODE_ANALYSIS_*.txt
 CODE_CLEANUP_*.md
 COMPREHENSIVE_*.md
 CONTEXTUAL_*.md
@@ -132,23 +181,23 @@ VALIDATION_*.md
 WEAKEST_*.md
 checkpoint*.md
 compass_artifact_*.md
-CONFIGURATION_EXTRACTION.md
+SESSION_*.md
+PHASE*_*.md
 
-# Exclude session-specific and temporary documentation
+# Exclude specific non-essential docs
 CAPABILITY_VALIDATION_REPORT.md
 CLAUDE_INSTRUCTIONS.md
 DEMO_QUICK_START.md
 DOCUMENTATION_UPDATE_SUMMARY.md
 E2E_VALIDATION_REPORT.md
 HYPOTHESIS_AND_SCOPE.md
+MCP_DEMO_*.md
 MCP_ENHANCEMENT_*.md
 MCP_INTEGRATION_ANALYSIS.md
 MCP_QUERY_*.md
 MCP_SERVER_GUIDE.md
 MCP_TOOL_*.md
 PARALLEL_TASK_*.md
-PHASE1_AUTHENTICITY_VERIFICATION.md
-PHASE1_PROTOCOL_COMPLIANCE_REPORT.md
 PREPARATION_COMPLETE.md
 PRODUCTION_DEPLOYMENT_CHECKLIST.md
 PROJECT_HYGIENE_REPORT.md
@@ -158,32 +207,42 @@ README_EVALUATION_COMPLETE.md
 REMAINING_CRITICAL_GAPS.md
 REMEDIATION_COMPLETE.txt
 REPRODUCIBILITY.md
-SESSION_PROGRESS_SUMMARY.md
-SESSION_SUMMARY_*.md
 TDD_ALIGNMENT_ANALYSIS.md
 USAGE_GUIDE_FOR_BEGINNERS.md
 
-# EXCEPTION: Keep primary project documentation
+# EXCEPTION: Keep ONLY essential project documentation
 !README.md
-!docs/**/*.md
-!tasks/*/context/*.md
-!.claude/full_protocol.md
+!CONTRIBUTING.md
+!LICENSE.md
+!CHANGELOG.md
+!docs/README.md
+!docs/architecture/*.md
+!docs/api/*.md
 
 # ============================================================================
-# Reports and analysis outputs
+# REPORTS & ANALYSIS (All excluded - not production code)
 # ============================================================================
-bandit_report.*
+reports/
+analysis_reports/
+evaluation_reports/
+recommendations/
+retrospective_output.*
 *_report.txt
 *_report.json
 *_report.html
+*_report.csv
 *_results.txt
 *_results.json
 validation_results.*
 diagnostic_results.*
+benchmark_results.*
 
-# Models and large files
+# ============================================================================
+# MODELS & LARGE FILES (Use external model registry)
+# ============================================================================
 models/
 embeddings/
+checkpoints/
 *.bin
 *.h5
 *.keras
@@ -192,42 +251,138 @@ embeddings/
 *.onnx
 *.safetensors
 *.ckpt
+*.model
+*.joblib
 
 # ============================================================================
-# Task artifacts and validation outputs
+# TASK ARTIFACTS (Exclude execution outputs, keep context)
 # ============================================================================
-# Exclude all task validation artifacts and generated outputs
+
+# Exclude ALL task artifacts and outputs
 tasks/*/artifacts/
 tasks/*/reports/
+tasks/*/qa/
+tasks/*/logs/
+tasks/*/phase*/profile_data/
+tasks/*/phase*/optimizations/
+tasks/*/phase*/differential_tests/
+tasks/*/phase*/property_tests/
+tasks/*/*.log
+tasks/*/*.json
+tasks/*/*.txt
+
+# Exclude specific task execution files
+tasks/*/TASK_COMPLETE.md
+tasks/*/EXECUTION_PLAN.md
+tasks/*/STATUS.md
+tasks/*/PROGRESS.md
+
+# EXCEPTION: Keep ONLY task context and critical definitions
+!tasks/*/context/
+!tasks/*/context/*.md
+!tasks/*/context/*.json
+!tasks/*/README.md
+!tasks/*/requirements.txt
+!tasks/*/.gitkeep
+
+# Exclude entire task directories for completed/archived tasks
+# (Uncomment specific tasks to exclude after archiving)
+# tasks/001-*/
+# tasks/002-*/
+
+# ============================================================================
+# ARTIFACTS & GENERATED OUTPUTS (All excluded)
+# ============================================================================
 artifacts/
 artifacts/demo/
 artifacts/validation/
-
-# EXCEPTION: Keep task context (hypotheses, designs, evidence)
-!tasks/*/context/
-
-# ============================================================================
-# QA and analysis outputs
-# ============================================================================
-qa/
-qa/*.xml
-qa/*.txt
-qa/*.json
-qa/*.html
-
-# EXCEPTION: Keep QA directory structure
-!qa/.gitkeep
+context/
+astra-graphrag/  # Nested project directory
+research/
 
 # ============================================================================
-# Cache directories
+# SCRIPTS & UTILITIES (Exclude analysis/demo, keep core)
+# ============================================================================
+
+# Exclude analysis and benchmarking scripts
+scripts/analysis/
+scripts/benchmarking/
+scripts/demo/
+scripts/load_testing/
+scripts/migration/
+
+# Exclude utility scripts not needed in production
+scripts/*_snapshot.py
+scripts/check_memory_sync.py
+scripts/discover_cp.py
+scripts/env_snapshot.py
+scripts/migrate_to_*.py
+scripts/run_manifest.py
+scripts/task_registry.py
+scripts/tdd_guard.py
+
+# EXCEPTION: Keep core production scripts
+!scripts/processing/
+!scripts/validation/*.py
+!scripts/ingest/
+
+# ============================================================================
+# SCA INFRASTRUCTURE (Exclude evaluator, keep runner)
+# ============================================================================
+sca_retrospective_evaluator*.py
+sca_infrastructure/discovery/
+full_protocol.md
+
+# EXCEPTION: Keep core SCA runner only
+!sca_infrastructure/runner.py
+!sca_infrastructure/__init__.py
+
+# ============================================================================
+# DEMO & BATCH FILES (All excluded)
+# ============================================================================
+*.bat
+*.sh
+demo_*.bat
+demo_*.sh
+start_*.bat
+stop_*.bat
+restart_*.bat
+status_*.bat
+
+# EXCEPTION: Keep production deployment scripts
+!scripts/deploy/*.sh
+!scripts/deploy/*.bat
+
+# ============================================================================
+# ARCHIVES & BINARIES (Never commit)
+# ============================================================================
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+*.exe
+*.dmg
+*.pkg
+*.deb
+*.rpm
+ngrok-*.zip
+
+# ============================================================================
+# CACHE DIRECTORIES (All excluded)
 # ============================================================================
 .ruff_cache/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+.bandit/
+.pylint.d/
 nul
 
-# OS files
+# ============================================================================
+# OS-SPECIFIC FILES (All excluded)
+# ============================================================================
 .DS_Store
 .DS_Store?
 ._*
@@ -236,29 +391,86 @@ nul
 ehthumbs.db
 Thumbs.db
 desktop.ini
+*.lnk
 
-# Jupyter Notebooks
+# ============================================================================
+# JUPYTER NOTEBOOKS (Excluded - use .py scripts instead)
+# ============================================================================
 .ipynb_checkpoints/
 *.ipynb
 
-# Documentation build artifacts
+# EXCEPTION: Keep tutorial/documentation notebooks
+!docs/notebooks/*.ipynb
+!examples/*.ipynb
+
+# ============================================================================
+# DOCUMENTATION BUILD ARTIFACTS
+# ============================================================================
 docs/_build/
 docs/_static/
 docs/_templates/
+docs/api/_generated/
 
-# Package manager files
+# ============================================================================
+# PACKAGE MANAGER & LOCAL CONFIG
+# ============================================================================
 pip-log.txt
 pip-delete-this-directory.txt
-
-# Local configuration
 local_settings.py
 instance/
 .webassets-cache
 
-# Secrets and keys
-*.key
-*.pem
-*.crt
-*.p12
-secrets.yaml
-secrets.yml
+# ============================================================================
+# DOCKER & DEPLOYMENT (Keep configs, exclude runtime)
+# ============================================================================
+docker-compose.override.yml
+.dockerignore.local
+
+# ============================================================================
+# PROTOCOL & CONFIG (Selective inclusion)
+# ============================================================================
+.sca_config.json
+.secrets.baseline
+
+# EXCEPTION: Keep essential configs
+!pyproject.toml
+!requirements.txt
+!Dockerfile
+!docker-compose.yml
+!Makefile
+!.pre-commit-config.yaml
+
+# ============================================================================
+# CRITICAL APPLICATION FILES (Explicitly track these)
+# ============================================================================
+# These patterns ensure critical files are NOT accidentally excluded
+
+# Core application code
+!services/**/*.py
+!models/**/*.py
+!workflows/**/*.py
+!schemas/**/*.py
+!configs/**/*.yaml
+!configs/**/*.yml
+!configs/**/*.json
+
+# Tests (keep all test files)
+!tests/**/*.py
+!tests/**/*.json
+!tests/**/*.yaml
+
+# MCP server files
+!mcp_server.py
+!mcp_http_server.py
+!test_mcp_locally.py
+
+# Core documentation
+!README.md
+!.claude/CLAUDE.md
+
+# ============================================================================
+# END OF .gitignore
+# ============================================================================
+# This configuration ensures only production-critical application code,
+# essential configurations, tests, and core documentation are tracked.
+# All generated outputs, reports, logs, and temporary files are excluded.
