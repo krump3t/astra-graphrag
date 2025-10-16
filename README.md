@@ -133,6 +133,57 @@ This system implements **true GraphRAG** (Graph-based Retrieval Augmented Genera
 - **`load_graph_to_astra.py`** - Upload graph to AstraDB
 - **`graph_from_processed.py`** - Build knowledge graph from raw data
 
+#### 4. Monitoring Services (`services/monitoring/`)
+
+- **`cost_tracker.py`** - Track API costs (OpenAI, Watsonx)
+  - Real-time cost calculation per query
+  - Token usage monitoring
+  - Budget alerts and reporting
+
+- **`latency_tracker.py`** - Performance monitoring
+  - Component-level latency tracking
+  - P50, P95, P99 percentile analysis
+  - Bottleneck identification
+
+- **`metrics_collector.py`** - System metrics aggregation
+  - Query throughput and success rates
+  - Error tracking and categorization
+  - Historical trend analysis
+
+#### 5. Orchestration (`services/orchestration/`)
+
+- **`local_orchestrator.py`** - Local workflow execution
+  - Synchronous query processing
+  - Tool coordination
+  - Error handling and retries
+
+- **`http_orchestrator.py`** - HTTP API wrapper
+  - REST API endpoints
+  - Request validation
+  - Response formatting
+
+- **`multi_tool_planner.py`** - Multi-tool query planning
+  - Query decomposition
+  - Tool selection and sequencing
+  - Result synthesis
+
+- **`tool_executor.py`** - Tool execution engine
+  - Parallel tool invocation
+  - Timeout management
+  - Result validation
+
+#### 6. MCP Server (`services/mcp/`)
+
+- **`glossary_scraper.py`** - Domain glossary scraping
+  - Schlumberger glossary integration
+  - Term definition extraction
+  - Caching and updates
+
+- **`glossary_cache.py`** - Glossary caching layer
+  - Redis-compatible caching
+  - TTL management
+  - Cache invalidation
+
 ---
 
 ## Data Model
@@ -270,6 +321,16 @@ print(result.metadata["num_results_after_traversal"])  # 22
 
 ## Validation & Testing
 
+### Test Organization
+
+The project maintains **41 test files** across multiple categories:
+
+- **`tests/unit/`** - Unit tests for individual modules (25 files)
+- **`tests/integration/`** - End-to-end workflow tests (8 files)
+- **`tests/cp/`** - Critical Path tests with @pytest.mark.cp (4 files)
+- **`tests/authenticity/`** - Authenticity validation framework (1 file)
+- **`tests/validation/`** - System validation scripts (3 files)
+
 ### Unit Tests
 
 ```bash
@@ -280,19 +341,64 @@ python tests/test_graph_traverser.py
 # Relationship embeddings tests
 python tests/test_relationship_embeddings.py
 # ✓ 7/7 tests passing
+
+# Run all unit tests
+pytest tests/unit/ -v
 ```
+
+### Authenticity Validation Framework
+
+Based on Task 015, the project implements rigorous authenticity validation:
+
+```bash
+# Run authenticity tests (5 invariants)
+pytest tests/authenticity/test_authenticity_invariants.py -v
+
+# Invariants tested:
+# 1. Genuine computation (no mocked results)
+# 2. Data processing integrity (real data transformations)
+# 3. Algorithmic fidelity (actual domain algorithms)
+# 4. Real I/O interaction (actual database/API calls)
+# 5. Honest failure reporting (no hidden errors)
+```
+
+**Results** (Task 015):
+- 21/21 authenticity tests passed (100%)
+- 4 tests skipped (external API dependencies)
+- 1 xfailed (known limitation documented)
 
 ### Integration Tests
 
 ```bash
 # Full workflow validation
 python scripts/validation/validate_graph_traversal_debug.py
+
+# MCP server end-to-end
+pytest tests/integration/test_mcp_e2e.py
 ```
 
 **Results**:
 - Well-to-Curves queries: **100% accuracy**
 - Graph traversal: **22x expansion ratio**
 - Latency: ~1.5s (0.3s graph overhead)
+
+### QA Gates & Pre-Commit Hooks
+
+```bash
+# Install pre-commit hooks
+pre-commit install
+
+# Run all quality checks
+pre-commit run --all-files
+
+# Quality gates:
+# • Ruff (linter + formatter)
+# • Bandit (security - HIGH/CRITICAL only)
+# • detect-secrets (credential scanning)
+# • MyPy (type checking - optional)
+# • YAML/JSON validation
+# • Large file detection (>500KB)
+```
 
 ---
 
@@ -527,6 +633,121 @@ python scripts/validation/validate_graph_traversal_debug.py
 
 # Check logs/graph_traversal_output.log
 ```
+
+---
+
+## Deployment
+
+### Docker Deployment
+
+The project includes a multi-stage Docker build for production deployment:
+
+```bash
+# Build Docker image
+docker build -t astra-graphrag:latest .
+
+# Run MCP server
+docker run -p 8000:8000 \
+  -e ASTRA_DB_APPLICATION_TOKEN=$ASTRA_DB_TOKEN \
+  -e OPENAI_API_KEY=$OPENAI_KEY \
+  astra-graphrag:latest
+
+# Run HTTP API wrapper
+docker run -p 8080:8080 astra-graphrag:latest python mcp_http_server.py
+```
+
+**Dockerfile Features**:
+- Multi-stage build (minimizes image size)
+- Non-root user (security best practice)
+- Health checks for orchestration
+- Python 3.11-slim base image
+
+**Files**:
+- `Dockerfile` - Multi-stage build configuration
+- `.dockerignore` - Exclude unnecessary files
+- `mcp_server.py` - MCP server entrypoint
+- `mcp_http_server.py` - HTTP API wrapper
+
+### Production Checklist
+
+- [ ] Set environment variables (`ASTRA_DB_*`, `OPENAI_API_KEY`, `WATSONX_*`)
+- [ ] Configure logging (`logs/` directory mounted)
+- [ ] Set up monitoring (metrics collector, latency tracker)
+- [ ] Enable cost tracking (cost_tracker.py)
+- [ ] Configure rate limiting
+- [ ] Set up health check endpoints
+- [ ] Review security settings (Bandit scan)
+- [ ] Test with production data volume
+
+### MCP Server Setup
+
+```bash
+# Install MCP CLI (if not already installed)
+npm install -g @modelcontextprotocol/cli
+
+# Run MCP server locally
+python mcp_server.py
+
+# Test MCP server
+curl http://localhost:8000/health
+```
+
+---
+
+## Project Status
+
+### Recent Development (Tasks 001-018)
+
+**Completed Tasks**:
+
+1. **Task 001-002**: MCP Integration
+   - Glossary scraper with Schlumberger integration
+   - Caching layer for term definitions
+
+2. **Task 008**: Docker Integration & Deployment
+   - Multi-stage Dockerfile
+   - Production-ready container configuration
+
+3. **Task 012**: HTTP API & Ngrok Deployment
+   - REST API wrapper (`mcp_http_server.py`)
+   - Public endpoint deployment
+
+4. **Task 013**: Multi-Tool Orchestration
+   - Query decomposition and planning
+   - Parallel tool execution
+
+5. **Task 014**: HTTP API Production Readiness
+   - Request validation
+   - Error handling
+   - Response formatting
+
+6. **Task 015**: Authenticity Validation Framework ✅ **COMPLETED**
+   - Dead code removal: 25/25 candidates (100%)
+   - Authenticity tests: 21/21 passed (100%)
+   - 5 invariants validated
+
+7. **Task 017**: Ground Truth Failure Domain (Phase 2)
+   - Dataset verification (55 Q&A pairs)
+   - Instrumentation architecture designed
+   - Chi-square validation planned
+
+8. **Task 018**: Production Remediation
+   - Code quality improvements
+   - Security hardening
+
+**Active Development**:
+- Monitoring services integration
+- Cost and latency tracking
+- Enhanced tracing and debugging tools
+
+**Technology Stack**:
+- Python 3.11
+- AstraDB (DataStax vector database)
+- OpenAI embeddings (text-embedding-3-small)
+- IBM Watsonx (LLM generation)
+- LangGraph (workflow orchestration)
+- Docker (containerization)
+- Pytest (testing framework)
 
 ---
 

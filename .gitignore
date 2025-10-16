@@ -28,6 +28,9 @@ data/processed/
 !schemas/*.json
 !tasks/*/context/*.json
 
+# EXCEPTION: Keep production environment template for deployment reference
+!configs/env/.env.production.template
+
 # Python
 __pycache__/
 *.py[cod]
@@ -52,7 +55,7 @@ wheels/
 # Virtual environments
 venv/
 ENV/
-env/
+/env/
 .venv/
 
 # Testing and coverage
@@ -134,20 +137,31 @@ CONFIGURATION_EXTRACTION.md
 # Exclude session-specific and temporary documentation
 CAPABILITY_VALIDATION_REPORT.md
 CLAUDE_INSTRUCTIONS.md
+DEMO_QUICK_START.md
 DOCUMENTATION_UPDATE_SUMMARY.md
 E2E_VALIDATION_REPORT.md
 HYPOTHESIS_AND_SCOPE.md
+MCP_ENHANCEMENT_*.md
 MCP_INTEGRATION_ANALYSIS.md
+MCP_QUERY_*.md
 MCP_SERVER_GUIDE.md
+MCP_TOOL_*.md
+PARALLEL_TASK_*.md
 PHASE1_AUTHENTICITY_VERIFICATION.md
 PHASE1_PROTOCOL_COMPLIANCE_REPORT.md
 PREPARATION_COMPLETE.md
+PRODUCTION_DEPLOYMENT_CHECKLIST.md
+PROJECT_HYGIENE_REPORT.md
 PROJECT_STATUS.md
+PROTOCOL_V*.md
 README_EVALUATION_COMPLETE.md
+REMAINING_CRITICAL_GAPS.md
 REMEDIATION_COMPLETE.txt
+REPRODUCIBILITY.md
 SESSION_PROGRESS_SUMMARY.md
 SESSION_SUMMARY_*.md
 TDD_ALIGNMENT_ANALYSIS.md
+USAGE_GUIDE_FOR_BEGINNERS.md
 
 # EXCEPTION: Keep primary project documentation
 !README.md
